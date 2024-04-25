@@ -28,6 +28,9 @@ userRouter
 
 // * Trip endpoints
 
+// ! create a trip is missing
 userRouter
   .put("/:id/trips/:tripId", updateTrip)
   .delete("/:id/trips/:tripId", deleteTrip);
+
+// ! create, update, delete expense

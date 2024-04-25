@@ -15,11 +15,12 @@ const userSchema = new Schema({
 userSchema.statics.register = async (data) => {
   const hashed = await hash(data.password, 10);
   data.password = hashed;
-  return User.create(data);
+  console.log(data.password);
+  return await User.create(data);
 };
 
 userSchema.statics.login = async (data) => {
-  const user = await User.findOne({ username: data.username });
+  const user = await User.findOne({ username: data.username }); //! login also using email
   if (!user) return false;
   const match = await compare(data.password, user.password);
   if (!match) {
@@ -35,4 +36,5 @@ userSchema.methods.toJSON = function () {
   return user;
 };
 
-export default model("User", userSchema);
+const User = model("User", userSchema);
+export default User;
