@@ -1,8 +1,9 @@
 {
-  "name": "TripVault Server",
+  "name": "TripVault-server",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
