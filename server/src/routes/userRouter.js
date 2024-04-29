@@ -15,9 +15,15 @@ import {
   deleteUser,
   updateTrip,
   deleteTrip,
+  getAvailableCurrencies,
+  convertCurrencyAmount,
 } from "../controllers/userController.js";
 
 export const userRouter = Router();
+
+// * Currency endpoints
+userRouter.get("/currencies", getAvailableCurrencies);
+userRouter.post("/convert-currency", convertCurrencyAmount);
 
 // * User endpoints
 

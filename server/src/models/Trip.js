@@ -24,7 +24,7 @@ const expenseSchema = new Schema({
   categoryName: { type: String, required: true },
   value: { type: Number, required: true },
   currency: { type: String, required: true },
-  convertedValue: { type: Number },
+  convertedAmount: { type: Number }, // renamed from convertedValue to streamline naming
   description: { type: String },
   dates: [{ type: Date, required: true }],
   paymentMethod: [{ type: String }],
