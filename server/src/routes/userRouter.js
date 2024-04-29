@@ -1,36 +1,23 @@
-// User Router (/users):
-// POST /register - for user registration.ok
-// POST /login - for user authentication and login.ok
-// GET /profile - to fetch the logged-in user's profile details.
-// PUT /profile - to update the user's profile information.
-// POST /change-password - to allow users to change their password.
-// DELETE / - to delete a user account.
-// ---------------------------------------------------------
-
-import { Router } from "express";
+import { Router } from 'express';
 
 import {
   getUser,
   updateUser,
   deleteUser,
-  updateTrip,
-  deleteTrip,
-} from "../controllers/userController.js";
+  getAvailableCurrencies,
+  convertCurrencyAmount,
+} from '../controllers/userController.js';
+import { validateId } from '../middlewares/validateId.js';
+import { validateUser } from '../middlewares/validateUser.js';
 
 export const userRouter = Router();
 
-// * User endpoints
+// * Currency endpoints
+userRouter.get('/currencies', getAvailableCurrencies);
+userRouter.post('/convert-currency', convertCurrencyAmount);
 
 userRouter
-  .get("/:id", getUser)
-  .put("/:id", updateUser)
-  .delete("/:id", deleteUser);
-
-// * Trip endpoints
-
-// ! create a trip is missing
-userRouter
-  .put("/:id/trips/:tripId", updateTrip)
-  .delete("/:id/trips/:tripId", deleteTrip);
-
-// ! create, update, delete expense
+  .route('/:id')
+  .get(validateId, getUser)
+  .patch(validateId, validateUser, updateUser)
+  .delete(validateId, deleteUser);

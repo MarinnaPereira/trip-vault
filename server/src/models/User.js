@@ -1,5 +1,5 @@
-import { Schema, model } from "mongoose";
-import bcrypt from "bcrypt";
+import { Schema, model } from 'mongoose';
+import bcrypt from 'bcrypt';
 
 const { hash, compare } = bcrypt;
 
@@ -7,20 +7,22 @@ const userSchema = new Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  avatar: { type: String, required: true }, // name of the avatar
-  trips: [{ type: Schema.Types.ObjectId, ref: "Trip" }],
-  selectedTrip: { type: Schema.Types.ObjectId, ref: "Trip" },
+  avatarTitle: { type: String, required: true },
+  // trips: [{ type: Schema.Types.ObjectId, ref: "Trip" }],
+  selectedTrip: { type: Schema.Types.ObjectId, ref: 'Trip' },
 });
 
-userSchema.statics.register = async (data) => {
+userSchema.statics.register = async data => {
   const hashed = await hash(data.password, 10);
   data.password = hashed;
   console.log(data.password);
   return await User.create(data);
 };
 
-userSchema.statics.login = async (data) => {
-  const user = await User.findOne({ username: data.username }); //! login also using email
+userSchema.statics.login = async data => {
+  const user = await User.findOne({
+    $or: [{ username: data.username }, { email: data.email }],
+  });
   if (!user) return false;
   const match = await compare(data.password, user.password);
   if (!match) {
@@ -36,5 +38,5 @@ userSchema.methods.toJSON = function () {
   return user;
 };
 
-const User = model("User", userSchema);
+const User = model('User', userSchema);
 export default User;

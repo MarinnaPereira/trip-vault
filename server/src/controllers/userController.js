@@ -1,15 +1,15 @@
-import User from "../models/User.js";
-import Trip from "../models/Trip.js";
+import User from '../models/User.js';
 
 export const getUser = async (req, res, next) => {
   const { id } = req.params;
   try {
     const user = await User.findById(id)
-      .populate("trips")
-      .populate("selectedTrip");
+      // .populate('trips') //!
+      .populate('selectedTrip');
     if (!user) {
-      const error = new Error("User does not exist");
+      const error = new Error('User does not exist');
       error.status = 404;
+      return next(error);
     }
     res.json(user);
   } catch (error) {
@@ -19,11 +19,11 @@ export const getUser = async (req, res, next) => {
 
 export const updateUser = async (req, res, next) => {
   const { id } = req.params;
-  const { body } = req;
+  const { body } = req; //! for this data to be validated and then updated, the frontend should send the whole user object, not only the updated part
+  //! OR: we create another middleware which will find the user by id, clone it to a variable, spreading also the req.body, and after that pass the new variable to the validator -> i think it's better!
   try {
     const updatedUser = await User.findByIdAndUpdate(id, body, {
       new: true,
-      runValidators: true,
     });
     res.json(updatedUser);
   } catch (error) {
@@ -35,29 +35,8 @@ export const deleteUser = async (req, res, next) => {
   const { id } = req.params;
   try {
     await User.findByIdAndDelete(id);
-    res.json({ message: "User deleted successfully" });
+    res.json({ message: 'User deleted successfully' });
   } catch (error) {
     next(error);
-  }
-};
-
-export const updateTrip = async (req, res, next) => {
-  console.log(req.params);
-  try {
-    const updatedTrip = await Trip.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    res.json(updatedTrip);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-export const deleteTrip = async (req, res) => {
-  try {
-    await Trip.findByIdAndDelete(req.params.id);
-    res.json({ message: "Trip deleted successfully" });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
   }
 };

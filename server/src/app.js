@@ -1,23 +1,27 @@
-import express from "express";
-import cors from "cors";
-import morgan from "morgan";
+import express from 'express';
+import cors from 'cors';
+import morgan from 'morgan';
 
-import { authRouter } from "./routes/authRouter.js";
-import { userRouter } from "./routes/userRouter.js";
+import { authRouter } from './routes/authRouter.js';
+import { userRouter } from './routes/userRouter.js';
+import { tripsRouter } from './routes/tripsRouter.js';
+import { expensesRouter } from './routes/expensesRouter.js';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 
 // routes
-app.use("/auth", authRouter);
-app.use("/user", userRouter);
+app.use('/auth', authRouter);
+app.use('/user', userRouter);
+app.use('/trips', tripsRouter);
+app.use('/expenses', expensesRouter);
 
 // error handling
 app.use((req, res, next) => {
-  const error = new Error("Route is not found");
+  const error = new Error('Route is not found');
   error.status = 404;
   next(error);
 });
@@ -25,7 +29,7 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   res
     .status(err.status || 500)
-    .send({ error: err.message || "Something went wrong!" });
+    .send({ error: err.message || 'Something went wrong!' });
 });
 
 export default app;
