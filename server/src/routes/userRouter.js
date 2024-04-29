@@ -13,8 +13,11 @@ import { validateUser } from '../middlewares/validateUser.js';
 export const userRouter = Router();
 
 // * Currency endpoints
+
 userRouter.get('/currencies', getAvailableCurrencies);
 userRouter.post('/convert-currency', convertCurrencyAmount);
+
+// * User endpoints
 
 userRouter
   .route('/:id')
