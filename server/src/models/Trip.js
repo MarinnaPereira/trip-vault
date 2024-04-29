@@ -1,24 +1,5 @@
 import { Schema, model } from 'mongoose';
 
-const categorySchema = new Schema({
-  name: {
-    type: String,
-    enum: [
-      'Accommodation',
-      'Activities',
-      'Groceries',
-      'Restaurants',
-      'Services',
-      'Shopping',
-      'Taxes & Fees',
-      'Transportation',
-      'Others',
-    ],
-    required: true,
-  },
-  total: { type: Number, required: true },
-});
-
 const expenseSchema = new Schema({
   categoryName: {
     type: String,
@@ -53,7 +34,6 @@ const tripSchema = new Schema({
   currency: { type: String, required: true },
   budget: { type: Number },
   expenses: [expenseSchema],
-  expenseCategories: [categorySchema],
 });
 
 const Trip = model('Trip', tripSchema);
