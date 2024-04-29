@@ -30,11 +30,16 @@ const tripSchema = new Schema({
   name: { type: String, required: true },
   start: { type: Date, required: true },
   end: { type: Date, required: true },
-  duration: { type: Number, required: true },
   currency: { type: String, required: true },
   budget: { type: Number },
   expenses: [expenseSchema],
 });
+
+tripSchema.methods.toJSON = function () {
+  const trip = this.toObject();
+  delete trip.__v;
+  return trip;
+};
 
 const Trip = model('Trip', tripSchema);
 

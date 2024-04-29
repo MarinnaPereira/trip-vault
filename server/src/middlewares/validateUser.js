@@ -36,6 +36,16 @@ export const validateUser = [
     )
     .escape(),
 
+  body('avatar')
+    .trim()
+    .notEmpty()
+    .withMessage('Avatar is required')
+    .isLength({ min: 2 })
+    .withMessage('Avatar must be at least 2 characters long')
+    .isAlphanumeric()
+    .withMessage('Avatar should only contain letters and numbers')
+    .escape(),
+
   (req, res, next) => {
     const errors = validationResult(req);
     console.log(errors);

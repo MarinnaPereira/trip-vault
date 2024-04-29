@@ -8,11 +8,12 @@ export const validateId = [
 
   (req, res, next) => {
     const result = validationResult(req);
-    // console.log("Result:", result);
+    // console.log('Result:', result);
     // console.log(result.isEmpty());
     if (!result.isEmpty()) {
       return next(new Error('Invalid id'));
     }
+    console.log('id validated');
     next();
   },
 ];

@@ -1,7 +1,14 @@
-import Trip from '../models/Trip';
+import Trip from '../models/Trip.js';
+import User from '../models/User.js';
+import { isValidObjectId } from 'mongoose';
 
 export const getAllTrips = async (req, res, next) => {
   const { userId } = req.body;
+  //! req.userInfo
+  if (!isValidObjectId(userId)) {
+    return res.status(400).json({ message: 'Invalid userId' });
+  }
+
   try {
     const trips = await Trip.find({ userId });
     if (!trips || trips.length === 0) {
@@ -9,12 +16,16 @@ export const getAllTrips = async (req, res, next) => {
     }
     res.json(trips);
   } catch (error) {
+    //! console.log('here is the error'); -> it's coming as 500 even though it's client side issue -> wrong userId
     next(error);
   }
 };
 
 export const addTrip = async (req, res, next) => {
   const { userId, name, start, end, duration, currency, budget } = req.body;
+  if (!isValidObjectId(userId)) {
+    return res.status(400).json({ message: 'Invalid userId' });
+  }
   try {
     const newTrip = new Trip({
       userId,
@@ -39,6 +50,10 @@ export const getTrip = async (req, res, next) => {
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
     }
+    const user = await User.findById(trip.userId);
+    user.selectedTrip = id;
+    await user.save();
+    console.log(user);
     res.json(trip);
   } catch (error) {
     next(error);
@@ -47,8 +62,8 @@ export const getTrip = async (req, res, next) => {
 
 export const updateTrip = async (req, res, next) => {
   const { id } = req.params;
-  const tripData = req.body; //! for this data to be validated and then updated, the frontend should send the whole trip object, not only the updated part
-  //! OR: we create another middleware which will find the trip by id, clone it to a variable, spreading also the req.body, and after that pass the new variable to the validator -> i think it's better!
+  const tripData = req.body; //! for this data to be validated and then updated, the frontend should send the whole trip object, not only the updated part -> i think it's better!
+  //! OR: we create another middleware which will find the trip by id, clone it to a variable, spreading also the req.body, and after that pass the new variable to the validator
   try {
     const updatedTrip = await Trip.findByIdAndUpdate(id, tripData, {
       new: true,
@@ -63,9 +78,9 @@ export const updateTrip = async (req, res, next) => {
 };
 
 export const deleteTrip = async (req, res, next) => {
-  const { tripId } = req.params;
+  const { id } = req.params;
   try {
-    const deletedTrip = await Trip.findByIdAndDelete(tripId);
+    const deletedTrip = await Trip.findByIdAndDelete(id);
     if (!deletedTrip) {
       return res.status(404).json({ message: 'Trip not found' });
     }

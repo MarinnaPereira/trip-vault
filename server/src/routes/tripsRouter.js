@@ -9,13 +9,24 @@ import {
 } from '../controllers/tripsController.js';
 import { validateTrip } from '../middlewares/validateTrip.js';
 import { validateId } from '../middlewares/validateId.js';
+import verifyToken from '../middlewares/verifyToken.js';
+import { sanitizeTripToUpdate } from '../middlewares/sanitizeTripToUpdate.js';
 
 export const tripsRouter = Router();
 
-tripsRouter.route('/').get(getAllTrips).post(validateTrip, addTrip);
+tripsRouter
+  .route('/')
+  .get(verifyToken, getAllTrips)
+  .post(verifyToken, validateTrip, addTrip);
 
 tripsRouter
   .route('/:id')
-  .get(validateId, getTrip)
-  .patch(validateId, validateTrip, updateTrip)
-  .delete(validateId, deleteTrip);
+  .get(validateId, verifyToken, getTrip)
+  .patch(
+    validateId,
+    verifyToken,
+    sanitizeTripToUpdate,
+    validateTrip,
+    updateTrip,
+  )
+  .delete(validateId, verifyToken, deleteTrip);

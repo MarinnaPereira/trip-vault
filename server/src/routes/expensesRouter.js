@@ -9,6 +9,7 @@ import {
 } from '../controllers/expensesController.js';
 import { validateExpense } from '../middlewares/validateExpense.js';
 import { validateId } from '../middlewares/validateId.js';
+import verifyToken from '../middlewares/verifyToken.js';
 
 export const expensesRouter = Router();
 
@@ -16,6 +17,6 @@ expensesRouter.route('/').get(getAllExpenses).post(validateExpense, addExpense);
 
 expensesRouter
   .route('/:id')
-  .get(validateId, getExpense)
-  .patch(validateId, updateExpense)
-  .delete(validateId, deleteExpense);
+  .get(verifyToken, validateId, getExpense)
+  .patch(verifyToken, validateId, updateExpense)
+  .delete(verifyToken, validateId, deleteExpense);
