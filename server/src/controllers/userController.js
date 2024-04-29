@@ -1,5 +1,7 @@
 import User from "../models/User.js";
 import Trip from "../models/Trip.js";
+import { getExchangeRates } from "../utilities/currencyService.js";
+import { convertCurrency } from "../utilities/currencyConverter.js";
 
 export const getUser = async (req, res, next) => {
   const { id } = req.params;
@@ -10,6 +12,7 @@ export const getUser = async (req, res, next) => {
     if (!user) {
       const error = new Error("User does not exist");
       error.status = 404;
+      return next(error);
     }
     res.json(user);
   } catch (error) {
@@ -42,22 +45,81 @@ export const deleteUser = async (req, res, next) => {
 };
 
 export const updateTrip = async (req, res, next) => {
-  console.log(req.params);
+  const { tripId } = req.params;
+  const { expenses } = req.body;
+
   try {
-    const updatedTrip = await Trip.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const trip = await Trip.findById(tripId);
+    if (!trip) {
+      return res.status(404).json({ message: "Trip not found" });
+    }
+
+    // currency conversion for expenses
+    if (expenses) {
+      await Promise.all(
+        expenses.map(async (expense) => {
+          if (expense.currency !== trip.currency) {
+            const rates = await getExchangeRates(expense.currency);
+            const fromRate = rates[expense.currency]; // rate of expense currency
+            const toRate = rates[trip.currency]; // rate of trips base/home currency
+            expense.convertedValue = convertCurrency(
+              expense.value,
+              fromRate,
+              toRate
+            );
+          }
+          trip.expenses.push(expense);
+        })
+      );
+    }
+
+    const updatedTrip = await trip.save();
     res.json(updatedTrip);
   } catch (error) {
+    console.error("Error updating trip:", error);
     res.status(400).json({ message: error.message });
   }
 };
 
 export const deleteTrip = async (req, res) => {
+  const { id } = req.params;
   try {
-    await Trip.findByIdAndDelete(req.params.id);
+    await Trip.findByIdAndDelete(id);
     res.json({ message: "Trip deleted successfully" });
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+// get available currencies
+export const getAvailableCurrencies = async (req, res, next) => {
+  try {
+    const baseCurrency = req.query.baseCurrency || "USD";
+    const exchangeRates = await getExchangeRates(baseCurrency);
+    if (!exchangeRates) {
+      return res.status(500).json({ error: "Failed to fetch exchange rates" });
+    }
+    res.json({ currencies: Object.keys(exchangeRates) }); // using Object.keys to list currency codes
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const convertCurrencyAmount = async (req, res, next) => {
+  const { amount, fromCurrency, toCurrency } = req.body;
+  try {
+    const rates = await getExchangeRates(fromCurrency);
+    if (!rates || !rates[fromCurrency] || !rates[toCurrency]) {
+      return res.status(400).json({
+        error: "Invalid currency code provided or rates not available.",
+      });
+    }
+    const fromRate = rates[fromCurrency];
+    const toRate = rates[toCurrency];
+    const convertedAmount = convertCurrency(amount, fromRate, toRate);
+    res.json({ convertedAmount });
+  } catch (error) {
+    console.error("Error converting currency:", error);
+    next(error);
   }
 };
