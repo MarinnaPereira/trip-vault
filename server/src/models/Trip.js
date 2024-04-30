@@ -33,6 +33,7 @@ const tripSchema = new Schema({
   currency: { type: String, required: true },
   budget: { type: Number },
   expenses: [expenseSchema],
+  // expenses: [{ type: Schema.Types.ObjectId, ref: 'Expense' }],
 });
 
 tripSchema.methods.toJSON = function () {

@@ -41,7 +41,8 @@ export const addExpense = async (req, res, next) => {
       value,
       currency,
       description,
-      dates: dates ? dates.split(',').map(date => new Date(date)) : [],
+      dates,
+      // dates: dates ? dates.split(',').map(date => new Date(date)) : [],
       paymentMethod,
       receipt: receiptPath,
     };
@@ -62,11 +63,16 @@ export const getExpense = async (req, res, next) => {
       return res.status(404).json({ message: 'Trip not found' });
     }
     const expenseId = req.params.id;
-    const expense = trip.expenses._id(expenseId);
-    if (!expense) {
+    // console.log(expenseId);
+    // console.log(trip.expenses);
+
+    const expense = trip.expenses.filter(expense =>
+      expense._id.equals(expenseId),
+    );
+    if (expense.length === 0) {
       return res.status(404).json({ message: 'Expense not found' });
     }
-    res.json(expense);
+    res.json(expense[0]);
   } catch (error) {
     next(error);
   }
