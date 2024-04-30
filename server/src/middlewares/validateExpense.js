@@ -33,10 +33,10 @@ export const validateExpense = [
     .isLength({ min: 3, max: 3 })
     .withMessage('Currency must be 3 characters long'),
 
-  body('convertedValue')
+  body('convertedAmount')
     .optional()
     .isNumeric()
-    .withMessage('Converted value must be a number'),
+    .withMessage('Converted amount must be a number'),
 
   body('description')
     .optional()

@@ -1,6 +1,7 @@
 import Trip from '../models/Trip.js';
 
 export const getAllExpenses = async (req, res, next) => {
+  //! necessary? when we get the trip, we get all expenses
   try {
     const { tripId } = req.body;
     const trip = await Trip.findById(tripId);
@@ -16,7 +17,7 @@ export const getAllExpenses = async (req, res, next) => {
 
 export const addExpense = async (req, res, next) => {
   try {
-    const { tripId } = req.body;
+    const { tripId } = req.body; //! are we sending here or taking from the userId sent by the token?
     const trip = await Trip.findById(tripId);
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
