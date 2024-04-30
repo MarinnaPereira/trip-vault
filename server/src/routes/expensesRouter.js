@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import upload from '../middlewares/uploadFile.js';
 
 import {
   getAllExpenses,
@@ -13,7 +14,10 @@ import verifyToken from '../middlewares/verifyToken.js';
 
 export const expensesRouter = Router();
 
-expensesRouter.route('/').get(getAllExpenses).post(validateExpense, addExpense);
+expensesRouter
+  .route('/')
+  .get(verifyToken, getAllExpenses)
+  .post(verifyToken, upload.single('receipt'), validateExpense, addExpense);
 
 expensesRouter
   .route('/:id')

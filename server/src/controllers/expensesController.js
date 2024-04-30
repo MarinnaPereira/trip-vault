@@ -16,12 +16,32 @@ export const getAllExpenses = async (req, res, next) => {
 
 export const addExpense = async (req, res, next) => {
   try {
-    const { tripId } = req.body;
+    const {
+      tripId,
+      categoryName,
+      value,
+      currency,
+      description,
+      dates,
+      paymentMethod,
+    } = req.body;
     const trip = await Trip.findById(tripId);
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
     }
-    const newExpense = req.body.expense;
+
+    const receiptPath = req.file ? req.file.path : undefined;
+
+    const newExpense = {
+      categoryName,
+      value,
+      currency,
+      description,
+      dates: dates ? dates.split(',').map(date => new Date(date)) : [],
+      paymentMethod,
+      receipt: receiptPath,
+    };
+
     trip.expenses.push(newExpense);
     await trip.save();
     res.status(201).json(newExpense);
