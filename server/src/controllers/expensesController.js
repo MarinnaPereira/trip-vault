@@ -18,7 +18,6 @@ export const getAllExpenses = async (req, res, next) => {
 export const addExpense = async (req, res, next) => {
   try {
     // const { tripId } = req.body; //! are we sending here or taking from the userId sent by the token?
-
     const {
       tripId,
       categoryName,
@@ -68,11 +67,11 @@ export const getExpense = async (req, res, next) => {
 
     const expense = trip.expenses.filter(expense =>
       expense._id.equals(expenseId),
-    );
-    if (expense.length === 0) {
+    )[0];
+    if (!expense) {
       return res.status(404).json({ message: 'Expense not found' });
     }
-    res.json(expense[0]);
+    res.json(expense);
   } catch (error) {
     next(error);
   }
@@ -85,14 +84,18 @@ export const updateExpense = async (req, res, next) => {
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
     }
+
     const expenseId = req.params.id;
-    const expenseToUpdate = trip.expenses._id(expenseId); //!
-    if (!expenseToUpdate) {
+    const expense = trip.expenses.filter(expense =>
+      expense._id.equals(expenseId),
+    )[0];
+    if (!expense) {
       return res.status(404).json({ message: 'Expense not found' });
     }
-    Object.assign(expenseToUpdate, req.body.expense);
+
+    Object.assign(expense, req.body);
     await trip.save();
-    res.json(expenseToUpdate);
+    res.json(expense);
   } catch (error) {
     next(error);
   }
@@ -106,12 +109,17 @@ export const deleteExpense = async (req, res, next) => {
       return res.status(404).json({ message: 'Trip not found' });
     }
     const expenseId = req.params.id;
-    const expenseToDelete = trip.expenses._id(expenseId);
-    if (!expenseToDelete) {
-      return res.status(404).json({ message: 'Expense not found' });
-    }
-    expenseToDelete.remove();
+    // const expense = trip.expenses.filter(expense =>
+    //   expense._id.equals(expenseId),
+    // )[0];
+    // if (!expense) {
+    //   return res.status(404).json({ message: 'Expense not found' });
+    // }
+    trip.expenses = trip.expenses.filter(
+      expense => !expense._id.equals(expenseId),
+    );
     await trip.save();
+    //! for us to remember to delete the file of the expense as well
     res.json({ message: 'Expense deleted successfully' });
   } catch (error) {
     next(error);

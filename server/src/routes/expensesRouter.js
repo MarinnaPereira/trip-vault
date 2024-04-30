@@ -11,6 +11,7 @@ import {
 import { validateExpense } from '../middlewares/validateExpense.js';
 import { validateId } from '../middlewares/validateId.js';
 import verifyToken from '../middlewares/verifyToken.js';
+import { sanitizeExpenseToUpdate } from '../middlewares/sanitizeExpenseToUpdate.js';
 
 export const expensesRouter = Router();
 
@@ -22,5 +23,11 @@ expensesRouter
 expensesRouter
   .route('/:id')
   .get(verifyToken, validateId, getExpense)
-  .patch(verifyToken, validateId, updateExpense)
+  .patch(
+    verifyToken,
+    validateId,
+    sanitizeExpenseToUpdate,
+    validateExpense,
+    updateExpense,
+  )
   .delete(verifyToken, validateId, deleteExpense);

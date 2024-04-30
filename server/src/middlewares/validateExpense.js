@@ -60,11 +60,13 @@ export const validateExpense = [
     .optional()
     .isString()
     .withMessage('Receipt must be a string')
-    .escape(),
+    .escape(), //! should we keep this??
 
   (req, res, next) => {
     const errors = validationResult(req);
+    console.log('errors', errors);
     if (errors.isEmpty()) {
+      console.log('expense validated');
       return next();
     }
     next({ status: 400, message: errors.array() });

@@ -1,4 +1,3 @@
-import Expense from '../models/Expense.js';
 import Trip from '../models/Trip.js';
 import User from '../models/User.js';
 import { isValidObjectId } from 'mongoose';
@@ -47,7 +46,7 @@ export const addTrip = async (req, res, next) => {
 export const getTrip = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const trip = await Trip.findById(id).populate('expenses');
+    const trip = await Trip.findById(id);
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
     }
@@ -85,7 +84,6 @@ export const deleteTrip = async (req, res, next) => {
     if (!deletedTrip) {
       return res.status(404).json({ message: 'Trip not found' });
     }
-    await Expense.deleteMany({ tripId: id });
     res.json({ message: 'Trip deleted successfully' });
   } catch (error) {
     next(error);
