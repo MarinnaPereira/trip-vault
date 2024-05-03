@@ -1,21 +1,21 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import WelcomeScreen from "./app/screens/WelcomeScreen";
-import LoginScreen from "./app/screens/LoginScreen";
-import RegisterScreen from "./app/screens/RegisterScreen";
-import TabNavigation from "./app/navigations/TabNavigation";
-import TripScreen from "./app/screens/TripScreen";
-import MyAccountScreen from "./app/screens/MyAccountScreen";
-import AvatarScreen from "./app/screens/AvatarScreen";
-import CategoryScreen from "./app/screens/CategoryScreen";
-import UnlockFirstTripScreen from "./app/screens/UnlockFirstTripScreen";
-import TrackFirstExpenseScreen from "./app/screens/TrackFirstExpenseScreen";
-import InitiateTripScreen from "./app/screens/InitiateTripScreen";
-import DropdownCurrency from "./app/screens/DropdownCurrency";
-import NewExpenseScreen from "./app/screens/NewExpenseScreen";
-import MyTripsScreen from "./app/screens/MyTripsScreen";
-import StatsScreen from "./app/screens/StatsScreen";
+import WelcomeScreen from './app/screens/WelcomeScreen';
+import LoginScreen from './app/screens/LoginScreen';
+import RegisterScreen from './app/screens/RegisterScreen';
+import TabNavigation from './app/navigations/TabNavigation';
+import TripScreen from './app/screens/TripScreen';
+import MyAccountScreen from './app/screens/MyAccountScreen';
+import AvatarScreen from './app/screens/AvatarScreen';
+import CategoryScreen from './app/screens/CategoryScreen';
+import UnlockFirstTripScreen from './app/screens/UnlockFirstTripScreen';
+import TrackFirstExpenseScreen from './app/screens/TrackFirstExpenseScreen';
+import InitiateTripScreen from './app/screens/InitiateTripScreen';
+import DropdownCurrency from './app/screens/DropdownCurrency';
+import NewExpenseScreen from './app/screens/NewExpenseScreen';
+import MyTripsScreen from './app/screens/MyTripsScreen';
+import StatsScreen from './app/screens/StatsScreen';
 
 const Stack = createStackNavigator();
 
@@ -32,13 +32,13 @@ export default function App() {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
-          options={{ headerBackTitleVisible: false, title: "" }}
+          options={{ headerBackTitleVisible: false, title: '' }}
         />
         <Stack.Screen name="Avatar" component={AvatarScreen} />
         <Stack.Screen
           name="Register"
           component={RegisterScreen}
-          options={{ headerBackTitleVisible: false, title: "" }}
+          options={{ headerBackTitleVisible: false, title: '' }}
         />
 
         <Stack.Screen name="Category" component={CategoryScreen} />
@@ -49,15 +49,16 @@ export default function App() {
         />
 
         <Stack.Screen
+          name="InitiateTrip"
+          component={InitiateTripScreen}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
           name="TrackFirstExpenseScreen"
           component={TrackFirstExpenseScreen}
         />
 
-        <Stack.Screen
-          name="InitiateTripScreen"
-          component={InitiateTripScreen}
-          options={{ headerShown: false }}
-        />
         <Stack.Screen
           name="DropdownCurrency"
           component={DropdownCurrency}
