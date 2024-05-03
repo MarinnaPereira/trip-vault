@@ -1,12 +1,21 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import React from "react";
+import { useState } from "react";
 
-export default function Avatar() {
+export default function Avatar({ navigation }) {
+  const [avatar, setAvatar] = useState(null);
+
+  const handleAvatarPress = () => {
+    setAvatar("iceberg");
+    navigation.navigate("Register", { avatar: avatar });
+  };
+
   return (
     <View className="items-center mt-8">
-      <Text className="text-xl font-semibold">Pick your avatar</Text>
+      <Text className="text-xl font-semibold">
+        Start by picking your avatar
+      </Text>
       <View className="flex flex-row w-20 h-20 rounded-xl gap-3 justify-center mt-5">
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleAvatarPress}>
           <Image
             source={require("./../../assets/images/iceberg.png")}
             className="w-[100px] h-[100px] mt-5 rounded-xl"

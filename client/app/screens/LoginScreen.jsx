@@ -3,13 +3,38 @@ import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function LoginScreen({ navigation }) {
+  const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  const loginUser = async () => {
+    const url = "http://192.168.0.237:8080/auth/login";
+    try {
+      const data = {
+        credential,
+        password,
+      };
+      const config = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      };
+      const response = await fetch(url, config);
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // !handleLoginPress function
-  // const handleLoginPress = () => {
-  //   navigation.navigate("MyTrips", { screen: "MyTripsScreen" });
-  // };
+  const handleLoginPress = () => {
+    loginUser();
+    console.log("user logged in");
+    navigation.navigate("UnlockFirstTrip", { screen: "UnlockFirstTripScreen" });
+  };
 
   const handleRegisterPress = () => {
     navigation.navigate("Register", { screen: "RegisterScreen" });
@@ -31,6 +56,7 @@ export default function LoginScreen({ navigation }) {
         className="w-[300px] mt-8 bg-lightGray rounded-md p-3"
         placeholder="username / email"
         placeholderTextColor="#999"
+        onChangeText={(text) => setCredential(text)}
       ></TextInput>
       <View className="flex flex-row justify-between w-[300px] mt-4 bg-lightGray rounded-md p-3">
         <TextInput
@@ -54,7 +80,7 @@ export default function LoginScreen({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity
-        // onPress={handleLoginPress}
+        onPress={handleLoginPress}
         className="bg-green w-[300px] rounded-lg mt-4"
       >
         <Text className="text-white text-center p-4">Login</Text>

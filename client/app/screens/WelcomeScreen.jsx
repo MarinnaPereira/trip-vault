@@ -10,7 +10,7 @@ export default function WelcomeScreen() {
   };
 
   const handleRegisterPress = () => {
-    navigation.navigate("Register", { screen: "RegisterScreen" });
+    navigation.navigate("Avatar", { screen: "AvatarScreen" });
   };
 
   return (

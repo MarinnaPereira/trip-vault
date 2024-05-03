@@ -1,6 +1,7 @@
 import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+// import axios from "axios";
 
 export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState("");
@@ -8,9 +9,39 @@ export default function RegisterScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  const createUser = async () => {
+    const url = "http://192.168.0.237:8080/auth/register";
+    // console.log("avatar", avatar);
+    const avatar = "iceberg";
+    try {
+      const data = {
+        username,
+        email,
+        password,
+        avatar,
+      };
+      const config = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      };
+      const response = await fetch(url, config);
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // !handleRegisterPress function to save data
   const handleRegisterPress = () => {
-    navigation.navigate("MyAccount", { username: username, email: email });
+    createUser();
+    console.log("user created");
+    navigation.navigate("Login", { screen: "LoginScreen" });
+
+    // navigation.navigate("MyAccount", { username: username, email: email });
   };
 
   const handleLoginPress = () => {
