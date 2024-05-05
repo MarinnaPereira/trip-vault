@@ -23,7 +23,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen name="TabNavigation" component={TabNavigation} /> */}
+        <Stack.Screen
+          name="TabNavigation"
+          component={TabNavigation}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Welcome"
           component={WelcomeScreen}
@@ -34,14 +38,18 @@ export default function App() {
           component={LoginScreen}
           options={{ headerBackTitleVisible: false, title: '' }}
         />
-        <Stack.Screen name="Avatar" component={AvatarScreen} />
+        <Stack.Screen name="Avatar" component={AvatarScreen} options={{ headerShown: false }}/>
         <Stack.Screen
           name="Register"
           component={RegisterScreen}
           options={{ headerBackTitleVisible: false, title: '' }}
         />
 
-        <Stack.Screen name="Category" component={CategoryScreen} />
+        <Stack.Screen
+          name="Category"
+          component={CategoryScreen}
+          options={{ headerShown: false }}
+        />
 
         <Stack.Screen
           name="UnlockFirstTrip"
