@@ -1,3 +1,4 @@
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -15,13 +16,10 @@ import TrackFirstExpenseScreen from "./app/screens/TrackFirstExpenseScreen";
 import InitiateTripScreen from "./app/screens/InitiateTripScreen";
 import DropdownCurrency from "./app/screens/DropdownCurrency";
 import SearchBar from "./app/screens/SearchBar";
-
 import TripNameScreen from "./app/screens/TripNameScreen";
 import TripNameEndScreen from "./app/screens/TripNameEndScreen";
-
 import NewExpenseScreen from "./app/screens/NewExpenseScreen";
 import MyTripsScreen from "./app/screens/MyTripsScreen";
-
 import StatsScreen from "./app/screens/StatsScreen";
 
 const Stack = createStackNavigator();
@@ -30,30 +28,50 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen name="TabNavigation" component={TabNavigation} /> */}
-        {/* <Stack.Screen
+        <Stack.Screen
+          name="TabNavigation"
+          component={TabNavigation}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="Welcome"
           component={WelcomeScreen}
           options={{ headerShown: false }}
-        /> */}
-        {/* <Stack.Screen name="Login" component={LoginScreen} options={{ headerBackTitleVisible: false, title: '' }}/> */}
-        {/* <Stack.Screen
+        />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerBackTitleVisible: false, title: '' }}
+        />
+        <Stack.Screen name="Avatar" component={AvatarScreen} options={{ headerShown: false }}/>
+        <Stack.Screen
           name="Register"
           component={RegisterScreen}
-          options={{ headerBackTitleVisible: false, title: "" }}
-        /> */}
-        {/* <Stack.Screen name="Avatar" component={AvatarScreen} /> */}
+          options={{ headerBackTitleVisible: false, title: '' }}
+        />
 
-        {/* <Stack.Screen name="Category" component={CategoryScreen} /> */}
 
-        {/* <Stack.Screen
+        <Stack.Screen
+          name="Category"
+          component={CategoryScreen}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
           name="UnlockFirstTrip"
           component={UnlockFirstTripScreen}
-        /> */}
+        />
+
+        <Stack.Screen
+          name="InitiateTrip"
+          component={InitiateTripScreen}
+          options={{ headerShown: false }}
+        />
 
         {/* <Stack.Screen
           name="TrackFirstExpenseScreen"
           component={TrackFirstExpenseScreen}
+
         /> */}
 
         {/* <Stack.Screen
@@ -93,6 +111,7 @@ export default function App() {
           options={{ headerShown: false }}
         /> */}
         {/* <Stack.Screen name="Stats" component={StatsScreen} /> */}
+
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -56,8 +56,11 @@ export const validateExpense = [
     .withMessage('Payment method must be a string')
     .escape(),
 
-  body('receipt').optional().isString().withMessage('Receipt must be a string'),
-  // .escape(), //! should we keep this??
+  body('receipt')
+    .optional()
+    .isString()
+    .withMessage('Receipt must be a string')
+    .escape(),
 
   (req, res, next) => {
     const errors = validationResult(req);

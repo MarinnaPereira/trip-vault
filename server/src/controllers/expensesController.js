@@ -1,6 +1,7 @@
-import Trip from '../models/Trip.js';
-import fs from 'fs';
+import { decode } from 'html-entities';
 import fse from 'fs-extra';
+
+import Trip from '../models/Trip.js';
 
 export const getAllExpenses = async (req, res, next) => {
   //! necessary? when we get the trip, we get all expenses
@@ -72,6 +73,9 @@ export const getExpense = async (req, res, next) => {
     if (!expense) {
       return res.status(404).json({ message: 'Expense not found' });
     }
+    const receiptPath = expense.receipt;
+    const originalReceiptPath = decode(receiptPath);
+    expense.receipt = originalReceiptPath;
     res.json(expense);
   } catch (error) {
     next(error);
@@ -100,7 +104,9 @@ export const updateExpense = async (req, res, next) => {
     if (!req.file) {
       //! remember to delete the file of the uploads folder as well -??
       const receiptPath = expense.receipt;
-      fse.remove(receiptPath);
+      const originalReceiptPath = decode(receiptPath);
+      // console.log(originalReceiptPath);
+      fse.remove(originalReceiptPath);
       expense.receipt = undefined;
     }
 

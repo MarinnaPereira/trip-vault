@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import {
   View,
@@ -99,4 +100,5 @@ export default function MyTripsScreen({ totalSpent }) {
       </View>
     </ScrollView>
   );
+
 }

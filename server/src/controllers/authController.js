@@ -14,9 +14,9 @@ export const addUser = async (req, res, next) => {
 };
 
 export const loginUser = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { credential, password } = req.body;
   try {
-    const user = await User.login({ username, email, password });
+    const user = await User.login({ credential, password });
     if (!user) {
       next({ status: 401, message: 'Bad credential' });
       return;

@@ -1,18 +1,51 @@
-import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+
+import { loginUser } from '../api/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useUserContext } from '../contexts/userContext';
 
 export default function LoginScreen({ navigation }) {
-  const [password, setPassword] = useState("");
+  const [credential, setCredential] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const { user, setUser, isLogged, setIsLogged } = useUserContext();
 
-  // !handleLoginPress function
-  // const handleLoginPress = () => {
-  //   navigation.navigate("MyTrips", { screen: "MyTripsScreen" });
-  // };
+  const getToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (token !== null) {
+        console.log('token', token);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleLoginPress = async () => {
+    // ! just for testing other requests
+    // deleteUser(user);
+
+    try {
+      const userData = {
+        credential,
+        password,
+      };
+      const { token, user } = await loginUser(userData);
+      await AsyncStorage.setItem('token', token);
+      setUser(user);
+      setIsLogged(true);
+    } catch (err) {
+      console.error(err);
+    }
+
+    getToken();
+    navigation.navigate('UnlockFirstTrip', { screen: 'UnlockFirstTripScreen' });
+  };
 
   const handleRegisterPress = () => {
-    navigation.navigate("Register", { screen: "RegisterScreen" });
+    navigation.navigate('Register', { screen: 'RegisterScreen' });
   };
 
   const togglePasswordVisibility = () => {
@@ -22,7 +55,7 @@ export default function LoginScreen({ navigation }) {
   return (
     <View className="flex-1 items-center">
       <Image
-        source={require("./../../assets/images/trip-vault-logo.png")}
+        source={require('./../../assets/images/trip-vault-logo.png')}
         className="w-[120px] h-[120px] mt-5"
       />
       <Text className="mt-12 text-xl font-semibold">Login</Text>
@@ -31,6 +64,7 @@ export default function LoginScreen({ navigation }) {
         className="w-[300px] mt-8 bg-lightGray rounded-md p-3"
         placeholder="username / email"
         placeholderTextColor="#999"
+        onChangeText={text => setCredential(text)}
       ></TextInput>
       <View className="flex flex-row justify-between w-[300px] mt-4 bg-lightGray rounded-md p-3">
         <TextInput
@@ -38,10 +72,10 @@ export default function LoginScreen({ navigation }) {
           placeholderTextColor="#999"
           secureTextEntry={!showPassword}
           value={password}
-          onChangeText={(text) => setPassword(text)}
+          onChangeText={text => setPassword(text)}
         />
         <Ionicons
-          name={showPassword ? "eye-off" : "eye"}
+          name={showPassword ? 'eye-off' : 'eye'}
           size={24}
           color="black"
           onPress={togglePasswordVisibility}
@@ -54,7 +88,7 @@ export default function LoginScreen({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity
-        // onPress={handleLoginPress}
+        onPress={handleLoginPress}
         className="bg-green w-[300px] rounded-lg mt-4"
       >
         <Text className="text-white text-center p-4">Login</Text>

@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 const { hash, compare } = bcrypt;
 
 const userSchema = new Schema({
-  username: { type: String, required: true },
+  username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   avatar: { type: String, required: true },
@@ -20,7 +20,7 @@ userSchema.statics.register = async data => {
 
 userSchema.statics.login = async data => {
   const user = await User.findOne({
-    $or: [{ username: data.username }, { email: data.email }],
+    $or: [{ username: data.credential }, { email: data.credential }],
   });
   if (!user) return false;
   const match = await compare(data.password, user.password);

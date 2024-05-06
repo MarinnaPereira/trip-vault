@@ -17,7 +17,7 @@ export const validateUser = [
     .withMessage('Email is required')
     .isEmail()
     .withMessage('Invalid email address')
-    .normalizeEmail({ all_lowercase: true })
+    .normalizeEmail({ all_lowercase: true, gmail_remove_dots: false })
     .escape(),
 
   body('password')

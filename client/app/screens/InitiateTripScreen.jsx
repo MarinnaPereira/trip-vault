@@ -1,3 +1,4 @@
+
 import { View, Text, Image, TouchableOpacity, Button } from "react-native";
 // import TabNavigation from "../navigations/TabNavigation";
 import React, { useState } from "react";
@@ -6,6 +7,7 @@ import DropdownCurrency from "./DropdownCurrency";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 
 export default function InitiateTripScreen() {
   const navigation = useNavigation();
@@ -16,11 +18,11 @@ export default function InitiateTripScreen() {
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
 
   const handleEnterName = () => {
-    navigation.navigate("MyTrips", { screen: "MyTripsScreen" });
+    navigation.navigate('MyTrips', { screen: 'MyTripsScreen' });
   };
 
   const handleGoBack = () => {
-    navigation.navigate("UnlockFirstTrip", { screen: "UnlockFirstTripScreen" });
+    navigation.navigate('UnlockFirstTrip', { screen: 'UnlockFirstTripScreen' });
   };
 
   const showStartDatePicker = () => {
@@ -53,7 +55,7 @@ export default function InitiateTripScreen() {
       <View className="mt-10">
         <TouchableOpacity onPress={handleGoBack}>
           <Image
-            source={require("../../assets/images/singleArrow.png")}
+            source={require('../../assets/images/singleArrow.png')}
             className="ml-9 w-12 h-12"
           />
         </TouchableOpacity>
