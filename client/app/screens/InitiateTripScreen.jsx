@@ -1,14 +1,19 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Button } from "react-native";
 // import TabNavigation from "../navigations/TabNavigation";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import DropdownCurrency from "./DropdownCurrency";
-// import DatePicker from "react-native-date-picker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function InitiateTripScreen() {
   const navigation = useNavigation();
-  // const [startDate, setStartDate] = useState(null);
-  // const [endDate, setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [isStartDatePickerVisible, setStartDatePickerVisibility] =
+    useState(false);
+  const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
 
   const handleEnterName = () => {
     navigation.navigate("MyTrips", { screen: "MyTripsScreen" });
@@ -16,6 +21,32 @@ export default function InitiateTripScreen() {
 
   const handleGoBack = () => {
     navigation.navigate("UnlockFirstTrip", { screen: "UnlockFirstTripScreen" });
+  };
+
+  const showStartDatePicker = () => {
+    setStartDatePickerVisibility(true);
+  };
+
+  const hideStartDatePicker = () => {
+    setStartDatePickerVisibility(false);
+  };
+
+  const handleStartDateConfirm = (date) => {
+    setStartDate(date);
+    hideStartDatePicker();
+  };
+
+  const showEndDatePicker = () => {
+    setEndDatePickerVisibility(true);
+  };
+
+  const hideEndDatePicker = () => {
+    setEndDatePickerVisibility(false);
+  };
+
+  const handleEndDateConfirm = (date) => {
+    setEndDate(date);
+    hideEndDatePicker();
   };
   return (
     <>
@@ -54,56 +85,64 @@ export default function InitiateTripScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* THIS CODE BELLOW IS THE CALENDAR */}
-        {/* <View style={{ marginTop: 20 }}>
-          <DatePicker
-            style={{
-              width: 300,
-              backgroundColor: "lightgray",
-              borderRadius: 5,
-            }}
-            date={startDate}
+        <View className="mt-16">
+          <TouchableOpacity
+            onPress={showStartDatePicker}
+            className="bg-lightGray rounded-md"
+          >
+            <Text className="w-[300px] p-3 text-[#999]">Select start date</Text>
+          </TouchableOpacity>
+          <DateTimePickerModal
+            isVisible={isStartDatePickerVisible}
             mode="date"
-            placeholder="Select start date"
-            format="YYYY-MM-DD"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            onDateChange={(date) => setStartDate(date)}
+            onConfirm={handleStartDateConfirm}
+            onCancel={hideStartDatePicker}
           />
+        </View>
 
-          <DatePicker
-            style={{
-              width: 300,
-              backgroundColor: "lightgray",
-              borderRadius: 5,
-              marginTop: 10,
-            }}
-            date={endDate}
+        <View className="mt-2">
+          <TouchableOpacity
+            onPress={showEndDatePicker}
+            className="bg-lightGray rounded-md"
+          >
+            <Text className="w-[300px] p-3 text-[#999]">Select end date</Text>
+          </TouchableOpacity>
+          <DateTimePickerModal
+            isVisible={isEndDatePickerVisible}
             mode="date"
-            placeholder="Select end date"
-            format="YYYY-MM-DD"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            onDateChange={(date) => setEndDate(date)}
+            onConfirm={handleEndDateConfirm}
+            onCancel={hideEndDatePicker}
           />
+        </View>
 
-          //? THIS CODE BELLOW IS THE CALCULATION OF THE TRIP LENGTH
-          <View style={{ marginTop: 10 }}>
-            <Text style={{ width: 300, padding: 10 }}>
-              The trip length is{" "}
-              {endDate && startDate
-                ? `${
-                    Math.abs(new Date(endDate) - new Date(startDate)) /
-                    (1000 * 60 * 60 * 24)
-                  } days`
-                : "__"}{" "}
-              days
-            </Text>
-          </View>
-           */}
-        {/* </View> */}
+        <View className="flex-row items-center mt-2 w-[300px] p-3 bg-lightGray rounded-md">
+          <MaterialCommunityIcons
+            name="information-outline"
+            size={16}
+            color="#878686"
+          />
+          <Text className="ml-2 text-[#6d6a6a]">
+            The trip length is{" "}
+            {endDate && startDate
+              ? `${
+                  Math.abs(new Date(endDate) - new Date(startDate)) /
+                  (1000 * 60 * 60 * 24)
+                } days`
+              : "__"}{" "}
+            days
+          </Text>
+        </View>
 
-        {/* HERE HAS TO COME THE NAVBAR -> TabNavigation */}
+        <View className="mt-8">
+          <TouchableOpacity
+            // onPress={ }
+            className="bg-green w-[150px] rounded-lg mt-4"
+          >
+            <Text className="text-white text-center p-4">Save</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* HERE WE ARE ADDING THE NAVBAR -> TabNavigation */}
       </View>
     </>
   );

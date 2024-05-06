@@ -12,7 +12,7 @@ export default function TrackFirstExpenseScreen() {
 
   return (
     <View className="flex-1 mt-[130px] items-center">
-      <Text className="text-3xl">Track Your First Expense</Text>
+      <Text className="text-3xl"> Track Your First Expense</Text>
       <TouchableOpacity onPress={CategoryScreen}>
         <Image
           source={require("../../assets/images/plus.png")}

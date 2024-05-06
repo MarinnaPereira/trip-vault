@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
 
 export default function Category() {
-
   return (
     <View className="items-center mt-5">
       <Text className="text-xl font-semibold">Pick a category</Text>
