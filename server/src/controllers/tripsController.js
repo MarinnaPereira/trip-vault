@@ -37,6 +37,11 @@ export const addTrip = async (req, res, next) => {
       budget,
     });
     const savedTrip = await newTrip.save();
+
+    const user = await User.findById(userId);
+    user.selectedTrip = savedTrip._id;
+    await user.save();
+
     res.json(savedTrip);
   } catch (error) {
     next(error);

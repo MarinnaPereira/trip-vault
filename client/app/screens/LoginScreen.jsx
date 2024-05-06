@@ -2,49 +2,44 @@ import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 
+import { loginUser } from '../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useUserContext } from '../contexts/userContext';
 
 export default function LoginScreen({ navigation }) {
   const [credential, setCredential] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-
-  const loginUser = async () => {
-    const url = 'http://192.168.0.237:8080/auth/login';
-    try {
-      const data = {
-        credential,
-        password,
-      };
-      const config = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      };
-      const response = await fetch(url, config);
-      const result = await response.json();
-      await AsyncStorage.setItem('token', result.token);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const { user, setUser, isLogged, setIsLogged } = useUserContext();
 
   const getToken = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
       if (token !== null) {
-        console.log(token);
+        console.log('token', token);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  // !handleLoginPress function
-  const handleLoginPress = () => {
-    loginUser();
+  const handleLoginPress = async () => {
+    // ! just for testing other requests
+    // deleteUser(user);
+
+    try {
+      const userData = {
+        credential,
+        password,
+      };
+      const { token, user } = await loginUser(userData);
+      await AsyncStorage.setItem('token', token);
+      setUser(user);
+      setIsLogged(true);
+    } catch (err) {
+      console.error(err);
+    }
+
     getToken();
     navigation.navigate('UnlockFirstTrip', { screen: 'UnlockFirstTripScreen' });
   };
