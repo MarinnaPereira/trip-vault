@@ -15,7 +15,6 @@ import TrackFirstExpenseScreen from "./app/screens/TrackFirstExpenseScreen";
 import InitiateTripScreen from "./app/screens/InitiateTripScreen";
 import DropdownCurrency from "./app/screens/DropdownCurrency";
 import SearchBar from "./app/screens/SearchBar";
-import SearchBar2 from "./app/screens/SearchBar2";
 
 import TripNameScreen from "./app/screens/TripNameScreen";
 import TripNameEndScreen from "./app/screens/TripNameEndScreen";
@@ -68,11 +67,11 @@ export default function App() {
           component={TripNameScreen}
           options={{ headerShown: false }}
         /> */}
-        {/* <Stack.Screen
+        <Stack.Screen
           name="TripNameEndScreen"
           component={TripNameEndScreen}
           options={{ headerShown: false }}
-        /> */}
+        />
         {/* <Stack.Screen
           name="DropdownCurrency"
           component={DropdownCurrency}
@@ -83,20 +82,16 @@ export default function App() {
           component={SearchBar}
           options={{ headerShown: false }}
         /> */}
-        {/* <Stack.Screen
-          name="SearchBar2"
-          component={SearchBar2}
-          options={{ headerShown: false }}
-        /> */}
+
         {/* <Stack.Screen name="Trip" component={TripScreen} /> */}
 
         {/* <Stack.Screen name="NewExpense" component={NewExpenseScreen} /> */}
         {/* <Stack.Screen name="MyAccount" component={MyAccountScreen} /> */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name="MyTrips"
           component={MyTripsScreen}
           options={{ headerShown: false }}
-        />
+        /> */}
         {/* <Stack.Screen name="Stats" component={StatsScreen} /> */}
       </Stack.Navigator>
     </NavigationContainer>

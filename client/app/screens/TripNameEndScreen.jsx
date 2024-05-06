@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, Modal } from "react-native";
 import { Entypo, FontAwesome6 } from "@expo/vector-icons";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function TripNameEndScreen({ totalSpent }) {
   const [isMenuVisible, setMenuVisible] = useState(false);
@@ -32,7 +33,7 @@ export default function TripNameEndScreen({ totalSpent }) {
     navigation.navigate("UnlockFirstTrip", { screen: "UnlockFirstTripScreen" });
   };
   return (
-    <>
+    <ScrollView>
       <View className="mt-6">
         <TouchableOpacity onPress={handleGoBack}>
           <Image
@@ -228,6 +229,6 @@ export default function TripNameEndScreen({ totalSpent }) {
           />
         </TouchableOpacity>
       </View>
-    </>
+    </ScrollView>
   );
 }

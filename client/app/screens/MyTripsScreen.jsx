@@ -1,8 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, Modal } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Modal,
+  ScrollView,
+} from "react-native";
 import { Entypo, FontAwesome6 } from "@expo/vector-icons";
-//import SearchBar from "./SearchBar";
-import SearchBar2 from "./SearchBar2";
+import SearchBar from "./SearchBar";
 
 const handleGoBack = () => {
   navigation.navigate("UnlockFirstTrip", { screen: "UnlockFirstTripScreen" });
@@ -10,7 +16,7 @@ const handleGoBack = () => {
 
 export default function MyTripsScreen({ totalSpent }) {
   return (
-    <>
+    <ScrollView>
       <View className="mt-10">
         <TouchableOpacity onPress={handleGoBack}>
           <Image
@@ -46,7 +52,8 @@ export default function MyTripsScreen({ totalSpent }) {
           <View className="flex-row justify-between mt-8 ml-2">
             <Text>All trips</Text>
           </View>
-          <SearchBar2 />
+          <SearchBar />
+
           <View className="mt-2 flex-row">
             <View className="p-3 bg-lightGray rounded-md ">
               <Text className="w-[350px] p-1 text-black font-bold relative ">
@@ -90,6 +97,6 @@ export default function MyTripsScreen({ totalSpent }) {
           />
         </TouchableOpacity>
       </View>
-    </>
+    </ScrollView>
   );
 }
