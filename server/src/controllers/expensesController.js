@@ -67,19 +67,31 @@ export const getExpense = async (req, res, next) => {
     }
     const expenseId = req.params.id;
 
-    const expense = trip.expenses.filter(expense =>
-      expense._id.equals(expenseId),
-    )[0];
+    const expense = trip.expenses.find(
+      expense => expense._id.toString() === expenseId,
+    );
     if (!expense) {
       return res.status(404).json({ message: 'Expense not found' });
     }
     const receiptPath = expense.receipt;
     const originalReceiptPath = decode(receiptPath);
     expense.receipt = originalReceiptPath;
-    res.json(expense);
+    res.locals.expense = expense;
+    if (req.path.includes('receipt')) {
+      next();
+    } else {
+      res.json(expense);
+    }
   } catch (error) {
     next(error);
   }
+};
+
+export const downloadReceipt = async (req, res, next) => {
+  if (!res.locals.expense || !res.locals.expense.receipt) {
+    return res.status(404).json({ message: 'Receiptnot found' });
+  }
+  res.sendFile(res.locals.expense.receipt), { root: '.' };
 };
 
 export const updateExpense = async (req, res, next) => {
