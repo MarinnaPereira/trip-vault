@@ -2,7 +2,12 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const baseUrl = 'http://192.168.0.237:8080';
-const token = await AsyncStorage.getItem('token');
+
+const getToken = async () => {
+  const token = await AsyncStorage.getItem('token');
+  return token;
+  // const token = '$2b$10$hlfD4HuCOd4xSEkWWmyDsOE0yFUgY6bmY7vwfqF5cVN5u5eDjbWhK';
+};
 
 export const registerUser = async newUser => {
   try {
@@ -30,6 +35,7 @@ export const loginUser = async userData => {
 
 export const updateUser = async updatedUser => {
   try {
+    const token = getToken();
     const res = await axios.patch(
       `${baseUrl}/user/${updatedUser._id}`,
       updatedUser,
@@ -49,6 +55,8 @@ export const updateUser = async updatedUser => {
 
 export const deleteUser = async user => {
   try {
+    const token = getToken();
+
     const res = await axios.delete(`${baseUrl}/user/${user._id}`, {
       headers: {
         'Content-Type': 'application/json',
