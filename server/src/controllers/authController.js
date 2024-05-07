@@ -9,7 +9,6 @@ export const addUser = async (req, res, next) => {
     res.json(registeredUser);
   } catch (error) {
     next({ status: 400, message: error.message });
-    //! give the token already?
   }
 };
 

@@ -5,12 +5,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { loginUser } from '../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUserContext } from '../contexts/userContext';
+import { useTripsContext } from '../contexts/tripsContext';
 
 export default function LoginScreen({ navigation }) {
   const [credential, setCredential] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const { user, setUser, isLogged, setIsLogged } = useUserContext();
+  const { trips, dispatch } = useTripsContext();
 
   const handleLoginPress = async () => {
     try {
