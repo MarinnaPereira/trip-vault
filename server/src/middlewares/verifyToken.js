@@ -13,13 +13,11 @@ const verifyToken = async (req, res, next) => {
       throw new Error('User not authenticated');
     }
 
-    if (!user.selectedTrip) {
-      throw new Error('No active trip for this user');
-    }
-
     console.log('token verified');
     req.userInfo = user;
-    req.tripId = user.selectedTrip._id;
+    if (user.selectedTrip) {
+      req.tripId = user.selectedTrip._id;
+    }
     console.log('req.userInfo', req.userInfo);
     next();
   } catch (error) {
