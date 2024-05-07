@@ -10,15 +10,20 @@ const verifyToken = async (req, res, next) => {
     console.log('token', token);
     console.log('user', user);
     if (!user || !user._id.equals(decoded.userId)) {
-      throw new Error();
+      throw new Error('User not authenticated');
+    }
+
+    if (!user.selectedTrip) {
+      throw new Error('No active trip for this user');
     }
 
     console.log('token verified');
-    req.userInfo = user; //! necessary?
+    req.userInfo = user;
+    req.tripId = user.selectedTrip._id;
     console.log('req.userInfo', req.userInfo);
     next();
   } catch (error) {
-    res.status(401).json({ msg: 'Unauthorized' });
+    res.status(401).json({ msg: 'Unauthorized', error: error.message });
   }
 };
 
