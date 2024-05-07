@@ -1,11 +1,60 @@
-import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, Modal } from "react-native";
-import { Entypo, FontAwesome6 } from "@expo/vector-icons";
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, Modal } from 'react-native';
+import { Entypo, FontAwesome6 } from '@expo/vector-icons';
+
+import { deleteExpense, deleteTrip } from '../api/api';
+import { useTripsContext } from '../contexts/tripsContext';
+import { useUserContext } from '../contexts/userContext';
 
 export default function TripNameScreen({ totalSpent }) {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
+
+  const { trips, dispatch } = useTripsContext();
+  const { user, setUser } = useUserContext();
+
+  //* testing deleting trip
+  // call api deleteTrip
+  // update trip context
+  // update user's selected trip
+
+  const tripData = {
+    name: 'hardcoded trip3',
+    start: '2024-11-01',
+    end: '2024-12-15',
+    currency: 'USD',
+    budget: 3000,
+    _id: '663a206528c0de859429ca39',
+  };
+
+  useEffect(() => {
+    const eliminateTrip = async () => {
+      try {
+        await deleteTrip(tripData);
+        dispatch({
+          type: 'DELETE_TRIP',
+          payload: tripData['_id'],
+        });
+      } catch (error) {
+        console.error('Error fetching trips:', error);
+      }
+    };
+
+    eliminateTrip();
+  }, []);
+
+  useEffect(() => {
+    console.log('Updated trips', trips); // Logging updated trips
+    setUser({
+      ...user,
+      selectedTrip: trips.length >= 1 ? trips[trips.length - 1]._id : null,
+    });
+  }, [trips]); // Logging trips when it changes
+
+  useEffect(() => {
+    console.log('User', user);
+  }, [user]);
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
@@ -73,9 +122,9 @@ export default function TripNameScreen({ totalSpent }) {
         <View
           style={{
             flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
           }}
         >
           <View className="bg-white p-5 rounded-lg">
@@ -134,7 +183,7 @@ export default function TripNameScreen({ totalSpent }) {
 
           <View className="flex-row">
             <Image
-              source={require("../../assets/images/restaurant.png")}
+              source={require('../../assets/images/restaurant.png')}
               className="w-12 h-12"
             />
 
@@ -162,7 +211,7 @@ export default function TripNameScreen({ totalSpent }) {
 
           <View className="flex-row">
             <Image
-              source={require("../../assets/images/shopping.png")}
+              source={require('../../assets/images/shopping.png')}
               className="w-12 h-12"
             />
 
@@ -180,7 +229,7 @@ export default function TripNameScreen({ totalSpent }) {
 
           <View className="flex-row mt-2">
             <Image
-              source={require("../../assets/images/activities.png")}
+              source={require('../../assets/images/activities.png')}
               className="w-12 h-12"
             />
 
@@ -199,7 +248,7 @@ export default function TripNameScreen({ totalSpent }) {
 
           <View className="flex-row mt-2">
             <Image
-              source={require("../../assets/images/others.png")}
+              source={require('../../assets/images/others.png')}
               className="w-12 h-12"
             />
 
@@ -221,7 +270,7 @@ export default function TripNameScreen({ totalSpent }) {
       <View className="flex flex-row justify-end">
         <TouchableOpacity>
           <Image
-            source={require("../../assets/images/plus.png")}
+            source={require('../../assets/images/plus.png')}
             className="mr-5 w-20 h-20"
           />
         </TouchableOpacity>

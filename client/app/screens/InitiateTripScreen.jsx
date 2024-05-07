@@ -1,13 +1,14 @@
-
-import { View, Text, Image, TouchableOpacity, Button } from "react-native";
+import { View, Text, Image, TouchableOpacity, Button } from 'react-native';
 // import TabNavigation from "../navigations/TabNavigation";
-import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import DropdownCurrency from "./DropdownCurrency";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import DropdownCurrency from './DropdownCurrency';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-
+import { useTripsContext } from '../contexts/tripsContext';
+import { useUserContext } from '../contexts/userContext';
+import { addTrip, updateTrip } from '../api/api';
 
 export default function InitiateTripScreen() {
   const navigation = useNavigation();
@@ -16,6 +17,61 @@ export default function InitiateTripScreen() {
   const [isStartDatePickerVisible, setStartDatePickerVisibility] =
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
+
+  const { dispatch, trips } = useTripsContext();
+  const { user, setUser } = useUserContext();
+
+  const tripData = {
+    name: 'hardcoded trip4',
+    start: '2024-11-01',
+    end: '2024-12-15',
+    currency: 'USD',
+    budget: 3000,
+    // _id: '663a0e28a24385e123c99223', //for updating only
+  };
+
+  // *testing creating trip
+  useEffect(() => {
+    const createTrip = async () => {
+      try {
+        const newTrip = await addTrip(tripData);
+        dispatch({
+          type: 'ADD_TRIP',
+          payload: newTrip,
+        });
+        setUser({ ...user, selectedTrip: newTrip._id });
+      } catch (error) {
+        console.error('Error creating trip:', error);
+      }
+    };
+
+    createTrip();
+  }, []);
+
+  // *testing updating trip
+  // useEffect(() => {
+  //   const editTrip = async () => {
+  //     try {
+  //       const editedTrip = await updateTrip(tripData);
+  //       dispatch({
+  //         type: 'UPDATE_TRIP',
+  //         payload: editedTrip,
+  //       });
+  //     } catch (error) {
+  //       console.error('Error updating trip:', error);
+  //     }
+  //   };
+
+  //   editTrip();
+  // }, []);
+
+  useEffect(() => {
+    console.log('Updated trips', trips); // Logging updated trips
+  }, [trips]); // Logging trips when it changes
+
+  useEffect(() => {
+    console.log('User', user);
+  }, [user]);
 
   const handleEnterName = () => {
     navigation.navigate('MyTrips', { screen: 'MyTripsScreen' });
@@ -33,7 +89,7 @@ export default function InitiateTripScreen() {
     setStartDatePickerVisibility(false);
   };
 
-  const handleStartDateConfirm = (date) => {
+  const handleStartDateConfirm = date => {
     setStartDate(date);
     hideStartDatePicker();
   };
@@ -46,7 +102,7 @@ export default function InitiateTripScreen() {
     setEndDatePickerVisibility(false);
   };
 
-  const handleEndDateConfirm = (date) => {
+  const handleEndDateConfirm = date => {
     setEndDate(date);
     hideEndDatePicker();
   };
@@ -124,13 +180,13 @@ export default function InitiateTripScreen() {
             color="#878686"
           />
           <Text className="ml-2 text-[#6d6a6a]">
-            The trip length is{" "}
+            The trip length is{' '}
             {endDate && startDate
               ? `${
                   Math.abs(new Date(endDate) - new Date(startDate)) /
                   (1000 * 60 * 60 * 24)
                 } days`
-              : "__"}{" "}
+              : '__'}{' '}
             days
           </Text>
         </View>

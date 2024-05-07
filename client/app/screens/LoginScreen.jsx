@@ -12,7 +12,6 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const { user, setUser, isLogged, setIsLogged } = useUserContext();
-  const { trips, dispatch } = useTripsContext();
 
   const handleLoginPress = async () => {
     try {
@@ -27,10 +26,9 @@ export default function LoginScreen({ navigation }) {
     } catch (err) {
       console.error(err);
     }
-
-    navigation.navigate('UnlockFirstTrip', {
-      screen: 'UnlockFirstTripScreen',
-    });
+    // navigation.navigate('UnlockFirstTrip', {
+    //   screen: 'UnlockFirstTripScreen',
+    // });
   };
 
   const handleRegisterPress = () => {

@@ -22,12 +22,14 @@ export const updateUser = async (req, res, next) => {
   //! OR: we create another middleware which will find the user by id, clone it to a variable, spreading also the req.body, and after that pass the new variable to the validator -> takes more time for processing the request and sending response to front
 
   delete body.email; // so the runValidators does not check unique email again
-
+  console.log('just added body log', body);
   try {
     const updatedUser = await User.findByIdAndUpdate(id, body, {
       new: true,
       runValidators: true,
     });
+    delete updatedUser.password;
+    console.log('updated user', updatedUser);
     res.json(updatedUser);
   } catch (error) {
     next(error);

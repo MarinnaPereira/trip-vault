@@ -60,7 +60,6 @@ export const updateUser = async updatedUser => {
     console.error(err);
   }
 };
-//!remember to setUser(res.data)
 
 export const deleteUser = async user => {
   // * user as parameter (should have _id inside)
@@ -114,7 +113,6 @@ export const addTrip = async newTrip => {
     console.error(err);
   }
 };
-// !frontend: remember to update user state, and setUser again, so it will be updated with the new selectedTrip
 
 export const updateTrip = async updatedTrip => {
   // * updatedTrip (with complete information, not just the changed ones inside) as parameter
@@ -136,7 +134,6 @@ export const updateTrip = async updatedTrip => {
     console.error(err);
   }
 };
-// !refetch allTrips
 
 export const deleteTrip = async trip => {
   // * trip as parameter (should have _id inside)
@@ -159,10 +156,10 @@ export const deleteTrip = async trip => {
 // ? expenses requests (getAll and get????????????)
 
 export const addExpense = async newExpense => {};
-// !refetch trip
+// !update trip
 
 export const updateExpense = async updatedExpense => {};
-// !refetch trip
+// !update trip
 
 export const deleteExpense = async expense => {};
-// !refetch trip
+// !update trip

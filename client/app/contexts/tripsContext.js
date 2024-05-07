@@ -4,6 +4,13 @@ export const TripsContext = createContext();
 
 const tripsReducer = (state, action) => {
   switch (action.type) {
+    case 'ADD_ALL_TRIPS':
+      //   if (!Array.isArray(action.payload)) {
+      //     console.error('Payload is not an array');
+      //     return state;
+      //   }
+      return [...state, ...action.payload];
+
     case 'ADD_TRIP':
       return [...state, action.payload];
     case 'UPDATE_TRIP':
@@ -12,6 +19,8 @@ const tripsReducer = (state, action) => {
       );
     case 'DELETE_TRIP':
       return state.filter(trip => trip._id !== action.payload);
+    case 'DELETE_ALL_TRIPS':
+      return [];
     case 'ADD_EXPENSE':
       return state.map(trip =>
         trip._id === action.tripId
@@ -40,8 +49,9 @@ const tripsReducer = (state, action) => {
             }
           : trip,
       );
+
     default:
-      return state;
+      throw new Error('You action type does not exist!');
   }
 };
 
