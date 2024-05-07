@@ -3,8 +3,8 @@ import User from '../models/User.js';
 import { isValidObjectId } from 'mongoose';
 
 export const getAllTrips = async (req, res, next) => {
-  const { userId } = req.body;
-  //! req.userInfo
+  const userId = req.userInfo._id;
+  console.log(userId);
   if (!isValidObjectId(userId)) {
     return res.status(400).json({ message: 'Invalid userId' });
   }
@@ -22,7 +22,8 @@ export const getAllTrips = async (req, res, next) => {
 };
 
 export const addTrip = async (req, res, next) => {
-  const { userId, name, start, end, duration, currency, budget } = req.body;
+  const userId = req.userInfo._id;
+  const { name, start, end, duration, currency, budget } = req.body;
   if (!isValidObjectId(userId)) {
     return res.status(400).json({ message: 'Invalid userId' });
   }
@@ -37,11 +38,9 @@ export const addTrip = async (req, res, next) => {
       budget,
     });
     const savedTrip = await newTrip.save();
-
     const user = await User.findById(userId);
     user.selectedTrip = savedTrip._id;
     await user.save();
-
     res.json(savedTrip);
   } catch (error) {
     next(error);
