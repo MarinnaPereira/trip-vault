@@ -8,14 +8,19 @@ const verifyToken = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.userId);
     if (!user || !user._id.equals(decoded.userId)) {
-      throw new Error();
+      throw new Error('User not authenticated');
+    }
+
+    if (!user.selectedTrip) {
+      throw new Error('No active trip for this user');
     }
 
     console.log('token verified');
     req.userInfo = user; //! necessary?
+    req.tripId = user.selectedTrip._id;
     next();
   } catch (error) {
-    res.status(401).json({ msg: 'Unauthorized' });
+    res.status(401).json({ msg: 'Unauthorized', error: error.message });
   }
 };
 
