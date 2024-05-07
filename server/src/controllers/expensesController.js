@@ -6,7 +6,7 @@ import Trip from '../models/Trip.js';
 export const getAllExpenses = async (req, res, next) => {
   //! necessary? when we get the trip, we get all expenses
   try {
-    const { tripId } = req.body;
+    const tripId = req.tripId;
     const trip = await Trip.findById(tripId);
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
@@ -20,16 +20,9 @@ export const getAllExpenses = async (req, res, next) => {
 
 export const addExpense = async (req, res, next) => {
   try {
-    // const { tripId } = req.body; //! are we sending here or taking from the userId sent by the token?
-    const {
-      tripId,
-      categoryName,
-      value,
-      currency,
-      description,
-      dates,
-      paymentMethod,
-    } = req.body;
+    const tripId = req.tripId; //! are we sending here or taking from the userId sent by the token?
+    const { categoryName, value, currency, description, dates, paymentMethod } =
+      req.body;
 
     const trip = await Trip.findById(tripId);
     if (!trip) {
@@ -60,7 +53,7 @@ export const addExpense = async (req, res, next) => {
 
 export const getExpense = async (req, res, next) => {
   try {
-    const { tripId } = req.body;
+    const tripId = req.tripId;
     const trip = await Trip.findById(tripId);
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
@@ -96,7 +89,7 @@ export const downloadReceipt = async (req, res, next) => {
 
 export const updateExpense = async (req, res, next) => {
   try {
-    const { tripId } = req.body;
+    const tripId = req.tripId;
     const trip = await Trip.findById(tripId);
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
@@ -131,7 +124,7 @@ export const updateExpense = async (req, res, next) => {
 
 export const deleteExpense = async (req, res, next) => {
   try {
-    const { tripId } = req.body;
+    const tripId = req.tripId;
     const trip = await Trip.findById(tripId);
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
