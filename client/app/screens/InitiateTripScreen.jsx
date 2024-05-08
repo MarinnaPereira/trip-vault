@@ -5,42 +5,39 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  Button,
+  ScrollView,
 } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-// import TabNavigation from "../navigations/TabNavigation";
 import { useNavigation } from '@react-navigation/native';
-import DropdownCurrency from './DropdownCurrency';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
-import { addTrip, updateTrip } from '../api/api';
+import { addTrip } from '../api/api';
+import DropdownCurrency from './DropdownCurrency';
+import { useCurrencyContext } from '../contexts/currencyContext';
 
 export default function InitiateTripScreen() {
   const navigation = useNavigation();
   const [tripName, setTripName] = useState('');
+  const [budget, setBudget] = useState('');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [budget, setBudget] = useState(null);
   const [isStartDatePickerVisible, setStartDatePickerVisibility] =
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
-
   const { dispatch, trips } = useTripsContext();
   const { user, setUser } = useUserContext();
+  const { baseCurrency, setBaseCurrency, availableCurrencies } =
+    useCurrencyContext();
 
   const tripData = {
     name: tripName,
     start: startDate,
     end: endDate,
-    currency: 'ABC',
-    budget,
-    // _id: '663a0e28a24385e123c99223', //for updating only
+    currency: baseCurrency,
+    budget: parseFloat(budget) || 0,
   };
 
-  // *testing creating trip
   let newTrip;
   const createTrip = async () => {
     try {
@@ -49,60 +46,15 @@ export default function InitiateTripScreen() {
         type: 'ADD_TRIP',
         payload: newTrip,
       });
+      setUser({ ...user, selectedTrip: newTrip._id });
     } catch (error) {
       console.error('Error creating trip:', error);
     }
-    return newTrip;
   };
 
   const handleSavePress = async () => {
-    const newTrip = await createTrip();
-    if (newTrip) {
-      setUser({ ...user, selectedTrip: newTrip._id });
-    }
+    await createTrip();
   };
-
-  // useEffect(() => {
-  //   const createTrip = async () => {
-  //     try {
-  //       const newTrip = await addTrip(tripData);
-  //       dispatch({
-  //         type: 'ADD_TRIP',
-  //         payload: newTrip,
-  //       });
-  //       setUser({ ...user, selectedTrip: newTrip._id });
-  //     } catch (error) {
-  //       console.error('Error creating trip:', error);
-  //     }
-  //   };
-
-  //   createTrip();
-  // }, []);
-
-  // *testing updating trip
-  // useEffect(() => {
-  //   const editTrip = async () => {
-  //     try {
-  //       const editedTrip = await updateTrip(tripData);
-  //       dispatch({
-  //         type: 'UPDATE_TRIP',
-  //         payload: editedTrip,
-  //       });
-  //     } catch (error) {
-  //       console.error('Error updating trip:', error);
-  //     }
-  //   };
-
-  //   editTrip();
-  // }, []);
-
-  useEffect(() => {
-    console.log('Updated trips', trips); // Logging updated trips
-  }, [trips]); // Logging trips when it changes
-
-  useEffect(() => {
-    console.log('User', user);
-  }, [user]);
 
   const handleGoBack = () => {
     navigation.navigate('UnlockFirstTrip', { screen: 'UnlockFirstTripScreen' });
@@ -134,6 +86,18 @@ export default function InitiateTripScreen() {
     setEndDatePickerVisibility(false);
   };
 
+  const handleCurrencyChange = value => {
+    setBaseCurrency(value);
+  };
+
+  useEffect(() => {
+    console.log('Updated trips', trips);
+  }, [trips]);
+
+  useEffect(() => {
+    console.log('User', user);
+  }, [user]);
+
   return (
     <ScrollView>
       <View className="mt-10">
@@ -158,22 +122,23 @@ export default function InitiateTripScreen() {
           />
         </View>
         <View className="mt-4">
-          <DropdownCurrency />
-          <Text></Text>
+          <DropdownCurrency
+            selectedCurrency={baseCurrency}
+            onChange={handleCurrencyChange}
+          />
         </View>
-        <View className="mt-4 bg-lightGray rounder-md">
+        <View className="mt-8 bg-lightGray rounded-md">
           <TextInput
-            onChangeText={text => {
-              setBudget(text);
-            }} // handle changes to the budget
-            placeholder="Enter budget amount (optional)"
-            keyboardType="numeric" // this is the keyboard
-            style={{ width: 380, padding: 12, fontSize: 18, color: '#999' }}
+            onChangeText={text => setBudget(text)}
+            placeholder="Enter budget (optional)"
+            keyboardType="numeric"
+            value={budget}
+            className="w-[380px] text-lg p-3 bg-lightGray rounded-md"
           />
         </View>
         <View className="mt-16">
           <TouchableOpacity
-            onPress={(onPress = () => setStartDatePickerVisibility(true))}
+            onPress={() => setStartDatePickerVisibility(true)}
             className="bg-lightGray rounded-md"
           >
             <Text className="w-[380px] text-lg pt-3 pl-3 pb-2 text-[#999]">
@@ -201,7 +166,7 @@ export default function InitiateTripScreen() {
               Select end date
             </Text>
             {endDate && (
-              <Text className="pl-3 pb-3 text-lg  text-green font-extrabold">
+              <Text className="pl-3 pb-3 text-lg text-green font-extrabold">
                 {endDate.toDateString()}
               </Text>
             )}
