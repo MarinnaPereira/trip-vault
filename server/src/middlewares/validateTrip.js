@@ -1,11 +1,11 @@
 import { body, validationResult } from 'express-validator';
 
 export const validateTrip = [
-  body('userId')
-    .notEmpty()
-    .withMessage('User ID is required')
-    .isMongoId()
-    .withMessage('User ID must be a valid MongoDB ObjectId'),
+  // body('userId')
+  //   .notEmpty()
+  //   .withMessage('User ID is required')
+  //   .isMongoId()
+  //   .withMessage('User ID must be a valid MongoDB ObjectId'),
 
   body('name')
     .trim()

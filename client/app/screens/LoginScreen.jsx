@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { loginUser } from '../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUserContext } from '../contexts/userContext';
+import { useTripsContext } from '../contexts/tripsContext';
 
 export default function LoginScreen({ navigation }) {
   const [credential, setCredential] = useState('');
@@ -12,21 +13,7 @@ export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const { user, setUser, isLogged, setIsLogged } = useUserContext();
 
-  const getToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (token !== null) {
-        console.log('token', token);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleLoginPress = async () => {
-    // ! just for testing other requests
-    // deleteUser(user);
-
     try {
       const userData = {
         credential,
@@ -39,9 +26,9 @@ export default function LoginScreen({ navigation }) {
     } catch (err) {
       console.error(err);
     }
-
-    getToken();
-    navigation.navigate('UnlockFirstTrip', { screen: 'UnlockFirstTripScreen' });
+    // navigation.navigate('UnlockFirstTrip', {
+    //   screen: 'UnlockFirstTripScreen',
+    // });
   };
 
   const handleRegisterPress = () => {
@@ -56,18 +43,19 @@ export default function LoginScreen({ navigation }) {
     <View className="flex-1 items-center">
       <Image
         source={require('./../../assets/images/trip-vault-logo.png')}
-        className="w-[120px] h-[120px] mt-5"
+        className="w-[120px] h-[120px] mt-24"
       />
-      <Text className="mt-12 text-xl font-semibold">Login</Text>
-      <Text>Login to your account</Text>
+      <Text className="mt-12 text-3xl font-semibold">Login</Text>
+      <Text className="text-[19px]">Login to your account</Text>
       <TextInput
-        className="w-[300px] mt-8 bg-lightGray rounded-md p-3"
+        className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
         placeholder="username / email"
         placeholderTextColor="#999"
         onChangeText={text => setCredential(text)}
       ></TextInput>
-      <View className="flex flex-row justify-between w-[300px] mt-4 bg-lightGray rounded-md p-3">
+      <View className="flex flex-row justify-between w-[380px] mt-4 bg-lightGray rounded-md p-3">
         <TextInput
+          className="text-[19px]"
           placeholder="password"
           placeholderTextColor="#999"
           secureTextEntry={!showPassword}
@@ -82,16 +70,16 @@ export default function LoginScreen({ navigation }) {
         />
       </View>
 
-      <Text className="mt-28">Don't have an account?</Text>
+      <Text className="mt-36 text-[19px]">Don't have an account?</Text>
       <TouchableOpacity onPress={handleRegisterPress}>
-        <Text className="mt-2 text-orange">Register</Text>
+        <Text className="mt-2 text-orange text-[19px]">Register</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         onPress={handleLoginPress}
         className="bg-green w-[300px] rounded-lg mt-4"
       >
-        <Text className="text-white text-center p-4">Login</Text>
+        <Text className="text-white text-center p-4 text-[19px]">Login</Text>
       </TouchableOpacity>
     </View>
   );

@@ -11,6 +11,7 @@ export default function RegisterScreen({ navigation }) {
 
   // !handleRegisterPress function to save data
   const handleRegisterPress = () => {
+    // avatar is hardcoded, but it should be updated in the avatar page
     const newUser = { username, email, password, avatar: 'iceberg' };
     registerUser(newUser);
     console.log('user created');
@@ -29,26 +30,27 @@ export default function RegisterScreen({ navigation }) {
     <View className="flex-1 items-center">
       <Image
         source={require('./../../assets/images/trip-vault-logo.png')}
-        className="w-[120px] h-[120px] mt-5"
+        className="w-[120px] h-[120px] mt-24"
       />
-      <Text className="mt-12 text-xl font-semibold">Register</Text>
-      <Text>Create your account</Text>
+      <Text className="mt-12 text-3xl font-semibold">Register</Text>
+      <Text className="text-[19px]">Create your account</Text>
       <TextInput
-        className="w-[300px] mt-8 bg-lightGray rounded-md p-3"
+        className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
         placeholder="username"
         placeholderTextColor="#999"
         value={username}
         onChangeText={text => setUsername(text)}
       />
       <TextInput
-        className="w-[300px] mt-4 bg-lightGray rounded-md p-3"
+        className="w-[380px] mt-4 bg-lightGray rounded-md p-3 text-[19px]"
         placeholder="email"
         placeholderTextColor="#999"
         value={email}
         onChangeText={text => setEmail(text)}
       ></TextInput>
-      <View className="flex flex-row justify-between w-[300px] mt-4 bg-lightGray rounded-md p-3">
+      <View className="flex flex-row justify-between w-[380px] mt-4 bg-lightGray rounded-md p-3">
         <TextInput
+          className="text-[19px]"
           placeholder="password"
           placeholderTextColor="#999"
           secureTextEntry={!showPassword}
@@ -63,16 +65,16 @@ export default function RegisterScreen({ navigation }) {
         />
       </View>
 
-      <Text className="mt-12">Already have an account?</Text>
+      <Text className="mt-36 text-[19px]">Already have an account?</Text>
       <TouchableOpacity onPress={handleLoginPress}>
-        <Text className="mt-2 text-orange">Login</Text>
+        <Text className="mt-2 text-orange text-[19px]">Login</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         onPress={handleRegisterPress}
         className="bg-green w-[300px] rounded-lg mt-4"
       >
-        <Text className="text-white text-center p-4">Register</Text>
+        <Text className="text-white text-center p-4 text-[19px]">Register</Text>
       </TouchableOpacity>
     </View>
   );

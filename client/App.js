@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { UserProvider } from './app/contexts/userContext';
+import { TripsProvider } from './app/contexts/tripsContext';
 import WelcomeScreen from './app/screens/WelcomeScreen';
 import LoginScreen from './app/screens/LoginScreen';
 import RegisterScreen from './app/screens/RegisterScreen';
@@ -9,7 +10,6 @@ import TripScreen from './app/screens/TripScreen';
 import MyAccountScreen from './app/screens/MyAccountScreen';
 import AvatarScreen from './app/screens/AvatarScreen';
 import CategoryScreen from './app/screens/CategoryScreen';
-
 import UnlockFirstTripScreen from './app/screens/UnlockFirstTripScreen';
 import TrackFirstExpenseScreen from './app/screens/TrackFirstExpenseScreen';
 import InitiateTripScreen from './app/screens/InitiateTripScreen';
@@ -21,11 +21,16 @@ import NewExpenseScreen from './app/screens/NewExpenseScreen';
 import MyTripsScreen from './app/screens/MyTripsScreen';
 import StatsScreen from './app/screens/StatsScreen';
 import DonutPieChart from './app/screens/DonutPieChart';
+import EditExpenseScreen from './app/screens/EditExpenseScreen';
+import PaymentMethodModal from './app/modals/PaymentMethodModal';
+
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
+    <UserProvider>
+      <TripsProvider>
     <NavigationContainer>
       <Stack.Navigator>
         {/* <Stack.Screen
@@ -41,20 +46,16 @@ export default function App() {
         {/* <Stack.Screen
           name="Login"
           component={LoginScreen}
-          options={{ headerBackTitleVisible: false, title: '' }}
-        /> */}
-        {/* <Stack.Screen
-          name="Avatar"
-          component={AvatarScreen}
+
           options={{ headerShown: false }}
-        /> */}
-        {/* <Stack.Screen
+        />
+        <Stack.Screen name="Avatar" component={AvatarScreen} options={{ headerShown: false }}/>
+        <Stack.Screen
           name="Register"
           component={RegisterScreen}
-          options={{ headerBackTitleVisible: false, title: '' }}
-        /> */}
-
-        {/* <Stack.Screen
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="Category"
           component={CategoryScreen}
           options={{ headerShown: false }}
@@ -72,13 +73,13 @@ export default function App() {
           options={{ headerShown: false }}
         /> */}
 
-        {/* <Stack.Screen
+        <Stack.Screen
           name="TrackFirstExpenseScreen"
           component={TrackFirstExpenseScreen}
           options={{ headerShown: false }}
         /> */}
-
-        {/* <Stack.Screen
+        
+        <Stack.Screen
           name="InitiateTripScreen"
           component={InitiateTripScreen}
           options={{ headerShown: false }}
@@ -102,24 +103,29 @@ export default function App() {
           name="DropdownCurrency"
           component={DropdownCurrency}
           options={{ headerShown: false }}
-        /> */}
-        {/* <Stack.Screen
+        />
+        <Stack.Screen
           name="SearchBar"
           component={SearchBar}
           options={{ headerShown: false }}
-        /> */}
+        />
 
-        {/* <Stack.Screen name="Trip" component={TripScreen}  /> */}
 
-        {/* <Stack.Screen name="NewExpense" component={NewExpenseScreen} options={{ headerShown: false } /> */}
-        {/* <Stack.Screen name="MyAccount" component={MyAccountScreen} /> */}
-        {/* <Stack.Screen
+        <Stack.Screen name="Trip" component={TripScreen} />
+
+        <Stack.Screen name="NewExpense" component={NewExpenseScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="EditExpense" component={EditExpenseScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="MyAccount" component={MyAccountScreen} options={{ headerShown: false }}/>
+        <Stack.Screen
           name="MyTrips"
           component={MyTripsScreen}
           options={{ headerShown: false }}
-        /> */}
-        {/* <Stack.Screen name="Stats" component={StatsScreen} /> */}
+        />
+        <Stack.Screen name="Stats" component={StatsScreen} />
+        <Stack.Screen name="PaymentMethod" component={PaymentMethodModal} />
       </Stack.Navigator>
     </NavigationContainer>
+      </TripsProvider>
+    </UserProvider>
   );
 }

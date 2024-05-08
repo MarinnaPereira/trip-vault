@@ -6,7 +6,7 @@ import Trip from '../models/Trip.js';
 export const getAllExpenses = async (req, res, next) => {
   //! necessary? when we get the trip, we get all expenses
   try {
-    const { tripId } = req.body;
+    const tripId = req.tripId;
     const trip = await Trip.findById(tripId);
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
@@ -20,16 +20,9 @@ export const getAllExpenses = async (req, res, next) => {
 
 export const addExpense = async (req, res, next) => {
   try {
-    // const { tripId } = req.body; //! are we sending here or taking from the userId sent by the token?
-    const {
-      tripId,
-      categoryName,
-      value,
-      currency,
-      description,
-      dates,
-      paymentMethod,
-    } = req.body;
+    const tripId = req.tripId; //! are we sending here or taking from the userId sent by the token?
+    const { categoryName, value, currency, description, dates, paymentMethod } =
+      req.body;
 
     const trip = await Trip.findById(tripId);
     if (!trip) {
@@ -60,31 +53,43 @@ export const addExpense = async (req, res, next) => {
 
 export const getExpense = async (req, res, next) => {
   try {
-    const { tripId } = req.body;
+    const tripId = req.tripId;
     const trip = await Trip.findById(tripId);
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
     }
     const expenseId = req.params.id;
 
-    const expense = trip.expenses.filter(expense =>
-      expense._id.equals(expenseId),
-    )[0];
+    const expense = trip.expenses.find(
+      expense => expense._id.toString() === expenseId,
+    );
     if (!expense) {
       return res.status(404).json({ message: 'Expense not found' });
     }
     const receiptPath = expense.receipt;
     const originalReceiptPath = decode(receiptPath);
     expense.receipt = originalReceiptPath;
-    res.json(expense);
+    res.locals.expense = expense;
+    if (req.path.includes('receipt')) {
+      next();
+    } else {
+      res.json(expense);
+    }
   } catch (error) {
     next(error);
   }
 };
 
+export const downloadReceipt = async (req, res, next) => {
+  if (!res.locals.expense || !res.locals.expense.receipt) {
+    return res.status(404).json({ message: 'Receiptnot found' });
+  }
+  res.sendFile(res.locals.expense.receipt), { root: '.' };
+};
+
 export const updateExpense = async (req, res, next) => {
   try {
-    const { tripId } = req.body;
+    const tripId = req.tripId;
     const trip = await Trip.findById(tripId);
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
@@ -119,7 +124,7 @@ export const updateExpense = async (req, res, next) => {
 
 export const deleteExpense = async (req, res, next) => {
   try {
-    const { tripId } = req.body;
+    const tripId = req.tripId;
     const trip = await Trip.findById(tripId);
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
