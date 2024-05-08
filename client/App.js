@@ -20,6 +20,7 @@ import TripNameEndScreen from './app/screens/TripNameEndScreen';
 import NewExpenseScreen from './app/screens/NewExpenseScreen';
 import MyTripsScreen from './app/screens/MyTripsScreen';
 import StatsScreen from './app/screens/StatsScreen';
+import DonutPieChart from './app/screens/DonutPieChart';
 import EditExpenseScreen from './app/screens/EditExpenseScreen';
 import PaymentMethodModal from './app/modals/PaymentMethodModal';
 
@@ -32,19 +33,20 @@ export default function App() {
       <TripsProvider>
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
+        {/* <Stack.Screen
           name="TabNavigation"
           component={TabNavigation}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name="Welcome"
           component={WelcomeScreen}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name="Login"
           component={LoginScreen}
+
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Avatar" component={AvatarScreen} options={{ headerShown: false }}/>
@@ -53,47 +55,51 @@ export default function App() {
           component={RegisterScreen}
           options={{ headerShown: false }}
         />
-
         <Stack.Screen
           name="Category"
           component={CategoryScreen}
           options={{ headerShown: false }}
-        />
+        /> */}
 
-        <Stack.Screen
+        {/* <Stack.Screen
           name="UnlockFirstTrip"
           component={UnlockFirstTripScreen}
-        />
+          options={{ headerShown: false }}
+        /> */}
 
-        <Stack.Screen
+        {/* <Stack.Screen
           name="InitiateTrip"
           component={InitiateTripScreen}
           options={{ headerShown: false }}
-        />
+        /> */}
 
         <Stack.Screen
           name="TrackFirstExpenseScreen"
           component={TrackFirstExpenseScreen}
-
-        />
-
+          options={{ headerShown: false }}
+        /> */}
+        
         <Stack.Screen
           name="InitiateTripScreen"
           component={InitiateTripScreen}
           options={{ headerShown: false }}
-        />
-
+        /> */}
         <Stack.Screen
+          name="DonutPieChart"
+          component={DonutPieChart}
+          options={{ headerShown: false }}
+        />
+        {/* <Stack.Screen
           name="TripNameScreen"
           component={TripNameScreen}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name="TripNameEndScreen"
           component={TripNameEndScreen}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name="DropdownCurrency"
           component={DropdownCurrency}
           options={{ headerShown: false }}
@@ -103,6 +109,7 @@ export default function App() {
           component={SearchBar}
           options={{ headerShown: false }}
         />
+
 
         <Stack.Screen name="Trip" component={TripScreen} />
 
