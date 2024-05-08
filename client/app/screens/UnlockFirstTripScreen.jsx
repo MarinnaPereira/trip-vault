@@ -1,6 +1,6 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
-// import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import InitiateTripScreen from './InitiateTripScreen';
 
 export default function UnlockFirstTripScreen({ navigation }) {
@@ -11,18 +11,20 @@ export default function UnlockFirstTripScreen({ navigation }) {
   };
 
   return (
-    <View className="flex-1 mt-[130px] items-center">
-      <Text className="text-3xl">Unlock Your First Trip</Text>
+    <View className="flex-1 mt-[180px] items-center">
+      <Text className="text-3xl text-[#00b0a3] font-bold">
+        Unlock Your First Trip
+      </Text>
       <TouchableOpacity onPress={handleUnlockFirstTrip}>
         <Image
           source={require('../../assets/images/plus.png')}
-          className="w-28 h-28"
+          className="w-28 h-28 mt-8"
         />
       </TouchableOpacity>
 
       <Image
         source={require('./../../assets/images/LogoCroped.png')}
-        className="w-[495px] h-[325px] absolute bottom-0"
+        className="w-[530px] h-[365px] absolute bottom-0"
       />
     </View>
   );

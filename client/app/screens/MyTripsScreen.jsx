@@ -1,4 +1,6 @@
+
 import { useEffect, useState } from 'react';
+
 import {
   View,
   Text,
@@ -9,9 +11,11 @@ import {
 } from 'react-native';
 import { Entypo, FontAwesome6 } from '@expo/vector-icons';
 import SearchBar from './SearchBar';
+
 import { getAllTrips } from '../api/api';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
+
 
 const handleGoBack = () => {
   navigation.navigate('UnlockFirstTrip', { screen: 'UnlockFirstTripScreen' });
@@ -48,17 +52,10 @@ export default function MyTripsScreen({ totalSpent }) {
 
   return (
     <ScrollView>
-      <View className="mt-10">
-        <TouchableOpacity onPress={handleGoBack}>
-          <Image
-            source={require('../../assets/images/singleArrow.png')}
-            className="ml-4 w-12 h-12"
-          />
-        </TouchableOpacity>
-      </View>
 
-      <View className="mt-5 justify-start items-left">
-        <Text className="text-xl ml-5 mb-4 font-semibold items-start">
+      <View className="mt-24 justify-start items-left">
+        <Text className="text-3xl ml-8 mb-7 text-[#00b0a3] font-bold items-start">
+
           My Trips
         </Text>
       </View>
@@ -66,31 +63,33 @@ export default function MyTripsScreen({ totalSpent }) {
       <View className=" flex-1 items-center">
         <View>
           <View className="flex-row justify-between">
-            <Text>Selected trip</Text>
+            <Text className="text-lg text-[#f24f13] font-bold">
+              Selected trip
+            </Text>
           </View>
 
           <View className="mt-2 flex-row">
             <View className="p-3 bg-lightGray rounded-md">
-              <Text className="w-[350px] p-1 text-black font-bold relative ">
+              <Text className="w-[360px] p-1 text-lg text-black font-bold relative ">
                 Name of the previous trip
               </Text>
-              <Text className="w-[300px] pl-1 text-black ">
+              <Text className="w-[360px] pl-1 text-lg text-black ">
                 dd/mm/yyyy - dd/mm/yyyy
               </Text>
             </View>
             <Text>{totalSpent}</Text>
           </View>
           <View className="flex-row justify-between mt-8 ml-2">
-            <Text>All trips</Text>
+            <Text className="text-lg text-[#f24f13] font-bold">All trips</Text>
           </View>
           <SearchBar />
 
           <View className="mt-2 flex-row">
             <View className="p-3 bg-lightGray rounded-md ">
-              <Text className="w-[350px] p-1 text-black font-bold relative ">
+              <Text className="w-[360px] p-1 text-lg text-black font-bold relative ">
                 Name of the previous trip
               </Text>
-              <Text className="w-[300px] pl-1 text-black ">
+              <Text className="w-[360px] pl-1 text-lg text-black ">
                 dd/mm/yyyy - dd/mm/yyyy
               </Text>
             </View>
@@ -98,21 +97,21 @@ export default function MyTripsScreen({ totalSpent }) {
           </View>
           <View className="mt-2 flex-row">
             <View className="p-3 bg-lightGray rounded-md">
-              <Text className="w-[350px] p-1 text-black font-bold relative ">
+              <Text className="w-[360px] p-1 text-lg text-black font-bold relative ">
                 Name of the previous trip
               </Text>
-              <Text className="w-[300px] pl-1 text-black ">
+              <Text className="w-[360px] pl-1 text-lg text-black ">
                 dd/mm/yyyy - dd/mm/yyyy
               </Text>
             </View>
             <Text>{totalSpent}</Text>
           </View>
           <View className="mt-2 flex-row">
-            <View className="p-3 mb-32 bg-lightGray rounded-md">
-              <Text className="w-[350px] p-1 text-black font-bold relative ">
+            <View className="p-3  bg-lightGray rounded-md">
+              <Text className="w-[360px] p-1 text-lg text-black font-bold relative ">
                 Name of the previous trip
               </Text>
-              <Text className="w-[300px] pl-1 text-black ">
+              <Text className="w-[360px] text-lg pl-1 text-black ">
                 dd/mm/yyyy - dd/mm/yyyy
               </Text>
             </View>
@@ -124,7 +123,8 @@ export default function MyTripsScreen({ totalSpent }) {
         <TouchableOpacity>
           <Image
             source={require('../../assets/images/plus.png')}
-            className="mr-5 w-20 h-20"
+            className="mr-5 w-28 h-28"
+
           />
         </TouchableOpacity>
       </View>

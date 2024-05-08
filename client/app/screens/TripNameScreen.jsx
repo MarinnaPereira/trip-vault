@@ -1,8 +1,8 @@
+import { ScrollView } from 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, Modal } from 'react-native';
 import { Entypo, FontAwesome6 } from '@expo/vector-icons';
-
-import { deleteTrip } from '../api/api';
+import { deleteExpense, deleteTrip } from '../api/api';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
 
@@ -78,8 +78,8 @@ export default function TripNameScreen({ totalSpent }) {
   };
 
   return (
-    <>
-      <View className="absolute top-0 right-0 z-50 mt-10 mr-10">
+    <ScrollView>
+      <View className="absolute top-6 right-0 z-50 mt-10 mr-10">
         <TouchableOpacity onPress={toggleMenu}>
           <Entypo name="dots-three-vertical" size={24} color="darkgrey" />
         </TouchableOpacity>
@@ -148,14 +148,16 @@ export default function TripNameScreen({ totalSpent }) {
         </View>
       </Modal>
       <View className="mt-20 justify-start items-left">
-        <Text className="text-xl ml-8 mb-3 font-semibold items-start">
+        <Text className="text-3xl mt-20 ml-8 mb-7 text-[#00b0a3] font-bold items-start">
           Trip name
         </Text>
       </View>
       <View className="flex-1 items-center">
         <View>
           <View className="bg-lightGray rounded-md">
-            <Text className="w-[350px] p-3 text-[#999]">Total Spent </Text>
+            <Text className="w-[380px] p-3 text-lg text-[#999]">
+              Total Spent{' '}
+            </Text>
             <Text className="ml-auto mr-4 text-xl">€</Text>
           </View>
           <Text>{totalSpent}</Text>
@@ -163,106 +165,154 @@ export default function TripNameScreen({ totalSpent }) {
 
         <View className="flex-row justify-between items-center">
           <View className="bg-lightGray rounded-md">
-            <Text className="w-[167px] p-3 text-[#999]">Balance</Text>
+            <Text className="w-[182px] p-3 text-lg text-[#999]">Balance</Text>
             <Text className="ml-auto mr-4 text-xl">€</Text>
           </View>
 
           <View className="bg-lightGray rounded-md ml-4">
-            <Text className="w-[167px] p-3 text-[#999]">Daily Average</Text>
+            <Text className="w-[182px] p-3 text-lg text-[#999]">
+              Daily Average
+            </Text>
             <Text className="ml-auto mr-4 text-xl">€</Text>
           </View>
         </View>
       </View>
 
-      <View className="mt-12 flex-1 items-center">
+      <View className="mt-12 flex-1 text-lg items-center">
         <View>
           <View className="flex-row justify-between">
-            <Text className="text-left">Today</Text>
-            <Text className="text-right">Total amount of the day</Text>
+            <Text className="text-left text-lg">Today</Text>
+            <Text className="text-right text-lg">Total amount of the day</Text>
           </View>
 
-          <View className="flex-row">
-            <Image
-              source={require('../../assets/images/restaurant.png')}
-              className="w-12 h-12"
-            />
-
-            <View className=" bg-lightGray rounded-md">
-              <Text className="w-[300px] p-1 text-black font-bold relative ">
-                Description <Text className="absolute right-0">€</Text>
-              </Text>
-
-              <Text className="w-[300px] pl-1 text-black ">
-                Restaurant <Text className="absolute right-0">$</Text>
-              </Text>
+          <View className="items-center">
+            <View className="mt-3 mb-6 bg-lightGray rounded-md">
+              <View className="w-[380px] flex flex-row justify-between">
+                <Image
+                  source={require('../../assets/images/restaurant.png')}
+                  className="w-[60px] h-[60px] m-2 rounded-xl"
+                />
+                <View className="flex-1 justify-center">
+                  <View className="flex flex-row justify-between">
+                    <Text className="text-[19px] font-semibold">
+                      Description
+                    </Text>
+                    <Text className="text-[19px]  font-semibold mr-3">
+                      €100
+                    </Text>
+                  </View>
+                  <View className="flex flex-row justify-between">
+                    <Text className="text-[15px]">Restaurant</Text>
+                    <Text className="text-[15px] mr-3">$110</Text>
+                  </View>
+                </View>
+              </View>
             </View>
-
-            <Text>{totalSpent}</Text>
           </View>
         </View>
       </View>
 
-      <View className="flex-1 items-center">
+      <View className="flex-1 items-center mt-10">
         <View>
           <View className="flex-row justify-between">
-            <Text className="text-left">dd/mm/yyyy</Text>
-            <Text className="text-right">Total amount of the day</Text>
+            <Text className="text-left text-lg">dd/mm/yyyy</Text>
+            <Text className="text-right text-lg">Total amount of the day</Text>
           </View>
 
-          <View className="flex-row">
-            <Image
-              source={require('../../assets/images/shopping.png')}
-              className="w-12 h-12"
-            />
-
-            <View className=" bg-lightGray rounded-md">
-              <Text className="w-[300px] p-1 text-black font-bold relative ">
-                Description <Text className="absolute right-0">€</Text>
-              </Text>
-
-              <Text className="w-[300px] pl-1 text-black ">
-                Restaurant <Text className="absolute right-0">$</Text>
-              </Text>
+          <View className="items-center">
+            <View className="mt-3 mb-1 bg-lightGray rounded-md">
+              <View className="w-[380px] flex flex-row justify-between">
+                <Image
+                  source={require('../../assets/images/restaurant.png')}
+                  className="w-[60px] h-[60px] m-2 rounded-xl"
+                />
+                <View className="flex-1 justify-center">
+                  <View className="flex flex-row justify-between">
+                    <Text className="text-[19px] font-semibold">
+                      Transportation
+                    </Text>
+                    <Text className="text-[19px]  font-semibold mr-3">
+                      €100
+                    </Text>
+                  </View>
+                  <View className="flex flex-row justify-between">
+                    <Text className="text-[15px]">Tickets</Text>
+                    <Text className="text-[15px] mr-3">$110</Text>
+                  </View>
+                </View>
+              </View>
             </View>
-            <Text>{totalSpent}</Text>
           </View>
 
-          <View className="flex-row mt-2">
-            <Image
-              source={require('../../assets/images/activities.png')}
-              className="w-12 h-12"
-            />
-
-            <View className=" bg-lightGray rounded-md">
-              <Text className="w-[300px] p-1 text-black font-bold relative ">
-                Description <Text className="absolute right-0">€</Text>
-              </Text>
-
-              <Text className="w-[300px] pl-1 text-black ">
-                Restaurant <Text className="absolute right-0">$</Text>
-              </Text>
+          <View className="items-center">
+            <View className="mt-3 mb-1 bg-lightGray rounded-md">
+              <View className="w-[380px] flex flex-row justify-between">
+                <Image
+                  source={require('../../assets/images/restaurant.png')}
+                  className="w-[60px] h-[60px] m-2 rounded-xl"
+                />
+                <View className="flex-1 justify-center">
+                  <View className="flex flex-row justify-between">
+                    <Text className="text-[19px] font-semibold">Shopping</Text>
+                    <Text className="text-[19px]  font-semibold mr-3">
+                      €100
+                    </Text>
+                  </View>
+                  <View className="flex flex-row justify-between">
+                    <Text className="text-[15px]">Souvenirs</Text>
+                    <Text className="text-[15px] mr-3">$110</Text>
+                  </View>
+                </View>
+              </View>
             </View>
-
-            <Text>{totalSpent}</Text>
           </View>
 
-          <View className="flex-row mt-2">
-            <Image
-              source={require('../../assets/images/others.png')}
-              className="w-12 h-12"
-            />
-
-            <View className=" bg-lightGray rounded-md">
-              <Text className="w-[300px] p-1 text-black font-bold relative ">
-                Description <Text className="absolute right-0">€</Text>
-              </Text>
-
-              <Text className="w-[300px] pl-1 text-black ">
-                Restaurant <Text className="absolute right-0">$</Text>
-              </Text>
+          <View className="items-center">
+            <View className="mt-3 mb-1 bg-lightGray rounded-md">
+              <View className="w-[380px] flex flex-row justify-between">
+                <Image
+                  source={require('../../assets/images/activities.png')}
+                  className="w-[60px] h-[60px] m-2 rounded-xl"
+                />
+                <View className="flex-1 justify-center">
+                  <View className="flex flex-row justify-between">
+                    <Text className="text-[19px] font-semibold">
+                      Activities
+                    </Text>
+                    <Text className="text-[19px]  font-semibold mr-3">
+                      €100
+                    </Text>
+                  </View>
+                  <View className="flex flex-row justify-between">
+                    <Text className="text-[15px]">Theater</Text>
+                    <Text className="text-[15px] mr-3">$110</Text>
+                  </View>
+                </View>
+              </View>
             </View>
+          </View>
 
-            <Text>{totalSpent}</Text>
+          <View className="items-center">
+            <View className="mt-3 mb-1 bg-lightGray rounded-md">
+              <View className="w-[380px] flex flex-row justify-between">
+                <Image
+                  source={require('../../assets/images/groceries.png')}
+                  className="w-[60px] h-[60px] m-2 rounded-xl"
+                />
+                <View className="flex-1 justify-center">
+                  <View className="flex flex-row justify-between">
+                    <Text className="text-[19px] font-semibold">Services</Text>
+                    <Text className="text-[19px]  font-semibold mr-3">
+                      €100
+                    </Text>
+                  </View>
+                  <View className="flex flex-row justify-between">
+                    <Text className="text-[15px]">Restaurant</Text>
+                    <Text className="text-[15px] mr-3">$110</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
           </View>
         </View>
       </View>
@@ -271,10 +321,10 @@ export default function TripNameScreen({ totalSpent }) {
         <TouchableOpacity>
           <Image
             source={require('../../assets/images/plus.png')}
-            className="mr-5 w-20 h-20"
+            className="mr-6 w-28 h-28"
           />
         </TouchableOpacity>
       </View>
-    </>
+    </ScrollView>
   );
 }
