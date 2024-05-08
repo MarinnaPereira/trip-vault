@@ -26,9 +26,9 @@ export default function LoginScreen({ navigation }) {
     } catch (err) {
       console.error(err);
     }
-    // navigation.navigate('UnlockFirstTrip', {
-    //   screen: 'UnlockFirstTripScreen',
-    // });
+    navigation.navigate('UnlockFirstTrip', {
+      screen: 'UnlockFirstTripScreen',
+    });
   };
 
   const handleRegisterPress = () => {

@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 
 import {
@@ -15,7 +14,6 @@ import SearchBar from './SearchBar';
 import { getAllTrips } from '../api/api';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
-
 
 const handleGoBack = () => {
   navigation.navigate('UnlockFirstTrip', { screen: 'UnlockFirstTripScreen' });
@@ -41,7 +39,7 @@ export default function MyTripsScreen({ totalSpent }) {
     };
 
     fetchTrips();
-  }, [trips]); // Adding dispatch also as a dependency ?
+  }, [dispatch]); // Adding dispatch also as a dependency ?
 
   useEffect(() => {
     console.log('Updated trips', trips); // Logging updated trips
@@ -51,10 +49,8 @@ export default function MyTripsScreen({ totalSpent }) {
 
   return (
     <ScrollView>
-
       <View className="mt-24 justify-start items-left">
         <Text className="text-3xl ml-8 mb-7 text-[#00b0a3] font-bold items-start">
-
           My Trips
         </Text>
       </View>
@@ -123,7 +119,6 @@ export default function MyTripsScreen({ totalSpent }) {
           <Image
             source={require('../../assets/images/plus.png')}
             className="mr-5 w-28 h-28"
-
           />
         </TouchableOpacity>
       </View>
