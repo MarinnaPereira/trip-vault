@@ -7,41 +7,40 @@ import { useTripsContext } from '../contexts/tripsContext';
 import { deleteUser, updateUser } from '../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-export default function MyAccountScreen({ route }) {
+export default function MyAccountScreen({ route, navigation }) {
   // const { username, email } = route.params;
 
-  const { user, setUser } = useUserContext();
+  const { user, setIsLogged, setUser } = useUserContext();
   const { trips, dispatch } = useTripsContext();
 
   // *updateUser
-  const hardcodedUser = {
-    _id: '663a38af268b1a36580b8d07',
-    username: 'mari',
-    email: 'mari@email.com',
-  };
+  // const hardcodedUser = {
+  //   _id: '663a38af268b1a36580b8d07',
+  //   username: 'mari',
+  //   email: 'mari@email.com',
+  // };
 
-  const userData = {
-    ...hardcodedUser,
-    username: 'mari2',
-  };
+  // const userData = {
+  //   ...hardcodedUser,
+  //   username: 'mari2',
+  // };
 
-  useEffect(() => {
-    const editUser = async () => {
-      try {
-        const editedUser = await updateUser(userData);
-        setUser(editedUser);
-      } catch (error) {
-        console.error('Error updating User:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const editUser = async () => {
+  //     try {
+  //       const editedUser = await updateUser(userData);
+  //       setUser(editedUser);
+  //     } catch (error) {
+  //       console.error('Error updating User:', error);
+  //     }
+  //   };
 
-    editUser();
-  }, []);
+  //   editUser();
+  // }, []);
 
-  useEffect(() => {
-    console.log('User', user);
-  }, [user]);
+  // useEffect(() => {
+  //   console.log('User', user);
+  // }, [user]);
 
   // *deleteUser
   // deleteUser api
@@ -76,10 +75,18 @@ export default function MyAccountScreen({ route }) {
   // }, [user]);
 
   // *logout
-  // setUser(null)
-  // setTrips([])
-  // setLogged(false)
-  // removeToken
+
+  const handleLogoutPress = async () => {
+    setUser(null);
+    dispatch({
+      type: 'DELETE_ALL_TRIPS',
+    });
+    setIsLogged(false);
+    await AsyncStorage.removeItem('token');
+    navigation.navigate('Welcome', {
+      screen: 'WelcomeScreen',
+    });
+  };
 
   return (
     <>
@@ -121,7 +128,7 @@ export default function MyAccountScreen({ route }) {
             <View className="mt-16">
               <TouchableOpacity
                 // Function handleLogoutPress needs to be implemented
-                // onPress={handleLogoutPress}
+                onPress={handleLogoutPress}
                 className="bg-lightGray rounded-lg"
               >
                 <Text className="text-left text-[19px] p-4">Logout</Text>

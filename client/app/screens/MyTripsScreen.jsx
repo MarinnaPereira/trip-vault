@@ -1,6 +1,3 @@
-
-import { useEffect, useState } from 'react';
-
 import {
   View,
   Text,
@@ -12,50 +9,25 @@ import {
 import { Entypo, FontAwesome6 } from '@expo/vector-icons';
 import SearchBar from './SearchBar';
 
-import { getAllTrips } from '../api/api';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
-
 
 const handleGoBack = () => {
   navigation.navigate('UnlockFirstTrip', { screen: 'UnlockFirstTripScreen' });
 };
 
 export default function MyTripsScreen({ totalSpent }) {
-  const { dispatch, trips } = useTripsContext();
+  const { trips, dispatch } = useTripsContext();
   const { user, setUser } = useUserContext(); // for updating when the user touches/selects a specific trip
 
-  const { selectedTrip } = user;
-
-  useEffect(() => {
-    const fetchTrips = async () => {
-      try {
-        const allTrips = await getAllTrips();
-        dispatch({
-          type: 'ADD_ALL_TRIPS',
-          payload: allTrips,
-        });
-      } catch (error) {
-        console.error('Error fetching trips:', error);
-      }
-    };
-
-    fetchTrips();
-  }, [trips]); // Adding dispatch also as a dependency ?
-
-  useEffect(() => {
-    console.log('Updated trips', trips); // Logging updated trips
-  }, [trips]); // Logging trips when it changes
-
   // now map trips to display them
+  // trips.map(...)
   // when the user clicks one of them -> it should lead to TripNameScreen
 
   return (
     <ScrollView>
-
       <View className="mt-24 justify-start items-left">
         <Text className="text-3xl ml-8 mb-7 text-[#00b0a3] font-bold items-start">
-
           My Trips
         </Text>
       </View>
@@ -124,7 +96,6 @@ export default function MyTripsScreen({ totalSpent }) {
           <Image
             source={require('../../assets/images/plus.png')}
             className="mr-5 w-28 h-28"
-
           />
         </TouchableOpacity>
       </View>

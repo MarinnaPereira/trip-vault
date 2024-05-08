@@ -1,15 +1,15 @@
-import { createContext, useReducer, useContext } from 'react';
+import { createContext, useReducer, useContext, useEffect } from 'react';
 
 export const TripsContext = createContext();
 
 const tripsReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_ALL_TRIPS':
-      //   if (!Array.isArray(action.payload)) {
-      //     console.error('Payload is not an array');
-      //     return state;
-      //   }
-      return [...state, ...action.payload];
+      if (!Array.isArray(action.payload)) {
+        console.log('Payload is not an array');
+        return state;
+      }
+      return [...action.payload];
 
     case 'ADD_TRIP':
       return [...state, action.payload];

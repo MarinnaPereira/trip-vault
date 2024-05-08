@@ -19,38 +19,38 @@ export default function TripNameScreen({ totalSpent }) {
   // update trip context
   // update user's selected trip
 
-  const tripData = {
-    name: 'hardcoded trip3',
-    start: '2024-11-01',
-    end: '2024-12-15',
-    currency: 'USD',
-    budget: 3000,
-    _id: '663a206528c0de859429ca39',
-  };
+  // const tripData = {
+  //   name: 'hardcoded trip3',
+  //   start: '2024-11-01',
+  //   end: '2024-12-15',
+  //   currency: 'USD',
+  //   budget: 3000,
+  //   _id: '663a206528c0de859429ca39',
+  // };
 
-  useEffect(() => {
-    const eliminateTrip = async () => {
-      try {
-        await deleteTrip(tripData);
-        dispatch({
-          type: 'DELETE_TRIP',
-          payload: tripData['_id'],
-        });
-      } catch (error) {
-        console.error('Error fetching trips:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const eliminateTrip = async () => {
+  //     try {
+  //       await deleteTrip(tripData);
+  //       dispatch({
+  //         type: 'DELETE_TRIP',
+  //         payload: tripData['_id'],
+  //       });
+  //     } catch (error) {
+  //       console.error('Error fetching trips:', error);
+  //     }
+  //   };
 
-    eliminateTrip();
-  }, []);
+  //   eliminateTrip();
+  // }, []);
 
-  useEffect(() => {
-    console.log('Updated trips', trips); // Logging updated trips
-    setUser({
-      ...user,
-      selectedTrip: trips.length >= 1 ? trips[trips.length - 1]._id : null,
-    });
-  }, [trips]); // Logging trips when it changes
+  // useEffect(() => {
+  //   console.log('Updated trips', trips); // Logging updated trips
+  //   setUser({
+  //     ...user,
+  //     selectedTrip: trips.length >= 1 ? trips[trips.length - 1]._id : null,
+  //   });
+  // }, [trips]); // Logging trips when it changes
 
   useEffect(() => {
     console.log('User', user);

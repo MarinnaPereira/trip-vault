@@ -101,6 +101,7 @@ export const addTrip = async newTrip => {
   // * newTrip as parameter
   try {
     const token = await getToken();
+    console.log(token);
     const res = await axios.post(`${baseUrl}/trips`, newTrip, {
       headers: {
         'Content-Type': 'application/json',
