@@ -34,21 +34,21 @@ export default function App() {
         <CurrencyProvider>
           <NavigationContainer>
             <Stack.Navigator>
-              {/* <Stack.Screen
-              name="Welcome"
-              component={WelcomeScreen}
-              options={{ headerShown: false }}
-            /> */}
+              <Stack.Screen
+                name="Welcome"
+                component={WelcomeScreen}
+                options={{ headerShown: false }}
+              />
               {/* <Stack.Screen
               name="TabNavigation"
               component={TabNavigation}
               options={{ headerShown: false }}
             /> */}
-              {/* <Stack.Screen
-              name="Login"
-              component={LoginScreen}
-              options={{ headerShown: false }}
-            /> */}
+              <Stack.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{ headerShown: false }}
+              />
               {/* <Stack.Screen
               name="Avatar"
               component={AvatarScreen}
@@ -65,11 +65,11 @@ export default function App() {
               options={{ headerShown: false }}
             /> */}
 
-              {/* <Stack.Screen
-              name="UnlockFirstTrip"
-              component={UnlockFirstTripScreen}
-              options={{ headerShown: false }}
-            /> */}
+              <Stack.Screen
+                name="UnlockFirstTrip"
+                component={UnlockFirstTripScreen}
+                options={{ headerShown: false }}
+              />
 
               <Stack.Screen
                 name="InitiateTrip"
@@ -93,11 +93,11 @@ export default function App() {
               component={DonutPieChart}
               options={{ headerShown: false }}
             /> */}
-              {/* <Stack.Screen
-              name="TripNameScreen"
-              component={TripNameScreen}
-              options={{ headerShown: false }}
-            /> */}
+              <Stack.Screen
+                name="TripNameScreen"
+                component={TripNameScreen}
+                options={{ headerShown: false }}
+              />
               {/* <Stack.Screen
               name="TripNameEndScreen"
               component={TripNameEndScreen}
@@ -126,11 +126,11 @@ export default function App() {
               component={EditExpenseScreen}
               options={{ headerShown: false }}
             /> */}
-              {/* <Stack.Screen
-              name="MyAccount"
-              component={MyAccountScreen}
-              options={{ headerShown: false }}
-            /> */}
+              <Stack.Screen
+                name="MyAccount"
+                component={MyAccountScreen}
+                options={{ headerShown: false }}
+              />
               {/* <Stack.Screen
               name="MyTrips"
               component={MyTripsScreen}

@@ -10,7 +10,6 @@ const tripsReducer = (state, action) => {
         return state;
       }
       return [...action.payload];
-
     case 'ADD_TRIP':
       return [...state, action.payload];
     case 'UPDATE_TRIP':

@@ -34,7 +34,8 @@ export default function InitiateTripScreen() {
     name: tripName,
     start: startDate,
     end: endDate,
-    currency: baseCurrency,
+    // currency: baseCurrency,
+    currency: 'USD', // I hardcoded because currency api is not working for me
     budget: parseFloat(budget) || 0,
   };
 
@@ -54,6 +55,9 @@ export default function InitiateTripScreen() {
 
   const handleSavePress = async () => {
     await createTrip();
+    navigation.navigate('TripNameScreen', {
+      screen: 'TripNameScreen',
+    });
   };
 
   const handleGoBack = () => {
