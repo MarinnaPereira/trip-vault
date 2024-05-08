@@ -44,6 +44,7 @@ export default function MyTripsScreen({ totalSpent }) {
   }, [trips]); // Logging trips when it changes
 
   // now map trips to display them
+  // when the user clicks one of them -> it should lead to TripNameScreen
 
   return (
     <ScrollView>

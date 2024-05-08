@@ -1,13 +1,75 @@
-import { View, Text, TouchableOpacity, TextInput, Image } from "react-native";
-import React from "react";
-import { MaterialIcons } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import { FontAwesome6 } from "@expo/vector-icons";
-import { useState } from "react";
+import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
+import { useEffect } from 'react';
+import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome6 } from '@expo/vector-icons';
+import { useState } from 'react';
+import { useTripsContext } from '../contexts/tripsContext';
+import { useUserContext } from '../contexts/userContext';
+
+import { addExpense, updateExpense } from '../api/api';
 
 export default function NewExpenseScreen() {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  // const [file, setFile] = useState(null);
+  const { trips, dispatch } = useTripsContext();
+  const { user } = useUserContext();
+
+  //* addExpense
+  const expenseId = '663a857170c7112af6015994'; //hardcoded for now
+  const saveExpense = async () => {
+    const formData = new FormData();
+
+    formData.append('categoryName', 'Others');
+    formData.append('value', '150');
+    formData.append('currency', 'USD');
+    formData.append('description', 'lala');
+    formData.append('dates[]', '2024-05-01');
+    formData.append('dates[]', '2024-05-04');
+    formData.append('paymentMethod', 'Cash');
+    formData.append(
+      'file',
+      '/home/dci-student/Desktop/trip-vault/server/uploads/receipt-1715109135041-386685218.jpg',
+    );
+
+    // *add expense
+    const newExpense = await addExpense(formData);
+    return newExpense;
+
+    // *update expense
+    // const updatedExpense = await updateExpense(formData, expenseId);
+    // return updatedExpense;
+  };
+
+  // *add expense
+  const handleSavePress = async () => {
+    const newExpense = await saveExpense();
+    // remember to update current trip
+    const { selectedTrip } = user;
+    dispatch({
+      type: 'ADD_EXPENSE',
+      tripId: selectedTrip,
+      payload: newExpense,
+    });
+  };
+
+  //* update expense
+  // const handleSavePress = async () => {
+  //   const updatedExpense = await saveExpense();
+  //   // remember to update current trip
+  //   const {selectedTrip} = user;
+  //   dispatch({
+  //     type: 'UPDATE_EXPENSE',
+  //     tripId: selectedTrip,
+  //     expenseId: expenseId,
+  //     payload: updatedExpense,
+  //   });
+  // };
+
+  useEffect(() => {
+    console.log('Updated trips', trips); // Logging updated trips
+  }, [trips]);
 
   return (
     <View className="flex-1">
@@ -78,7 +140,7 @@ export default function NewExpenseScreen() {
 
           <View className="items-center mt-24">
             <TouchableOpacity
-              // onPress={handleLoginPress}
+              onPress={handleSavePress}
               className="bg-green w-[180px] rounded-lg"
             >
               <Text className="text-white text-center p-4">Save</Text>

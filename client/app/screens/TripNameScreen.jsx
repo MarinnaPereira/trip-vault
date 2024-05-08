@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, Modal } from 'react-native';
 import { Entypo, FontAwesome6 } from '@expo/vector-icons';
 
-import { deleteExpense, deleteTrip } from '../api/api';
+import { deleteTrip } from '../api/api';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
 

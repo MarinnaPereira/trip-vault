@@ -5,7 +5,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { loginUser } from '../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUserContext } from '../contexts/userContext';
-import { useTripsContext } from '../contexts/tripsContext';
 
 export default function LoginScreen({ navigation }) {
   const [credential, setCredential] = useState('');
@@ -26,9 +25,9 @@ export default function LoginScreen({ navigation }) {
     } catch (err) {
       console.error(err);
     }
-    // navigation.navigate('UnlockFirstTrip', {
-    //   screen: 'UnlockFirstTripScreen',
-    // });
+    navigation.navigate('UnlockFirstTrip', {
+      screen: 'UnlockFirstTripScreen',
+    });
   };
 
   const handleRegisterPress = () => {

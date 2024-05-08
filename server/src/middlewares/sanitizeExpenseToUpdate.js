@@ -2,7 +2,7 @@ import Trip from '../models/Trip.js';
 
 export const sanitizeExpenseToUpdate = async (req, res, next) => {
   try {
-    const { tripId } = req.body;
+    const { tripId } = req;
     const trip = await Trip.findById(tripId);
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });

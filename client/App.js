@@ -37,21 +37,25 @@ export default function App() {
               component={TabNavigation}
               options={{ headerShown: false }}
             /> */}
+
             {/* <Stack.Screen
               name="Welcome"
               component={WelcomeScreen}
               options={{ headerShown: false }}
             /> */}
-            <Stack.Screen
+
+            {/* <Stack.Screen
               name="Login"
               component={LoginScreen}
               options={{ headerBackTitleVisible: false, title: '' }}
-            />
+            /> */}
+
             {/* <Stack.Screen
               name="Avatar"
               component={AvatarScreen}
               options={{ headerShown: false }}
             /> */}
+
             {/* <Stack.Screen
               name="Register"
               component={RegisterScreen}
@@ -103,6 +107,7 @@ export default function App() {
               component={DropdownCurrency}
               options={{ headerShown: false }}
             /> */}
+
             {/* <Stack.Screen
               name="SearchBar"
               component={SearchBar}
@@ -111,13 +116,16 @@ export default function App() {
 
             {/* <Stack.Screen name="Trip" component={TripScreen} /> */}
 
-            {/* <Stack.Screen name="NewExpense" component={NewExpenseScreen} /> */}
+            <Stack.Screen name="NewExpense" component={NewExpenseScreen} />
+
             {/* <Stack.Screen name="MyAccount" component={MyAccountScreen} /> */}
+
             {/* <Stack.Screen
               name="MyTrips"
               component={MyTripsScreen}
               options={{ headerShown: false }}
             /> */}
+
             {/* <Stack.Screen name="Stats" component={StatsScreen} /> */}
           </Stack.Navigator>
         </NavigationContainer>
