@@ -3,12 +3,8 @@ import User from '../models/User.js';
 import { isValidObjectId } from 'mongoose';
 
 export const getAllTrips = async (req, res, next) => {
-  const { userId } = req.body;
-  //! req.userInfo
-  if (!isValidObjectId(userId)) {
-    return res.status(400).json({ message: 'Invalid userId' });
-  }
-
+  const userId = req.userInfo._id;
+  console.log(userId);
   try {
     const trips = await Trip.find({ userId });
     if (!trips || trips.length === 0) {
@@ -16,13 +12,13 @@ export const getAllTrips = async (req, res, next) => {
     }
     res.json(trips);
   } catch (error) {
-    //! console.log('here is the error'); -> it's coming as 500 even though it's client side issue -> wrong userId
     next(error);
   }
 };
 
 export const addTrip = async (req, res, next) => {
-  const { userId, name, start, end, duration, currency, budget } = req.body;
+  const userId = req.userInfo._id;
+  const { name, start, end, duration, currency, budget } = req.body;
   if (!isValidObjectId(userId)) {
     return res.status(400).json({ message: 'Invalid userId' });
   }
@@ -37,11 +33,9 @@ export const addTrip = async (req, res, next) => {
       budget,
     });
     const savedTrip = await newTrip.save();
-
     const user = await User.findById(userId);
     user.selectedTrip = savedTrip._id;
     await user.save();
-
     res.json(savedTrip);
   } catch (error) {
     next(error);
@@ -85,10 +79,28 @@ export const updateTrip = async (req, res, next) => {
 export const deleteTrip = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const deletedTrip = await Trip.findByIdAndDelete(id);
-    if (!deletedTrip) {
+    // Find the trip by its ID
+    const trip = await Trip.findById(id);
+
+    // Check if the trip exists
+    if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
     }
+
+    // Iterate over expenses of the trip
+    for (const expense of trip.expenses) {
+      // Check if the expense has a receipt path
+      if (expense.receipt) {
+        // Decode receipt path if necessary
+        const originalReceiptPath = decode(expense.receipt);
+        // Remove the receipt file
+        await fse.remove(originalReceiptPath);
+      }
+    }
+
+    // Delete the trip
+    await Trip.findByIdAndDelete(id);
+
     res.json({ message: 'Trip deleted successfully' });
   } catch (error) {
     next(error);

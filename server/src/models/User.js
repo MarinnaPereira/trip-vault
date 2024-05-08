@@ -27,6 +27,7 @@ userSchema.statics.login = async data => {
   if (!match) {
     return false;
   }
+  console.log(user);
   return user;
 };
 

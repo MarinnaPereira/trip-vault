@@ -1,9 +1,85 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
+import { useUserContext } from '../contexts/userContext';
+import { useTripsContext } from '../contexts/tripsContext';
+import { deleteUser, updateUser } from '../api/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function MyAccountScreen({ route }) {
   // const { username, email } = route.params;
+
+  const { user, setUser } = useUserContext();
+  const { trips, dispatch } = useTripsContext();
+
+  // *updateUser
+  const hardcodedUser = {
+    _id: '663a38af268b1a36580b8d07',
+    username: 'mari',
+    email: 'mari@email.com',
+  };
+
+  const userData = {
+    ...hardcodedUser,
+    username: 'mari2',
+  };
+
+  useEffect(() => {
+    const editUser = async () => {
+      try {
+        const editedUser = await updateUser(userData);
+        setUser(editedUser);
+      } catch (error) {
+        console.error('Error updating User:', error);
+      }
+    };
+
+    editUser();
+  }, []);
+
+  useEffect(() => {
+    console.log('User', user);
+  }, [user]);
+
+  // *deleteUser
+  // deleteUser api
+  // setUser(null)
+  // setTrips([])
+  // setLogged(false)
+  // removeToken
+
+  // useEffect(() => {
+  //   const eliminateUser = async () => {
+  //     try {
+  //       await deleteUser(hardcodedUser);
+  //       setUser(null);
+  //       dispatch({
+  //         type: 'DELETE_ALL_TRIPS',
+  //       });
+  //       await AsyncStorage.removeItem('token');
+  //     } catch (error) {
+  //       console.error('Error deleting user:', error);
+  //     }
+  //   };
+
+  //   eliminateUser();
+  // }, []);
+
+  // useEffect(() => {
+  //   console.log('Updated trips', trips); // Logging updated trips
+  // }, [trips]); // Logging trips when it changes
+
+  // useEffect(() => {
+  //   console.log('User', user);
+  // }, [user]);
+
+  // *logout
+  // setUser(null)
+  // setTrips([])
+  // setLogged(false)
+  // removeToken
 
   return (
     <>

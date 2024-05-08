@@ -5,6 +5,7 @@ import {
   getAllExpenses,
   addExpense,
   getExpense,
+  downloadReceipt,
   updateExpense,
   deleteExpense,
 } from '../controllers/expensesController.js';
@@ -31,3 +32,11 @@ expensesRouter
     updateExpense,
   )
   .delete(verifyToken, validateId, deleteExpense);
+
+expensesRouter.get(
+  '/:id/receipt',
+  verifyToken,
+  validateId,
+  getExpense,
+  downloadReceipt,
+);

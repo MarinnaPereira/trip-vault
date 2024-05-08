@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,21 +6,51 @@ import {
   TouchableOpacity,
   Modal,
   ScrollView,
-} from "react-native";
-import { Entypo, FontAwesome6 } from "@expo/vector-icons";
-import SearchBar from "./SearchBar";
+} from 'react-native';
+import { Entypo, FontAwesome6 } from '@expo/vector-icons';
+import SearchBar from './SearchBar';
+import { getAllTrips } from '../api/api';
+import { useTripsContext } from '../contexts/tripsContext';
+import { useUserContext } from '../contexts/userContext';
 
 const handleGoBack = () => {
-  navigation.navigate("UnlockFirstTrip", { screen: "UnlockFirstTripScreen" });
+  navigation.navigate('UnlockFirstTrip', { screen: 'UnlockFirstTripScreen' });
 };
 
 export default function MyTripsScreen({ totalSpent }) {
+  const { dispatch, trips } = useTripsContext();
+  const { user, setUser } = useUserContext(); // for updating when the user touches/selects a specific trip
+
+  const { selectedTrip } = user;
+
+  useEffect(() => {
+    const fetchTrips = async () => {
+      try {
+        const allTrips = await getAllTrips();
+        dispatch({
+          type: 'ADD_ALL_TRIPS',
+          payload: allTrips,
+        });
+      } catch (error) {
+        console.error('Error fetching trips:', error);
+      }
+    };
+
+    fetchTrips();
+  }, [trips]); // Adding dispatch also as a dependency ?
+
+  useEffect(() => {
+    console.log('Updated trips', trips); // Logging updated trips
+  }, [trips]); // Logging trips when it changes
+
+  // now map trips to display them
+
   return (
     <ScrollView>
       <View className="mt-10">
         <TouchableOpacity onPress={handleGoBack}>
           <Image
-            source={require("../../assets/images/singleArrow.png")}
+            source={require('../../assets/images/singleArrow.png')}
             className="ml-4 w-12 h-12"
           />
         </TouchableOpacity>
@@ -93,12 +122,11 @@ export default function MyTripsScreen({ totalSpent }) {
       <View className="flex flex-row justify-end">
         <TouchableOpacity>
           <Image
-            source={require("../../assets/images/plus.png")}
+            source={require('../../assets/images/plus.png')}
             className="mr-5 w-20 h-20"
           />
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
-
 }

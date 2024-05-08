@@ -11,6 +11,7 @@ export default function RegisterScreen({ navigation }) {
 
   // !handleRegisterPress function to save data
   const handleRegisterPress = () => {
+    // avatar is hardcoded, but it should be updated in the avatar page
     const newUser = { username, email, password, avatar: 'iceberg' };
     registerUser(newUser);
     console.log('user created');
