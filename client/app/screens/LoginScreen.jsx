@@ -65,7 +65,7 @@ export default function LoginScreen({ navigation }) {
   };
 
   const handleRegisterPress = () => {
-    navigation.navigate('Register', { screen: 'RegisterScreen' });
+    navigation.navigate('Avatar', { screen: 'AvatarScreen' });
   };
 
   const togglePasswordVisibility = () => {
