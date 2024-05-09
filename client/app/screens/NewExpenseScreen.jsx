@@ -8,10 +8,19 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
 import { addExpense, updateExpense } from '../api/api';
+import transport from '../../assets/images/plane.png';
 
-export default function NewExpenseScreen({ navigation }) {
-  const [selectedCategory, setSelectedCategory] = useState(null);
-
+export default function NewExpenseScreen({ navigation, route }) {
+  const [expense, setExpense] = useState(null);
+  let categoryName;
+  let categoryImage;
+  if (true) {
+    categoryName = 'Transportation';
+    categoryImage = transport;
+  } else {
+    categoryName = route.params.categoryName;
+    categoryImage = route.params.categoryImage;
+  }
   // const [file, setFile] = useState(null);
   const { trips, dispatch } = useTripsContext();
   const { user } = useUserContext();
@@ -21,7 +30,7 @@ export default function NewExpenseScreen({ navigation }) {
   const saveExpense = async () => {
     const formData = new FormData();
 
-    formData.append('categoryName', 'Others');
+    formData.append('categoryName', categoryName);
     formData.append('value', '150');
     formData.append('currency', 'USD');
     formData.append('description', 'lala');
@@ -67,9 +76,9 @@ export default function NewExpenseScreen({ navigation }) {
   //   });
   // };
 
-  useEffect(() => {
-    console.log('Updated trips', trips); // Logging updated trips
-  }, [trips]);
+  // useEffect(() => {
+  //   console.log('Updated trips', trips); // Logging updated trips
+  // }, [trips]);
 
   const handleGoBack = () => {
     navigation.navigate('Category', { screen: 'CategoryScreen' });
@@ -92,7 +101,7 @@ export default function NewExpenseScreen({ navigation }) {
 
       <View className="flex-1">
         <View className="flex flex-row justify-between mx-10 mt-5">
-          <Text className=" text-3xl font-semibold">Transportation</Text>
+          <Text className=" text-3xl font-semibold">{categoryName}</Text>
           <TouchableOpacity>
             <FontAwesome6 name="trash-can" size={32} color="red" />
           </TouchableOpacity>
@@ -103,7 +112,7 @@ export default function NewExpenseScreen({ navigation }) {
             <View className="w-[380px] flex flex-row justify-between items-center">
               <Image
                 // source={(source = { selectedCategory })}
-                source={require('./../../assets/images/plane.png')}
+                source={categoryImage}
                 className="w-[60px] h-[60px] m-2 rounded-xl"
               />
               <Text className="text-3xl">100.00</Text>

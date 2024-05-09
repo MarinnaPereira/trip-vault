@@ -48,7 +48,7 @@ export default function Avatar({ navigation }) {
         <Text className="text-3xl font-semibold">
           {user ? 'Change avatar' : 'Start by picking your avatar'}
         </Text>
-        <View className="gap-4">
+        <View className="mt-2">
           <FlatList
             data={avatars}
             renderItem={renderItem}

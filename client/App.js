@@ -34,31 +34,31 @@ export default function App() {
         <CurrencyProvider>
           <NavigationContainer>
             <Stack.Navigator>
-              <Stack.Screen
+              {/* <Stack.Screen
                 name="Welcome"
                 component={WelcomeScreen}
                 options={{ headerShown: false }}
-              />
+              /> */}
               {/* <Stack.Screen
               name="TabNavigation"
               component={TabNavigation}
               options={{ headerShown: false }}
             /> */}
-              <Stack.Screen
+              {/* <Stack.Screen
                 name="Login"
                 component={LoginScreen}
                 options={{ headerShown: false }}
-              />
-              <Stack.Screen
+              /> */}
+              {/* <Stack.Screen
                 name="Avatar"
                 component={AvatarScreen}
                 options={{ headerShown: false }}
-              />
-              <Stack.Screen
+              /> */}
+              {/* <Stack.Screen
                 name="Register"
                 component={RegisterScreen}
                 options={{ headerShown: false }}
-              />
+              /> */}
               <Stack.Screen
                 name="Category"
                 component={CategoryScreen}
@@ -78,10 +78,10 @@ export default function App() {
               /> */}
 
               {/* <Stack.Screen
-              name="TrackFirstExpenseScreen"
-              component={TrackFirstExpenseScreen}
-              options={{ headerShown: false }}
-            /> */}
+                name="TrackFirstExpenseScreen"
+                component={TrackFirstExpenseScreen}
+                options={{ headerShown: false }}
+              /> */}
 
               {/* <Stack.Screen
               name="InitiateTripScreen"
@@ -117,20 +117,21 @@ export default function App() {
               {/* <Stack.Screen name="Trip" component={TripScreen} /> */}
 
               {/* <Stack.Screen
-              name="NewExpense"
-              component={NewExpenseScreen}
-              options={{ headerShown: false }}
-            /> */}
+                name="NewExpense"
+                component={NewExpenseScreen}
+                options={{ headerShown: false }}
+              /> */}
+
               {/* <Stack.Screen
                 name="EditExpense"
                 component={EditExpenseScreen}
                 options={{ headerShown: false }}
               /> */}
-              <Stack.Screen
+              {/* <Stack.Screen
                 name="MyAccount"
                 component={MyAccountScreen}
                 options={{ headerShown: false }}
-              />
+              /> */}
               {/* <Stack.Screen
               name="MyTrips"
               component={MyTripsScreen}
