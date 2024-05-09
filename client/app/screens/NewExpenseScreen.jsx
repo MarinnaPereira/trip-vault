@@ -11,82 +11,86 @@ import { addExpense, updateExpense } from '../api/api';
 import transport from '../../assets/images/plane.png';
 
 export default function NewExpenseScreen({ navigation, route }) {
-  const [expense, setExpense] = useState(null);
+  const [expense, setExpense] = useState(null); // for checking if it's creating or updating
+  const [file, setFile] = useState(null);
+
   let categoryName;
   let categoryImage;
   if (true) {
-    categoryName = 'Transportation';
-    categoryImage = transport;
-  } else {
+    //   categoryName = 'Transportation';
+    //   categoryImage = transport;
+    // } else {
     categoryName = route.params.categoryName;
     categoryImage = route.params.categoryImage;
   }
-  // const [file, setFile] = useState(null);
+
   const { trips, dispatch } = useTripsContext();
   const { user } = useUserContext();
 
+  const handleFileChange = e => {
+    setFile(e.target.files[0]);
+  };
+
   //* addExpense
-  const expenseId = '663a857170c7112af6015994'; //hardcoded for now
   const saveExpense = async () => {
     const formData = new FormData();
 
     formData.append('categoryName', categoryName);
     formData.append('value', '150');
-    formData.append('currency', 'USD');
+    formData.append('currency', 'EUR');
     formData.append('description', 'lala');
     formData.append('dates[]', '2024-05-01');
     formData.append('dates[]', '2024-05-04');
     formData.append('paymentMethod', 'Cash');
-    formData.append(
-      'file',
-      '/home/dci-student/Desktop/trip-vault/server/uploads/receipt-1715109135041-386685218.jpg',
-    );
+    // formData.append('file', file');
 
-    // *add expense
     const newExpense = await addExpense(formData);
-    return newExpense;
-
-    // *update expense
-    // const updatedExpense = await updateExpense(formData, expenseId);
-    // return updatedExpense;
-  };
-
-  // *add expense
-  const handleSavePress2 = async () => {
-    const newExpense = await saveExpense();
-    // remember to update current trip
     const { selectedTrip } = user;
     dispatch({
       type: 'ADD_EXPENSE',
       tripId: selectedTrip,
       payload: newExpense,
     });
+
+    // *update expense
+    // const expenseId = '663a857170c7112af6015994'; //hardcoded for now
+    // const updatedExpense = await updateExpense(formData, expenseId);
+    //   const {selectedTrip} = user;
+    //   dispatch({
+    //     type: 'UPDATE_EXPENSE',
+    //     tripId: selectedTrip,
+    //     expenseId: expenseId,
+    //     payload: updatedExpense,
+    //   });
+  };
+
+  // *add expense
+  const handleSavePress = async () => {
+    await saveExpense();
+
+    navigation.navigate('TripNameScreen', {
+      screen: 'TripNameScreen',
+    });
   };
 
   //* update expense
-  // const handleSavePress = async () => {
+  // const handleSavePress2 = async () => {
   //   const updatedExpense = await saveExpense();
   //   // remember to update current trip
-  //   const {selectedTrip} = user;
-  //   dispatch({
-  //     type: 'UPDATE_EXPENSE',
-  //     tripId: selectedTrip,
-  //     expenseId: expenseId,
-  //     payload: updatedExpense,
-  //   });
+
   // };
 
   // useEffect(() => {
-  //   console.log('Updated trips', trips); // Logging updated trips
+  //   console.log('Updated trip expenses', trips); // Logging updated trips
   // }, [trips]);
 
   const handleGoBack = () => {
     navigation.navigate('Category', { screen: 'CategoryScreen' });
   };
 
-  const handleSavePress = () => {
-    navigation.navigate('TripName', { screen: 'TripNameScreen' });
-  };
+  // const handleSavePress = () => {
+  //   navigation.navigate('TripName', { screen: 'TripNameScreen' });
+  // };
 
   return (
     <>

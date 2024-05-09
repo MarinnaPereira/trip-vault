@@ -15,6 +15,7 @@ import { useUserContext } from '../contexts/userContext';
 import { addTrip } from '../api/api';
 import DropdownCurrency from './DropdownCurrency';
 import { useCurrencyContext } from '../contexts/currencyContext';
+import { DateTime } from 'luxon';
 
 export default function InitiateTripScreen() {
   const navigation = useNavigation();
@@ -34,8 +35,7 @@ export default function InitiateTripScreen() {
     name: tripName,
     start: startDate,
     end: endDate,
-    // currency: baseCurrency,
-    currency: 'USD', // I hardcoded because currency api is not working for me
+    currency: baseCurrency,
     budget: parseFloat(budget) || 0,
   };
 
@@ -55,8 +55,8 @@ export default function InitiateTripScreen() {
 
   const handleSavePress = async () => {
     await createTrip();
-    navigation.navigate('TripNameScreen', {
-      screen: 'TripNameScreen',
+    navigation.navigate('TrackFirstExpenseScreen', {
+      screen: 'TrackFirstExpenseScreen',
     });
   };
 
@@ -91,6 +91,7 @@ export default function InitiateTripScreen() {
   };
 
   const handleCurrencyChange = value => {
+    console.log(value);
     setBaseCurrency(value);
   };
 
@@ -101,6 +102,13 @@ export default function InitiateTripScreen() {
   useEffect(() => {
     console.log('User', user);
   }, [user]);
+
+  const tripLength =
+    endDate && startDate
+      ? DateTime.fromJSDate(endDate)
+          .diff(DateTime.fromJSDate(startDate), 'days')
+          .toObject().days + 1
+      : '__';
 
   return (
     <ScrollView>
@@ -189,10 +197,7 @@ export default function InitiateTripScreen() {
             color="#00B0A3"
           />
           <Text className="ml-2 text-lg text-green font-extrabold">
-            The trip length is{' '}
-            {endDate && startDate
-              ? `${Math.abs(endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)} days`
-              : '__ days'}
+            The trip length is {tripLength} days
           </Text>
         </View>
         <View className="mt-8">

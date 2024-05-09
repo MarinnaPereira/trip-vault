@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { useUserContext } from '../contexts/userContext';

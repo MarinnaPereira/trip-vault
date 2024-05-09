@@ -11,8 +11,8 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const { setUser, setIsLogged } = useUserContext();
-  const { trips, dispatch } = useTripsContext();
+  const { user, setUser, setIsLogged } = useUserContext();
+  const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
 
   const fetchUser = async () => {
     try {
@@ -36,10 +36,18 @@ export default function LoginScreen({ navigation }) {
     } catch (error) {
       console.error('Error fetching trips:', error);
     }
-    dispatch({
-      type: 'ADD_ALL_TRIPS',
-      payload: allTrips,
-    });
+    if (allTrips) {
+      dispatch({
+        type: 'ADD_ALL_TRIPS',
+        payload: allTrips,
+      });
+      console.log(user.selectedTrip);
+      if (user.selectedTrip) {
+        setPinnedTrip(trips.filter(trip => trip._id === user.selectedTrip));
+        console.log(pinnedTrip);
+      }
+    }
+
     handleNavigation();
   };
 
@@ -47,6 +55,10 @@ export default function LoginScreen({ navigation }) {
     if (!allTrips) {
       navigation.navigate('UnlockFirstTrip', {
         screen: 'UnlockFirstTripScreen',
+      });
+    } else if (!pinnedTrip.expenses) {
+      navigation.navigate('TrackFirstExpenseScreen', {
+        screen: 'TrackFirstExpenseScreen',
       });
     } else {
       navigation.navigate('TripNameScreen', {

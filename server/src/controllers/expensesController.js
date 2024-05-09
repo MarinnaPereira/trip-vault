@@ -82,7 +82,7 @@ export const getExpense = async (req, res, next) => {
 
 export const downloadReceipt = async (req, res, next) => {
   if (!res.locals.expense || !res.locals.expense.receipt) {
-    return res.status(404).json({ message: 'Receiptnot found' });
+    return res.status(404).json({ message: 'Receipt not found' });
   }
   res.sendFile(res.locals.expense.receipt), { root: '.' };
 };

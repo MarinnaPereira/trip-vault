@@ -11,7 +11,12 @@ export default function TripNameScreen({ totalSpent }) {
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
 
-  const { trips, dispatch } = useTripsContext();
+  // const { trips, dispatch, pinnedTrip } = useTripsContext();
+
+  // useEffect(() => {
+  //   console.log('pinnedTRip', pinnedTrip);
+  // }, []);
+
   const { user, setUser } = useUserContext();
 
   //* testing deleting trip
@@ -149,6 +154,7 @@ export default function TripNameScreen({ totalSpent }) {
       </Modal>
       <View className="mt-20 justify-start items-left">
         <Text className="text-3xl mt-20 ml-8 mb-7 text-[#00b0a3] font-bold items-start">
+          {/* {pinnedTrip ? pinnedTrip.name : 'Trip name'} */}
           Trip name
         </Text>
       </View>

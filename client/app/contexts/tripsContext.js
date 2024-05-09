@@ -1,4 +1,4 @@
-import { createContext, useReducer, useContext, useEffect } from 'react';
+import { createContext, useReducer, useContext, useState } from 'react';
 
 export const TripsContext = createContext();
 
@@ -56,9 +56,12 @@ const tripsReducer = (state, action) => {
 
 export const TripsProvider = ({ children }) => {
   const [trips, dispatch] = useReducer(tripsReducer, []);
+  const [pinnedTrip, setPinnedTrip] = useState({});
 
   return (
-    <TripsContext.Provider value={{ trips, dispatch }}>
+    <TripsContext.Provider
+      value={{ trips, dispatch, pinnedTrip, setPinnedTrip }}
+    >
       {children}
     </TripsContext.Provider>
   );
