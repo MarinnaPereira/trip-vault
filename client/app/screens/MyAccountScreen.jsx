@@ -1,18 +1,22 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
 import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
 import { deleteUser, updateUser } from '../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import EditUsernameModal from '../modals/EditUsernameModal';
 
 export default function MyAccountScreen({ route }) {
+  const [isEditUserModalVisible, setIsEditUserModalVisible] = useState(false);
   // const { username, email } = route.params;
 
   const { user, setUser } = useUserContext();
   const { trips, dispatch } = useTripsContext();
+
+  const toggleModal = () => {
+    setIsEditUserModalVisible(!isEditUserModalVisible);
+  };
 
   // *updateUser
   const hardcodedUser = {
@@ -104,7 +108,10 @@ export default function MyAccountScreen({ route }) {
         <View className="items-center">
           <View className="mt-4 w-[380px]">
             <Text className="text-left text-[19px]">username</Text>
-            <TouchableOpacity className="bg-lightGray rounded-md">
+            <TouchableOpacity
+              onPress={toggleModal}
+              className="bg-lightGray rounded-md"
+            >
               {/* Display the username dynamically. Replace 'dci' with the fetched username. */}
               <Text className="p-3 text-[#999] text-[19px]">dci</Text>
             </TouchableOpacity>
@@ -138,6 +145,11 @@ export default function MyAccountScreen({ route }) {
               </TouchableOpacity>
             </View>
           </View>
+
+          <EditUsernameModal
+            modalVisible={isEditUserModalVisible}
+            closeModal={toggleModal}
+          />
         </View>
       </View>
     </>

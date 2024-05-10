@@ -23,7 +23,11 @@ import StatsScreen from './app/screens/StatsScreen';
 import DonutPieChart from './app/screens/DonutPieChart';
 import EditExpenseScreen from './app/screens/EditExpenseScreen';
 import PaymentMethodModal from './app/modals/PaymentMethodModal';
-
+import UploadPictureModal from './app/modals/UploadPictureModal';
+import EditUsernameModal from './app/modals/EditUsernameModal';
+import OtherPaymentModal from './app/modals/OtherPaymentModal';
+import PictureScreen from './app/screens/PictureScreen';
+import EditPictureScreen from './app/screens/EditPictureScreen';
 
 const Stack = createStackNavigator();
 
@@ -31,100 +35,108 @@ export default function App() {
   return (
     <UserProvider>
       <TripsProvider>
-    <NavigationContainer>
-      <Stack.Navigator>
-        {/* <Stack.Screen
+        <NavigationContainer>
+          <Stack.Navigator>
+            {/* <Stack.Screen
           name="TabNavigation"
           component={TabNavigation}
           options={{ headerShown: false }}
         /> */}
-        {/* <Stack.Screen
+            {/* <Stack.Screen
           name="Welcome"
           component={WelcomeScreen}
           options={{ headerShown: false }}
         /> */}
-        {/* <Stack.Screen
+            {/* <Stack.Screen
           name="Login"
           component={LoginScreen}
 
           options={{ headerShown: false }}
-        />
-        <Stack.Screen name="Avatar" component={AvatarScreen} options={{ headerShown: false }}/>
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen name="Avatar" component={AvatarScreen} options={{ headerShown: false }}/> */}
+        {/* <Stack.Screen
           name="Register"
           component={RegisterScreen}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name="Category"
           component={CategoryScreen}
           options={{ headerShown: false }}
         /> */}
 
-        {/* <Stack.Screen
+            {/* <Stack.Screen
           name="UnlockFirstTrip"
           component={UnlockFirstTripScreen}
           options={{ headerShown: false }}
         /> */}
 
-        {/* <Stack.Screen
+            {/* <Stack.Screen
           name="InitiateTrip"
           component={InitiateTripScreen}
           options={{ headerShown: false }}
         /> */}
 
-        <Stack.Screen
+            {/* <Stack.Screen
           name="TrackFirstExpenseScreen"
           component={TrackFirstExpenseScreen}
           options={{ headerShown: false }}
-        /> */}
-        
-        <Stack.Screen
+        />  */}
+
+            {/* <Stack.Screen
           name="InitiateTripScreen"
           component={InitiateTripScreen}
           options={{ headerShown: false }}
         /> */}
-        <Stack.Screen
+            {/* <Stack.Screen
           name="DonutPieChart"
           component={DonutPieChart}
           options={{ headerShown: false }}
-        />
-        {/* <Stack.Screen
+        /> */}
+            {/* <Stack.Screen
           name="TripNameScreen"
           component={TripNameScreen}
           options={{ headerShown: false }}
         /> */}
-        {/* <Stack.Screen
+            {/* <Stack.Screen
           name="TripNameEndScreen"
           component={TripNameEndScreen}
           options={{ headerShown: false }}
         /> */}
-        {/* <Stack.Screen
+            {/* <Stack.Screen
           name="DropdownCurrency"
           component={DropdownCurrency}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+            {/* <Stack.Screen
           name="SearchBar"
           component={SearchBar}
           options={{ headerShown: false }}
-        />
+        /> */}
 
+            {/* <Stack.Screen name="Trip" component={TripScreen} /> */}
 
-        <Stack.Screen name="Trip" component={TripScreen} />
-
-        <Stack.Screen name="NewExpense" component={NewExpenseScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="EditExpense" component={EditExpenseScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="MyAccount" component={MyAccountScreen} options={{ headerShown: false }}/>
-        <Stack.Screen
+            {/* <Stack.Screen
+              name="NewExpense"
+              component={NewExpenseScreen}
+              options={{ headerShown: false }}
+            /> */}
+            {/* <Stack.Screen name="EditExpense" component={EditExpenseScreen} options={{ headerShown: false }}/> */}
+            {/* <Stack.Screen name="MyAccount" component={MyAccountScreen} options={{ headerShown: false }}/> */}
+            {/* <Stack.Screen
           name="MyTrips"
           component={MyTripsScreen}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen name="Stats" component={StatsScreen} />
-        <Stack.Screen name="PaymentMethod" component={PaymentMethodModal} />
-      </Stack.Navigator>
-    </NavigationContainer>
+        /> */}
+            {/* <Stack.Screen name="Stats" component={StatsScreen} /> */}
+            {/* <Stack.Screen name="PaymentMethod" component={PaymentMethodModal} options={{ headerShown: false }}/> */}
+            {/* <Stack.Screen name="UploadPicture" component={UploadPictureModal} options={{ headerShown: false }}/> */}
+            {/* <Stack.Screen name="EditUsername" component={EditUsernameModal} options={{ headerShown: false }}/> */}
+            {/* <Stack.Screen name="OtherPayment" component={OtherPaymentModal} options={{ headerShown: false }}/> */}
+            {/* <Stack.Screen name="Picture" component={PictureScreen} options={{ headerShown: false }}/> */}
+            <Stack.Screen name="EditPicture" component={EditPictureScreen} options={{ headerShown: false }}/>
+          </Stack.Navigator>
+        </NavigationContainer>
       </TripsProvider>
     </UserProvider>
   );
