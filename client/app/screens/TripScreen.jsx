@@ -1,6 +1,6 @@
-import { View, Text, TextInput } from "react-native";
-import React from "react";
-import TabNavigation from "../navigations/TabNavigation";
+import { View, Text, TextInput } from 'react-native';
+import React from 'react';
+// import TabNavigation from "../navigations/TabNavigation";
 
 export default function TripScreen() {
   return (

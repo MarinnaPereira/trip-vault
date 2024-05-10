@@ -1,9 +1,8 @@
+import { useState, useEffect } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-
-import { loginUser } from '../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { loginUser, getAllTrips } from '../api/api';
 import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
 
@@ -11,9 +10,11 @@ export default function LoginScreen({ navigation }) {
   const [credential, setCredential] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const { user, setUser, isLogged, setIsLogged } = useUserContext();
 
-  const handleLoginPress = async () => {
+  const { user, setUser, setIsLogged } = useUserContext();
+  const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
+
+  const fetchUser = async () => {
     try {
       const userData = {
         credential,
@@ -26,13 +27,57 @@ export default function LoginScreen({ navigation }) {
     } catch (err) {
       console.error(err);
     }
-    // navigation.navigate('UnlockFirstTrip', {
-    //   screen: 'UnlockFirstTripScreen',
-    // });
+  };
+
+  let allTrips;
+  const fetchUserTrips = async () => {
+    try {
+      allTrips = await getAllTrips();
+    } catch (error) {
+      console.error('Error fetching trips:', error);
+    }
+    if (allTrips) {
+      dispatch({
+        type: 'ADD_ALL_TRIPS',
+        payload: allTrips,
+      });
+      console.log(user.selectedTrip);
+      if (user.selectedTrip) {
+        setPinnedTrip(trips.filter(trip => trip._id === user.selectedTrip));
+        console.log(pinnedTrip);
+      }
+    }
+
+    handleNavigation();
+  };
+
+  const handleNavigation = () => {
+    if (!allTrips) {
+      navigation.navigate('UnlockFirstTrip', {
+        screen: 'UnlockFirstTripScreen',
+      });
+    } else if (!pinnedTrip.expenses) {
+      navigation.navigate('TrackFirstExpenseScreen', {
+        screen: 'TrackFirstExpenseScreen',
+      });
+    } else {
+      navigation.navigate('TripNameScreen', {
+        screen: 'TripNameScreen',
+      });
+    }
+  };
+
+  useEffect(() => {
+    console.log('Updated trips', trips); // Logging updated trips
+  }, [trips]); // Logging trips when it changes
+
+  const handleLoginPress = async () => {
+    await fetchUser();
+    await fetchUserTrips();
   };
 
   const handleRegisterPress = () => {
-    navigation.navigate('Register', { screen: 'RegisterScreen' });
+    navigation.navigate('Avatar', { screen: 'AvatarScreen' });
   };
 
   const togglePasswordVisibility = () => {

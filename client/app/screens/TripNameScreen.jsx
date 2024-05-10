@@ -6,13 +6,17 @@ import { deleteExpense, deleteTrip } from '../api/api';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
 
-
 export default function TripNameScreen({ totalSpent }) {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
 
-  const { trips, dispatch } = useTripsContext();
+  // const { trips, dispatch, pinnedTrip } = useTripsContext();
+
+  // useEffect(() => {
+  //   console.log('pinnedTRip', pinnedTrip);
+  // }, []);
+
   const { user, setUser } = useUserContext();
 
   //* testing deleting trip
@@ -20,38 +24,38 @@ export default function TripNameScreen({ totalSpent }) {
   // update trip context
   // update user's selected trip
 
-  const tripData = {
-    name: 'hardcoded trip3',
-    start: '2024-11-01',
-    end: '2024-12-15',
-    currency: 'USD',
-    budget: 3000,
-    _id: '663a206528c0de859429ca39',
-  };
+  // const tripData = {
+  //   name: 'hardcoded trip3',
+  //   start: '2024-11-01',
+  //   end: '2024-12-15',
+  //   currency: 'USD',
+  //   budget: 3000,
+  //   _id: '663a206528c0de859429ca39',
+  // };
 
-  useEffect(() => {
-    const eliminateTrip = async () => {
-      try {
-        await deleteTrip(tripData);
-        dispatch({
-          type: 'DELETE_TRIP',
-          payload: tripData['_id'],
-        });
-      } catch (error) {
-        console.error('Error fetching trips:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const eliminateTrip = async () => {
+  //     try {
+  //       await deleteTrip(tripData);
+  //       dispatch({
+  //         type: 'DELETE_TRIP',
+  //         payload: tripData['_id'],
+  //       });
+  //     } catch (error) {
+  //       console.error('Error fetching trips:', error);
+  //     }
+  //   };
 
-    eliminateTrip();
-  }, []);
+  //   eliminateTrip();
+  // }, []);
 
-  useEffect(() => {
-    console.log('Updated trips', trips); // Logging updated trips
-    setUser({
-      ...user,
-      selectedTrip: trips.length >= 1 ? trips[trips.length - 1]._id : null,
-    });
-  }, [trips]); // Logging trips when it changes
+  // useEffect(() => {
+  //   console.log('Updated trips', trips); // Logging updated trips
+  //   setUser({
+  //     ...user,
+  //     selectedTrip: trips.length >= 1 ? trips[trips.length - 1]._id : null,
+  //   });
+  // }, [trips]); // Logging trips when it changes
 
   useEffect(() => {
     console.log('User', user);
@@ -150,6 +154,7 @@ export default function TripNameScreen({ totalSpent }) {
       </Modal>
       <View className="mt-20 justify-start items-left">
         <Text className="text-3xl mt-20 ml-8 mb-7 text-[#00b0a3] font-bold items-start">
+          {/* {pinnedTrip ? pinnedTrip.name : 'Trip name'} */}
           Trip name
         </Text>
       </View>
@@ -186,7 +191,6 @@ export default function TripNameScreen({ totalSpent }) {
             <Text className="text-right text-lg">Total amount of the day</Text>
           </View>
 
-
           <View className="items-center">
             <View className="mt-3 mb-6 bg-lightGray rounded-md">
               <View className="w-[380px] flex flex-row justify-between">
@@ -221,7 +225,6 @@ export default function TripNameScreen({ totalSpent }) {
             <Text className="text-right text-lg">Total amount of the day</Text>
           </View>
 
-
           <View className="items-center">
             <View className="mt-3 mb-1 bg-lightGray rounded-md">
               <View className="w-[380px] flex flex-row justify-between">
@@ -244,10 +247,8 @@ export default function TripNameScreen({ totalSpent }) {
                   </View>
                 </View>
               </View>
-
             </View>
           </View>
-
 
           <View className="items-center">
             <View className="mt-3 mb-1 bg-lightGray rounded-md">
@@ -271,7 +272,6 @@ export default function TripNameScreen({ totalSpent }) {
               </View>
             </View>
           </View>
-
 
           <View className="items-center">
             <View className="mt-3 mb-1 bg-lightGray rounded-md">

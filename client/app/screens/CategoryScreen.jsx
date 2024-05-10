@@ -1,14 +1,40 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native';
-import React from 'react';
+import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
+import categories from '../../assets/categories';
+import { useState } from 'react';
 
-export default function Category() {
+export default function Category({ navigation }) {
+  const [expense, setExpense] = useState('null');
+
+  const handleCategoryPress = category => {
+    navigation.navigate('NewExpense', {
+      categoryName: category.name,
+      categoryImage: category.image,
+    });
+  };
+
+  const handleGoBack = () => {
+    if (expense._id) {
+      navigation.navigate('NewExpense', { screen: 'NewExpenseScreen' });
+    } else {
+      navigation.navigate('TrackFirstExpenseScreen', {
+        screen: 'TrackFirstExpenseScreen',
+      });
+    }
+  };
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => handleCategoryPress(item)} className="m-2">
+      <Image
+        source={item.image}
+        className="w-[105px] h-[105px] mt-2 rounded-2xl"
+      />
+      <Text className="text-[13px] text-center font-semibold">{item.name}</Text>
+    </TouchableOpacity>
+  );
   return (
     <>
       <View className="mt-10">
-        <TouchableOpacity
-        // Function handleGoBack needs to be implemented
-        // onPress={handleGoBack}
-        >
+        <TouchableOpacity onPress={handleGoBack}>
           <Image
             source={require('../../assets/images/singleArrow.png')}
             className="ml-5 mt-6 w-20 h-20"
@@ -18,94 +44,14 @@ export default function Category() {
 
       <View className="items-center mt-5">
         <Text className="text-3xl font-semibold">Pick a category</Text>
-        <View className="flex flex-row w-20 h-20 rounded-xl gap-4 justify-center mt-5">
-          <TouchableOpacity>
-            <Image
-              source={require('./../../assets/images/accommodation.png')}
-              className="w-[105px] h-[105px] rounded-xl"
-            />
-            <Text className="text-[13px] text-center font-semibold">
-              Accommodation
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require('./../../assets/images/activities.png')}
-              className="w-[105px] h-[105px] rounded-xl"
-            />
-            <Text className="text-[13px] text-center font-semibold">
-              Activities
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require('./../../assets/images/groceries.png')}
-              className="w-[105px] h-[105px] rounded-xl"
-            />
-            <Text className="text-[13px] text-center font-semibold">
-              Groceries
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View className="flex flex-row w-20 h-20 rounded-xl gap-4 justify-center mt-12">
-          <TouchableOpacity>
-            <Image
-              source={require('./../../assets/images/restaurant.png')}
-              className="w-[105px] h-[105px] rounded-xl"
-            />
-            <Text className="text-[13px] text-center font-semibold">
-              Restaurants
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require('./../../assets/images/services.png')}
-              className="w-[105px] h-[105px] rounded-xl"
-            />
-            <Text className="text-[13px] text-center font-semibold">
-              Services
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require('./../../assets/images/shopping.png')}
-              className="w-[105px] h-[105px] rounded-xl"
-            />
-            <Text className="text-[13px] text-center font-semibold">
-              Shopping
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View className="flex flex-row w-20 h-20 rounded-xl gap-4 justify-center mt-12">
-          <TouchableOpacity>
-            <Image
-              source={require('./../../assets/images/taxes-fees.png')}
-              className="w-[105px] h-[105px] rounded-xl"
-            />
-            <Text className="text-[13px] text-center font-semibold">
-              Taxes & Fees
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require('./../../assets/images/plane.png')}
-              className="w-[105px] h-[105px] rounded-xl"
-            />
-            <Text className="text-[13px] text-center font-semibold">
-              Transportation
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require('./../../assets/images/others.png')}
-              className="w-[105px] h-[105px] rounded-xl"
-            />
-            <Text className="text-[13px] text-center font-semibold">
-              Others
-            </Text>
-          </TouchableOpacity>
+        <View className="mt-3">
+          <FlatList
+            data={categories}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={3}
+            contentContainerClassName="flex-wrap justify-center items-center"
+          />
         </View>
       </View>
     </>

@@ -21,7 +21,7 @@ const expenseSchema = new Schema({
   convertedAmount: { type: Number },
   description: { type: String },
   dates: [{ type: Date, required: true }],
-  paymentMethod: [{ type: String }],
+  paymentMethod: { type: String },
   receipt: { type: String }, // path
 });
 

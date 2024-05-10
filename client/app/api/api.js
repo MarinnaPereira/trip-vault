@@ -101,6 +101,7 @@ export const addTrip = async newTrip => {
   // * newTrip as parameter
   try {
     const token = await getToken();
+    console.log(token);
     const res = await axios.post(`${baseUrl}/trips`, newTrip, {
       headers: {
         'Content-Type': 'application/json',
@@ -155,10 +156,77 @@ export const deleteTrip = async trip => {
 
 // ? expenses requests (getAll and get????????????)
 
-export const addExpense = async newExpense => {};
-// !update trip
+export const addExpense = async formData => {
+  // *formData with expense info as parameter
+  try {
+    const token = await getToken();
+    console.log(token);
+    console.log(formData);
+    const res = await axios.post(`${baseUrl}/expenses`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(res.data);
+    return res.data; // return object with the new expense info
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-export const updateExpense = async updatedExpense => {};
+// export const addExpense = async formData => {
+//   try {
+//     const token = await getToken();
+//     console.log(token);
+//     console.log(formData);
+
+//     const response = await fetch(`${baseUrl}/expenses`, {
+//       method: 'POST',
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//       body: formData,
+//     });
+
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
+
+//     const data = await response.json();
+//     console.log(data);
+//     return data; // return object with the new expense info
+//   } catch (err) {
+//     console.error(err);
+//     throw err; // Re-throw the error to propagate it to the caller
+//   }
+// };
+
+export const updateExpense = async (formData, expenseId) => {
+  try {
+    const token = await getToken();
+    console.log(token);
+    console.log(formData);
+
+    const response = await fetch(`${baseUrl}/expenses/${expenseId}`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data; // return object with the updated expense info
+  } catch (err) {
+    console.error(err);
+    throw err; // Re-throw the error to propagate it to the caller
+  }
+};
 // !update trip
 
 export const deleteExpense = async expense => {};

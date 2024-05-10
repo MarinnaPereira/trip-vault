@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { UserProvider } from './app/contexts/userContext';
 import { TripsProvider } from './app/contexts/tripsContext';
+import { CurrencyProvider } from './app/contexts/currencyContext';
 import WelcomeScreen from './app/screens/WelcomeScreen';
 import LoginScreen from './app/screens/LoginScreen';
 import RegisterScreen from './app/screens/RegisterScreen';
@@ -35,6 +36,7 @@ export default function App() {
   return (
     <UserProvider>
       <TripsProvider>
+        <CurrencyProvider>
         <NavigationContainer>
           <Stack.Navigator>
             {/* <Stack.Screen
@@ -137,6 +139,7 @@ export default function App() {
             <Stack.Screen name="EditPicture" component={EditPictureScreen} options={{ headerShown: false }}/>
           </Stack.Navigator>
         </NavigationContainer>
+        </CurrencyProvider>
       </TripsProvider>
     </UserProvider>
   );

@@ -33,10 +33,6 @@ expensesRouter
   )
   .delete(verifyToken, validateId, deleteExpense);
 
-expensesRouter.get(
-  '/:id/receipt',
-  verifyToken,
-  validateId,
-  getExpense,
-  downloadReceipt,
-);
+expensesRouter
+  .route('/:id/receipt')
+  .get(verifyToken, validateId, getExpense, downloadReceipt);

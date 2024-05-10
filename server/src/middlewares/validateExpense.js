@@ -63,6 +63,8 @@ export const validateExpense = [
     .escape(),
 
   (req, res, next) => {
+    console.log(req.body);
+
     const errors = validationResult(req);
     console.log('errors', errors);
     if (errors.isEmpty()) {

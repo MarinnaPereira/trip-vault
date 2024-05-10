@@ -20,7 +20,7 @@ export const getAllExpenses = async (req, res, next) => {
 
 export const addExpense = async (req, res, next) => {
   try {
-    const tripId = req.tripId; //! are we sending here or taking from the userId sent by the token?
+    const tripId = req.tripId;
     const { categoryName, value, currency, description, dates, paymentMethod } =
       req.body;
 
@@ -82,7 +82,7 @@ export const getExpense = async (req, res, next) => {
 
 export const downloadReceipt = async (req, res, next) => {
   if (!res.locals.expense || !res.locals.expense.receipt) {
-    return res.status(404).json({ message: 'Receiptnot found' });
+    return res.status(404).json({ message: 'Receipt not found' });
   }
   res.sendFile(res.locals.expense.receipt), { root: '.' };
 };
@@ -107,7 +107,6 @@ export const updateExpense = async (req, res, next) => {
 
     // if client deleted receipt image
     if (!req.file) {
-      //! remember to delete the file of the uploads folder as well -??
       const receiptPath = expense.receipt;
       const originalReceiptPath = decode(receiptPath);
       // console.log(originalReceiptPath);

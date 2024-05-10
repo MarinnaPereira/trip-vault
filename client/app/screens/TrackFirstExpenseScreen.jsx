@@ -1,13 +1,11 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
+// import { useNavigation } from '@react-navigation/native';
 import CategoryScreen from './CategoryScreen';
 
-export default function TrackFirstExpenseScreen() {
-  const navigation = useNavigation();
-
-  const handleTrackFirstExpenseScreen = () => {
-    navigation.navigate('PickACategory', { screen: 'PickACategory' });
+export default function TrackFirstExpenseScreen({ navigation }) {
+  const handleTackPress = () => {
+    navigation.navigate('Category', { screen: 'CategoryScreen' });
   };
 
   return (
@@ -16,7 +14,7 @@ export default function TrackFirstExpenseScreen() {
         {' '}
         Track Your First Expense
       </Text>
-      <TouchableOpacity onPress={CategoryScreen}>
+      <TouchableOpacity onPress={handleTackPress}>
         <Image
           source={require('../../assets/images/plus.png')}
           className="w-28 h-28 mt-8"

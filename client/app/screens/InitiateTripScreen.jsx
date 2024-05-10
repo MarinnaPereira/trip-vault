@@ -1,84 +1,63 @@
-
-import { View, Text, Image, TouchableOpacity, Button } from 'react-native';
-// import TabNavigation from "../navigations/TabNavigation";
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import DropdownCurrency from './DropdownCurrency';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
-import { addTrip, updateTrip } from '../api/api';
-
+import { addTrip } from '../api/api';
+import DropdownCurrency from './DropdownCurrency';
+import { useCurrencyContext } from '../contexts/currencyContext';
+import { DateTime } from 'luxon';
 
 export default function InitiateTripScreen() {
   const navigation = useNavigation();
+  const [tripName, setTripName] = useState('');
+  const [budget, setBudget] = useState('');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [isStartDatePickerVisible, setStartDatePickerVisibility] =
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
-
-
- const { dispatch, trips } = useTripsContext();
+  const { dispatch, trips } = useTripsContext();
   const { user, setUser } = useUserContext();
+  const { baseCurrency, setBaseCurrency, availableCurrencies } =
+    useCurrencyContext();
 
   const tripData = {
-    name: 'hardcoded trip4',
-    start: '2024-11-01',
-    end: '2024-12-15',
-    currency: 'USD',
-    budget: 3000,
-    // _id: '663a0e28a24385e123c99223', //for updating only
+    name: tripName,
+    start: startDate,
+    end: endDate,
+    currency: baseCurrency,
+    budget: parseFloat(budget) || 0,
   };
 
-  // *testing creating trip
-  useEffect(() => {
-    const createTrip = async () => {
-      try {
-        const newTrip = await addTrip(tripData);
-        dispatch({
-          type: 'ADD_TRIP',
-          payload: newTrip,
-        });
-        setUser({ ...user, selectedTrip: newTrip._id });
-      } catch (error) {
-        console.error('Error creating trip:', error);
-      }
-    };
+  let newTrip;
+  const createTrip = async () => {
+    try {
+      newTrip = await addTrip(tripData);
+      dispatch({
+        type: 'ADD_TRIP',
+        payload: newTrip,
+      });
+      setUser({ ...user, selectedTrip: newTrip._id });
+    } catch (error) {
+      console.error('Error creating trip:', error);
+    }
+  };
 
-    createTrip();
-  }, []);
-
-  // *testing updating trip
-  // useEffect(() => {
-  //   const editTrip = async () => {
-  //     try {
-  //       const editedTrip = await updateTrip(tripData);
-  //       dispatch({
-  //         type: 'UPDATE_TRIP',
-  //         payload: editedTrip,
-  //       });
-  //     } catch (error) {
-  //       console.error('Error updating trip:', error);
-  //     }
-  //   };
-
-  //   editTrip();
-  // }, []);
-
-  useEffect(() => {
-    console.log('Updated trips', trips); // Logging updated trips
-  }, [trips]); // Logging trips when it changes
-
-  useEffect(() => {
-    console.log('User', user);
-  }, [user]);
-
-
-  const handleEnterName = () => {
-    navigation.navigate('MyTrips', { screen: 'MyTripsScreen' });
+  const handleSavePress = async () => {
+    await createTrip();
+    navigation.navigate('TrackFirstExpenseScreen', {
+      screen: 'TrackFirstExpenseScreen',
+    });
   };
 
   const handleGoBack = () => {
@@ -93,7 +72,6 @@ export default function InitiateTripScreen() {
     setStartDatePickerVisibility(false);
   };
 
-
   const showEndDatePicker = () => {
     setEndDatePickerVisibility(true);
   };
@@ -102,7 +80,7 @@ export default function InitiateTripScreen() {
     setEndDatePickerVisibility(false);
   };
 
-    const handleStartDateConfirm = date => {
+  const handleStartDateConfirm = date => {
     setStartDate(date);
     setStartDatePickerVisibility(false);
   };
@@ -112,9 +90,28 @@ export default function InitiateTripScreen() {
     setEndDatePickerVisibility(false);
   };
 
+  const handleCurrencyChange = value => {
+    console.log(value);
+    setBaseCurrency(value);
+  };
+
+  useEffect(() => {
+    console.log('Updated trips', trips);
+  }, [trips]);
+
+  useEffect(() => {
+    console.log('User', user);
+  }, [user]);
+
+  const tripLength =
+    endDate && startDate
+      ? DateTime.fromJSDate(endDate)
+          .diff(DateTime.fromJSDate(startDate), 'days')
+          .toObject().days + 1
+      : '__';
 
   return (
-    <>
+    <ScrollView>
       <View className="mt-10">
         <TouchableOpacity onPress={handleGoBack}>
           <Image
@@ -124,39 +121,36 @@ export default function InitiateTripScreen() {
         </TouchableOpacity>
       </View>
       <View className="mt-5 justify-start items-left">
-        <Text className="text-3xl ml-8 mb-7 text-[#00b0a3] font-bold items-start">
+        <Text className="text-3xl ml-8 mb-7 text-[#00B0A3] font-bold items-start">
           Initiate a trip
         </Text>
       </View>
-
       <View className="flex-1 items-center">
         <View className="mt-4">
-          <TouchableOpacity
-            onPress={handleEnterName}
-            className="bg-lightGray rounded-md"
-          >
-            <Text className="w-[380px] text-lg p-3 text-[#999]">
-              Enter a name{' '}
-            </Text>
-          </TouchableOpacity>
+          <TextInput
+            onChangeText={text => setTripName(text)}
+            placeholder="Enter a name"
+            className="w-[380px] text-lg p-3 bg-lightGray rounded-md"
+          />
         </View>
-
         <View className="mt-4">
-          <DropdownCurrency />
-          <Text></Text>
+          <DropdownCurrency
+            selectedCurrency={baseCurrency}
+            onChange={handleCurrencyChange}
+          />
         </View>
-
-        <View className="mt-4">
-          <TouchableOpacity className=" bg-lightGray rounded-md">
-            <Text className="w-[380px] p-3 text-lg text-[#999]">
-              Budget (optional)
-            </Text>
-          </TouchableOpacity>
+        <View className="mt-8 bg-lightGray rounded-md">
+          <TextInput
+            onChangeText={text => setBudget(text)}
+            placeholder="Enter budget (optional)"
+            keyboardType="numeric"
+            value={budget}
+            className="w-[380px] text-lg p-3 bg-lightGray rounded-md"
+          />
         </View>
-
         <View className="mt-16">
           <TouchableOpacity
-            onPress={(onPress = () => setStartDatePickerVisibility(true))}
+            onPress={() => setStartDatePickerVisibility(true)}
             className="bg-lightGray rounded-md"
           >
             <Text className="w-[380px] text-lg pt-3 pl-3 pb-2 text-[#999]">
@@ -175,7 +169,6 @@ export default function InitiateTripScreen() {
             onCancel={() => setStartDatePickerVisibility(false)}
           />
         </View>
-
         <View className="mt-2">
           <TouchableOpacity
             onPress={() => setEndDatePickerVisibility(true)}
@@ -185,7 +178,7 @@ export default function InitiateTripScreen() {
               Select end date
             </Text>
             {endDate && (
-              <Text className="pl-3 pb-3 text-lg  text-green font-extrabold">
+              <Text className="pl-3 pb-3 text-lg text-green font-extrabold">
                 {endDate.toDateString()}
               </Text>
             )}
@@ -197,31 +190,25 @@ export default function InitiateTripScreen() {
             onCancel={hideEndDatePicker}
           />
         </View>
-
         <View className="flex-row items-center mt-2 w-[380px] p-3 bg-lightGray rounded-md">
           <MaterialCommunityIcons
             name="information-outline"
             size={20}
-            color="#00b0a3"
+            color="#00B0A3"
           />
           <Text className="ml-2 text-lg text-green font-extrabold">
-            The trip length is{' '}
-            {endDate && startDate
-              ? `${Math.abs(endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)} days`
-              : '__ days'}
-
+            The trip length is {tripLength} days
           </Text>
         </View>
-
         <View className="mt-8">
           <TouchableOpacity
-            // onPress={ }
+            onPress={handleSavePress}
             className="bg-green text-lg w-[180px] rounded-lg mt-4"
           >
             <Text className="text-white text-lg text-center p-4">Save</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </>
+    </ScrollView>
   );
 }
