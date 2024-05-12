@@ -5,6 +5,9 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
+
+import PaymentMethodModal from '../modals/PaymentMethodModal';
+import UploadPictureModal from '../modals/UploadPictureModal';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
@@ -13,6 +16,11 @@ import { addExpense, updateExpense } from '../api/api';
 import transport from '../../assets/images/plane.png';
 
 export default function NewExpenseScreen({ navigation, route }) {
+  const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] =
+    useState(false);
+  const [isUploadPictureModalVisible, setIsUploadPictureModalVisible] =
+    useState(false);
+  // const [selectedCategory, setSelectedCategory] = useState(null);
   const [expense, setExpense] = useState(null); // for checking if it's creating or updating
   const [file, setFile] = useState(null);
 
@@ -92,6 +100,7 @@ export default function NewExpenseScreen({ navigation, route }) {
   //   console.log('Updated trip expenses', trips); // Logging updated trips
   // }, [trips]);
 
+
   const handleGoBack = () => {
     navigation.navigate('Category', { screen: 'CategoryScreen' });
   };
@@ -99,6 +108,14 @@ export default function NewExpenseScreen({ navigation, route }) {
   // const handleSavePress = () => {
   //   navigation.navigate('TripName', { screen: 'TripNameScreen' });
   // };
+
+  const togglePaymentModal = () => {
+    setIsPaymentMethodModalVisible(!isPaymentMethodModalVisible);
+  };
+
+  const toggleUploadPictureModal = () => {
+    setIsUploadPictureModalVisible(!isUploadPictureModalVisible);
+  };
 
   return (
     <>
@@ -153,38 +170,52 @@ export default function NewExpenseScreen({ navigation, route }) {
 
             <View className="mt-4">
               <TouchableOpacity className=" bg-lightGray rounded-md">
-                <View className="w-[380px] flex flex-row justify-start items-center pl-3">
+                <View className="flex flex-row justify-start items-center pl-3">
                   <MaterialIcons
                     name="calendar-month"
                     size={30}
                     color="black"
                   />
-                  <Text className="py-3 pl-1 text-[19px]">Date</Text>
+                  <Text className="py-3 pl-2 text-[19px]">Date</Text>
                 </View>
               </TouchableOpacity>
             </View>
 
             <View className="mt-4">
-              <TouchableOpacity className=" bg-lightGray rounded-md">
-                <View className="w-[380px] flex flex-row justify-start items-center pl-3">
+              <TouchableOpacity
+                onPress={togglePaymentModal}
+                className=" bg-lightGray rounded-md"
+              >
+                <View className="flex flex-row justify-start items-center pl-3">
                   <MaterialCommunityIcons
                     name="credit-card-plus-outline"
-                    size={30}
+                    size={28}
                     color="black"
                   />
-                  <Text className="py-3 pl-1 text-[19px]">Payment Method</Text>
+                  <Text className="py-3 pl-2 text-[19px]">Payment Method</Text>
                 </View>
               </TouchableOpacity>
             </View>
+            <PaymentMethodModal
+              modalVisible={isPaymentMethodModalVisible}
+              closeModal={togglePaymentModal}
+            />
 
             <View className="mt-4">
-              <TouchableOpacity className=" bg-lightGray rounded-md">
-                <View className="w-[300px] flex flex-row justify-start items-center pl-3">
+              <TouchableOpacity
+                onPress={toggleUploadPictureModal}
+                className=" bg-lightGray rounded-md"
+              >
+                <View className="flex flex-row justify-start items-center pl-3">
                   <FontAwesome name="cloud-upload" size={24} color="black" />
-                  <Text className="py-3 pl-1 text-[19px]">Upload Picture</Text>
+                  <Text className="py-3 pl-2 text-[19px]">Upload Picture</Text>
                 </View>
               </TouchableOpacity>
             </View>
+            <UploadPictureModal
+              modalVisible={isUploadPictureModalVisible}
+              closeModal={toggleUploadPictureModal}
+            />
 
             <View className="items-center mt-48">
               <TouchableOpacity

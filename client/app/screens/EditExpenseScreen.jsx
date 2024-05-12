@@ -1,20 +1,28 @@
 import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
+import PaymentMethodModal from '../modals/PaymentMethodModal';
 
 // import { useState } from "react";
 
 export default function NewExpenseScreen({ navigation }) {
+  const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] =
+    useState(false);
   // const [selectedCategory, setSelectedCategory] = useState(null);
+
   const handleGoBack = () => {
     navigation.navigate('Category', { screen: 'CategoryScreen' });
   };
 
   const handleSavePress = () => {
     navigation.navigate('TripName', { screen: 'TripNameScreen' });
+  };
+
+  const togglePaymentModal = () => {
+    setIsPaymentMethodModalVisible(!isPaymentMethodModalVisible);
   };
 
   return (
@@ -71,31 +79,38 @@ export default function NewExpenseScreen({ navigation }) {
 
             <View className="mt-4">
               <TouchableOpacity className=" bg-lightGray rounded-md">
-                <View className="w-[380px] flex flex-row justify-start items-center pl-3">
+                <View className="flex flex-row justify-start items-center pl-3">
                   <MaterialIcons
                     name="calendar-month"
                     size={30}
                     color="black"
                   />
-                  <Text className="py-3 pl-1 text-[19px]">17/04/2024</Text>
+                  <Text className="py-3 pl-2 text-[19px]">17/04/2024</Text>
                 </View>
               </TouchableOpacity>
             </View>
 
             <View className="mt-4">
-              <TouchableOpacity className=" bg-lightGray rounded-md">
-                <View className="w-[380px] flex flex-row justify-start items-center pl-3">
+              <TouchableOpacity
+                onPress={togglePaymentModal}
+                className=" bg-lightGray rounded-md"
+              >
+                <View className="flex flex-row justify-start items-center pl-3">
                   <FontAwesome6 name="credit-card" size={24} color="black" />
-                  <Text className="py-3 pl-1 text-[19px]">Credit Card</Text>
+                  <Text className="py-3 pl-2 text-[19px]">Credit Card</Text>
                 </View>
               </TouchableOpacity>
             </View>
+            <PaymentMethodModal
+              modalVisible={isPaymentMethodModalVisible}
+              closeModal={togglePaymentModal}
+            />
 
             <View className="mt-4">
               <TouchableOpacity className=" bg-lightGray rounded-md">
-                <View className="w-[300px] flex flex-row justify-start items-center pl-3">
+                <View className="flex flex-row justify-start items-center pl-3">
                   <FontAwesome name="cloud-upload" size={24} color="black" />
-                  <Text className="py-3 pl-1 text-[19px]">Upload Picture</Text>
+                  <Text className="py-3 pl-2 text-[19px]">Upload Picture</Text>
                 </View>
               </TouchableOpacity>
             </View>
