@@ -93,7 +93,7 @@ export const getAllTrips = async () => {
     console.log(res.data);
     return res.data; // return an array with all trips
   } catch (err) {
-    console.error(err);
+    console.log(err);
   }
 };
 
@@ -156,50 +156,50 @@ export const deleteTrip = async trip => {
 
 // ? expenses requests (getAll and get????????????)
 
-export const addExpense = async formData => {
-  // *formData with expense info as parameter
-  try {
-    const token = await getToken();
-    console.log(token);
-    console.log(formData);
-    const res = await axios.post(`${baseUrl}/expenses`, formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    console.log(res.data);
-    return res.data; // return object with the new expense info
-  } catch (err) {
-    console.error(err);
-  }
-};
-
 // export const addExpense = async formData => {
+//   // *formData with expense info as parameter
 //   try {
 //     const token = await getToken();
 //     console.log(token);
 //     console.log(formData);
-
-//     const response = await fetch(`${baseUrl}/expenses`, {
-//       method: 'POST',
+//     const res = await axios.post(`${baseUrl}/expenses`, formData, {
 //       headers: {
 //         Authorization: `Bearer ${token}`,
 //       },
-//       body: formData,
 //     });
-
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! status: ${response.status}`);
-//     }
-
-//     const data = await response.json();
-//     console.log(data);
-//     return data; // return object with the new expense info
+//     console.log(res.data);
+//     return res.data; // return object with the new expense info
 //   } catch (err) {
 //     console.error(err);
-//     throw err; // Re-throw the error to propagate it to the caller
 //   }
 // };
+
+export const addExpense = async formData => {
+  try {
+    const token = await getToken();
+    console.log(token);
+    console.log(formData);
+
+    const response = await fetch(`${baseUrl}/expenses`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data; // return object with the new expense info
+  } catch (err) {
+    console.error(err);
+    throw err; // Re-throw the error to propagate it to the caller
+  }
+};
 
 export const updateExpense = async (formData, expenseId) => {
   try {

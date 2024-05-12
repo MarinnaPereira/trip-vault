@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { loginUser, getAllTrips } from '../api/api';
 import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
+import { loginUser, getAllTrips } from '../api/api';
 
 export default function LoginScreen({ navigation }) {
   const [credential, setCredential] = useState('');
@@ -23,6 +23,7 @@ export default function LoginScreen({ navigation }) {
       const { token, user } = await loginUser(userData);
       await AsyncStorage.setItem('token', token);
       setUser(user);
+      user.selectedTrip && setPinnedTrip(user.selectedTrip);
       setIsLogged(true);
     } catch (err) {
       console.error(err);
@@ -34,29 +35,24 @@ export default function LoginScreen({ navigation }) {
     try {
       allTrips = await getAllTrips();
     } catch (error) {
-      console.error('Error fetching trips:', error);
+      console.log('Error fetching trips:', error);
     }
     if (allTrips) {
       dispatch({
         type: 'ADD_ALL_TRIPS',
         payload: allTrips,
       });
-      console.log(user.selectedTrip);
-      if (user.selectedTrip) {
-        setPinnedTrip(trips.filter(trip => trip._id === user.selectedTrip));
-        console.log(pinnedTrip);
-      }
     }
-
     handleNavigation();
   };
 
-  const handleNavigation = () => {
+  const handleNavigation = async () => {
+    console.log(pinnedTrip);
     if (!allTrips) {
       navigation.navigate('UnlockFirstTrip', {
         screen: 'UnlockFirstTripScreen',
       });
-    } else if (!pinnedTrip.expenses) {
+    } else if (!pinnedTrip.expenses[0]) {
       navigation.navigate('TrackFirstExpenseScreen', {
         screen: 'TrackFirstExpenseScreen',
       });
@@ -67,9 +63,9 @@ export default function LoginScreen({ navigation }) {
     }
   };
 
-  useEffect(() => {
-    console.log('Updated trips', trips); // Logging updated trips
-  }, [trips]); // Logging trips when it changes
+  // useEffect(() => {
+  //   console.log('Updated trips', trips); // Logging updated trips
+  // }, [trips]); // Logging trips when it changes
 
   const handleLoginPress = async () => {
     await fetchUser();

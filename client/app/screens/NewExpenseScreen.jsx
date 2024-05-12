@@ -7,7 +7,9 @@ import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
+import { useCurrencyContext } from '../contexts/currencyContext';
 import { addExpense, updateExpense } from '../api/api';
+
 import transport from '../../assets/images/plane.png';
 
 export default function NewExpenseScreen({ navigation, route }) {
@@ -26,6 +28,12 @@ export default function NewExpenseScreen({ navigation, route }) {
 
   const { trips, dispatch } = useTripsContext();
   const { user } = useUserContext();
+  const { convertCurrency } = useCurrencyContext();
+
+  // const tripCurrency = pinnedTrip.currency
+  // if(currency !== tripCurrency) {
+  // const convertedAMount = convertCurrency(value, currency, tripCurrency);
+  // }
 
   const handleFileChange = e => {
     setFile(e.target.files[0]);
@@ -38,6 +46,7 @@ export default function NewExpenseScreen({ navigation, route }) {
     formData.append('categoryName', categoryName);
     formData.append('value', '150');
     formData.append('currency', 'EUR');
+    // if(convertedAmount) {form.append('convertedAmount', convertedAmount)}
     formData.append('description', 'lala');
     formData.append('dates[]', '2024-05-01');
     formData.append('dates[]', '2024-05-04');
@@ -77,7 +86,6 @@ export default function NewExpenseScreen({ navigation, route }) {
   // const handleSavePress2 = async () => {
   //   const updatedExpense = await saveExpense();
   //   // remember to update current trip
-
   // };
 
   // useEffect(() => {
@@ -115,7 +123,6 @@ export default function NewExpenseScreen({ navigation, route }) {
           <View className="mt-4 mb-6 bg-lightGray rounded-md">
             <View className="w-[380px] flex flex-row justify-between items-center">
               <Image
-                // source={(source = { selectedCategory })}
                 source={categoryImage}
                 className="w-[60px] h-[60px] m-2 rounded-xl"
               />

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, Modal } from "react-native";
-import { Entypo, FontAwesome6 } from "@expo/vector-icons";
-import { ScrollView } from "react-native-gesture-handler";
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, Modal } from 'react-native';
+import { Entypo, FontAwesome6 } from '@expo/vector-icons';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function TripNameEndScreen({ totalSpent }) {
   const [isMenuVisible, setMenuVisible] = useState(false);
@@ -30,14 +30,14 @@ export default function TripNameEndScreen({ totalSpent }) {
   };
 
   const handleGoBack = () => {
-    navigation.navigate("UnlockFirstTrip", { screen: "UnlockFirstTripScreen" });
+    navigation.navigate('UnlockFirstTrip', { screen: 'UnlockFirstTripScreen' });
   };
   return (
     <ScrollView>
       <View className="mt-6">
         <TouchableOpacity onPress={handleGoBack}>
           <Image
-            source={require("../../assets/images/singleArrow.png")}
+            source={require('../../assets/images/singleArrow.png')}
             className="ml-6 w-12 h-12"
           />
         </TouchableOpacity>
@@ -86,9 +86,9 @@ export default function TripNameEndScreen({ totalSpent }) {
         <View
           style={{
             flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
           }}
         >
           <View className="bg-white p-5 rounded-lg">
@@ -120,7 +120,7 @@ export default function TripNameEndScreen({ totalSpent }) {
         <View>
           <View className="bg-[#f24f13] rounded-md">
             <Text className="w-[310px] p-3 text-[#fdfdfd] text-center font-bold">
-              This trip ended in dd/mm/yyyy{" "}
+              This trip ended in dd/mm/yyyy{' '}
             </Text>
           </View>
           <Text>{totalSpent}</Text>
@@ -148,7 +148,7 @@ export default function TripNameEndScreen({ totalSpent }) {
 
           <View className="flex-row ">
             <Image
-              source={require("../../assets/images/restaurant.png")}
+              source={require('../../assets/images/restaurant.png')}
               className="w-12 h-12"
             />
 
@@ -173,7 +173,7 @@ export default function TripNameEndScreen({ totalSpent }) {
 
           <View className="flex-row">
             <Image
-              source={require("../../assets/images/shopping.png")}
+              source={require('../../assets/images/shopping.png')}
               className="w-12 h-12"
             />
 
@@ -189,7 +189,7 @@ export default function TripNameEndScreen({ totalSpent }) {
 
           <View className="flex-row mt-2">
             <Image
-              source={require("../../assets/images/activities.png")}
+              source={require('../../assets/images/activities.png')}
               className="w-12 h-12"
             />
 
@@ -205,7 +205,7 @@ export default function TripNameEndScreen({ totalSpent }) {
 
           <View className="flex-row mt-2">
             <Image
-              source={require("../../assets/images/others.png")}
+              source={require('../../assets/images/others.png')}
               className="w-12 h-12"
             />
 
@@ -224,7 +224,7 @@ export default function TripNameEndScreen({ totalSpent }) {
       <View className="flex flex-row justify-end">
         <TouchableOpacity>
           <Image
-            source={require("../../assets/images/plus.png")}
+            source={require('../../assets/images/plus.png')}
             className="mr-5 w-20 h-20"
           />
         </TouchableOpacity>
