@@ -47,12 +47,12 @@ export default function LoginScreen({ navigation }) {
   };
 
   const handleNavigation = async () => {
-    console.log(pinnedTrip);
+    console.log('pinnedTrip', pinnedTrip);
     if (!allTrips) {
       navigation.navigate('UnlockFirstTrip', {
         screen: 'UnlockFirstTripScreen',
       });
-    } else if (!pinnedTrip.expenses[0]) {
+    } else if (pinnedTrip.expenses.length === 0) {
       navigation.navigate('TrackFirstExpenseScreen', {
         screen: 'TrackFirstExpenseScreen',
       });

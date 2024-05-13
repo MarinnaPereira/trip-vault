@@ -169,6 +169,14 @@ export default function TripNameScreen({ totalSpent }) {
         </Text>
       </View>
       <View className="flex-1 items-center">
+        {/* <View>
+          <View className="bg-[#f24f13] rounded-md">
+            <Text className="w-[310px] p-3 text-[#fdfdfd] text-center font-bold">
+              This trip ended in dd/mm/yyyy{' '}
+            </Text>
+          </View>
+          <Text>{totalSpent}</Text>
+        </View> */}
         <View>
           <View className="bg-lightGray rounded-md">
             <Text className="w-[380px] p-3 text-lg text-[#999]">

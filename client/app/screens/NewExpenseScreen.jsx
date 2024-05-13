@@ -23,6 +23,7 @@ export default function NewExpenseScreen({ navigation, route }) {
   // const [selectedCategory, setSelectedCategory] = useState(null);
   const [expense, setExpense] = useState(null); // for checking if it's creating or updating
   const [file, setFile] = useState(null);
+  const [value, setValue] = useState(null);
 
   let categoryName;
   let categoryImage;
@@ -100,7 +101,6 @@ export default function NewExpenseScreen({ navigation, route }) {
   //   console.log('Updated trip expenses', trips); // Logging updated trips
   // }, [trips]);
 
-
   const handleGoBack = () => {
     navigation.navigate('Category', { screen: 'CategoryScreen' });
   };
@@ -143,7 +143,14 @@ export default function NewExpenseScreen({ navigation, route }) {
                 source={categoryImage}
                 className="w-[60px] h-[60px] m-2 rounded-xl"
               />
-              <Text className="text-3xl">100.00</Text>
+              <TextInput
+                className="text-3xl"
+                placeholder="0.00"
+                // placeholderTextColor="#999"
+                value={value}
+                keyboardType="numeric"
+                onChangeText={text => setValue(text)}
+              />
               <View className="flex pr-2">
                 <Text className="bg-lightGreen text-white text-xl p-2 rounded-md">
                   EUR
