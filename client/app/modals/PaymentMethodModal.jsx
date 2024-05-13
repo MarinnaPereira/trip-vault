@@ -64,6 +64,12 @@ const PaymentMethodModal = ({ modalVisible, closeModal }) => {
               </Text>
             </View>
           </TouchableOpacity>
+          <View className="h-px bg-gray" />
+          <TouchableOpacity onPress={closeModal}>
+            <View className="w-[380px] flex flex-row justify-center items-center pl-3">
+              <Text className="py-3 pl-2 text-[19px] text-red-500">Cancel</Text>
+            </View>
+          </TouchableOpacity>
         </View>
         <OtherPaymentModal
           modalVisible={isOtherPaymentModalVisible}
