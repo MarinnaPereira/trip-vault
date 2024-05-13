@@ -14,17 +14,26 @@ export default function LoginScreen({ navigation }) {
   const { user, setUser, setIsLogged } = useUserContext();
   const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
 
+  useEffect(() => {
+    (async () => {
+      if (pinnedTrip) await fetchUserTrips();
+    })();
+  }, [pinnedTrip]);
+
   const fetchUser = async () => {
     try {
       const userData = {
         credential,
         password,
       };
-      const { token, user } = await loginUser(userData);
-      await AsyncStorage.setItem('token', token);
-      setUser(user);
-      user.selectedTrip && setPinnedTrip(user.selectedTrip);
+      const data = await loginUser(userData);
+      await AsyncStorage.setItem('token', data.token);
+      setUser(data.user);
+      console.log('user', user);
       setIsLogged(true);
+      data.user.selectedTrip
+        ? setPinnedTrip(data.user.selectedTrip)
+        : handleNavigation();
     } catch (err) {
       console.error(err);
     }
@@ -34,20 +43,19 @@ export default function LoginScreen({ navigation }) {
   const fetchUserTrips = async () => {
     try {
       allTrips = await getAllTrips();
+      if (allTrips) {
+        dispatch({
+          type: 'ADD_ALL_TRIPS',
+          payload: allTrips,
+        });
+      }
+      handleNavigation();
     } catch (error) {
       console.log('Error fetching trips:', error);
     }
-    if (allTrips) {
-      dispatch({
-        type: 'ADD_ALL_TRIPS',
-        payload: allTrips,
-      });
-    }
-    handleNavigation();
   };
 
   const handleNavigation = async () => {
-    console.log('pinnedTrip', pinnedTrip);
     if (!allTrips) {
       navigation.navigate('UnlockFirstTrip', {
         screen: 'UnlockFirstTripScreen',
@@ -69,7 +77,6 @@ export default function LoginScreen({ navigation }) {
 
   const handleLoginPress = async () => {
     await fetchUser();
-    await fetchUserTrips();
   };
 
   const handleRegisterPress = () => {

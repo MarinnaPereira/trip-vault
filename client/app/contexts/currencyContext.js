@@ -26,7 +26,7 @@ export const CurrencyProvider = ({ children }) => {
 
     try {
       const response = await axios.get(
-        `https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_2QhV7fCL0mHDd4dG26CjREFnFKmdg8Efw6sV2SQY&base_currency=${baseCurrency}`,
+        `https://api.freecurrencyapi.com/v1/latest?apikey=${CURRENCY_API_KEY}&base_currency=${baseCurrency}`,
       );
       if (!response || !response.data || !response.data.data) {
         throw new Error('API response is not valid.');
@@ -45,7 +45,7 @@ export const CurrencyProvider = ({ children }) => {
   const fetchAvailableCurrencies = async () => {
     try {
       const response = await axios.get(
-        `https://api.freecurrencyapi.com/v1/currencies?apikey=fca_live_2QhV7fCL0mHDd4dG26CjREFnFKmdg8Efw6sV2SQY`,
+        `https://api.freecurrencyapi.com/v1/currencies?apikey=${CURRENCY_API_KEY}`,
       );
       if (!response || !response.data || !response.data.data) {
         throw new Error('API response is not valid.');
