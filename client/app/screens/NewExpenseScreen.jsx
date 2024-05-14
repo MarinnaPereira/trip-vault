@@ -14,8 +14,10 @@ import { useUserContext } from '../contexts/userContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
 import { addExpense, updateExpense } from '../api/api';
 
+import DropdownCurrency from './DropdownCurrency';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 //import transport from '../../assets/images/plane.png';
+
 
 
 export default function NewExpenseScreen({ navigation }) {
@@ -24,9 +26,11 @@ export default function NewExpenseScreen({ navigation }) {
   const [isUploadPictureModalVisible, setIsUploadPictureModalVisible] =
     useState(false);
 
+  const [currencyDropdownVisible, setCurrencyDropdownVisible] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState('EUR');
   // const [expense, setExpense] = useState(null); // for checking if it's creating or updating
 
-  const [file, setFile] = useState(null);
+  // const [file, setFile] = useState(null);
   const [value, setValue] = useState(null);
   const [description, setDescription] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState(null);
@@ -42,6 +46,7 @@ export default function NewExpenseScreen({ navigation }) {
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
   const [isSpreadByDays, setIsSpreadByDays] = useState(false);
+
 
   let categoryName;
   let categoryImage;
@@ -123,6 +128,16 @@ export default function NewExpenseScreen({ navigation }) {
     navigation.navigate('Category', { screen: 'CategoryScreen' });
   };
 
+
+  // const handleSavePress = () => {
+  //   navigation.navigate('TripName', { screen: 'TripNameScreen' });
+  // };
+
+  const handleCurrencyChange = currency => {
+    setSelectedCurrency(currency);
+    setCurrencyDropdownVisible(false);
+  };
+
   const togglePaymentModal = () => {
     setIsPaymentMethodModalVisible(!isPaymentMethodModalVisible);
   };
@@ -131,6 +146,8 @@ export default function NewExpenseScreen({ navigation }) {
     setIsUploadPictureModalVisible(!isUploadPictureModalVisible);
   };
 
+  const toggleCurrencyDropdown = () => {
+    setCurrencyDropdownVisible(!currencyDropdownVisible);
 
   const showSingleDatePicker = () => {
     setSingleDatePickerVisibility(true);
@@ -246,9 +263,11 @@ export default function NewExpenseScreen({ navigation }) {
                 onChangeText={text => setValue(text)}
               />
               <View className="flex pr-2">
-                <Text className="bg-lightGreen text-white text-xl p-2 rounded-md">
-                  EUR
-                </Text>
+                <TouchableOpacity onPress={toggleCurrencyDropdown}>
+                  <Text className="bg-lightGreen text-white text-xl p-2 rounded-md">
+                    {selectedCurrency}
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -262,6 +281,13 @@ export default function NewExpenseScreen({ navigation }) {
             color="#999"
             className="absolute"
           /> */}
+            {currencyDropdownVisible && (
+              <DropdownCurrency
+                selectedCurrency={selectedCurrency}
+                onChange={handleCurrencyChange}
+              />
+            )}
+
             <TextInput
               className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
               placeholder="Description"
