@@ -18,8 +18,6 @@ import DropdownCurrency from './DropdownCurrency';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 //import transport from '../../assets/images/plane.png';
 
-
-
 export default function NewExpenseScreen({ navigation }) {
   const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] =
     useState(false);
@@ -46,7 +44,6 @@ export default function NewExpenseScreen({ navigation }) {
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
   const [isSpreadByDays, setIsSpreadByDays] = useState(false);
-
 
   let categoryName;
   let categoryImage;
@@ -128,7 +125,6 @@ export default function NewExpenseScreen({ navigation }) {
     navigation.navigate('Category', { screen: 'CategoryScreen' });
   };
 
-
   // const handleSavePress = () => {
   //   navigation.navigate('TripName', { screen: 'TripNameScreen' });
   // };
@@ -149,325 +145,330 @@ export default function NewExpenseScreen({ navigation }) {
   const toggleCurrencyDropdown = () => {
     setCurrencyDropdownVisible(!currencyDropdownVisible);
 
-  const showSingleDatePicker = () => {
-    setSingleDatePickerVisibility(true);
-  };
+    const showSingleDatePicker = () => {
+      setSingleDatePickerVisibility(true);
+    };
 
-  const hideSingleDatePicker = () => {
-    setSingleDatePickerVisibility(false);
-  };
+    const hideSingleDatePicker = () => {
+      setSingleDatePickerVisibility(false);
+    };
 
-  const showStartDatePicker = () => {
-    setStartDatePickerVisibility(true);
-  };
+    const showStartDatePicker = () => {
+      setStartDatePickerVisibility(true);
+    };
 
-  const hideStartDatePicker = () => {
-    setStartDatePickerVisibility(false);
-  };
+    const hideStartDatePicker = () => {
+      setStartDatePickerVisibility(false);
+    };
 
-  const showEndDatePicker = () => {
-    setEndDatePickerVisibility(true);
-  };
+    const showEndDatePicker = () => {
+      setEndDatePickerVisibility(true);
+    };
 
-  const hideEndDatePicker = () => {
-    setSingleDatePickerVisibility(false);
-  };
+    const hideEndDatePicker = () => {
+      setSingleDatePickerVisibility(false);
+    };
 
-  const handleSingleDateConfirm = date => {
-    setSingleDate(date);
-    setSingleDatePickerVisibility(false);
-  };
+    const handleSingleDateConfirm = date => {
+      setSingleDate(date);
+      setSingleDatePickerVisibility(false);
+    };
 
-  const handleStartDateConfirm = date => {
-    setStartDate(date);
-    setStartDatePickerVisibility(false);
-  };
+    const handleStartDateConfirm = date => {
+      setStartDate(date);
+      setStartDatePickerVisibility(false);
+    };
 
-  const handleEndDateConfirm = date => {
-    setEndDate(date);
-    setEndDatePickerVisibility(false);
-  };
+    const handleEndDateConfirm = date => {
+      setEndDate(date);
+      setEndDatePickerVisibility(false);
+    };
 
-  const handleToggleSpreadByDays = () => {
-    setIsSpreadByDays(!isSpreadByDays);
-  };
+    const handleToggleSpreadByDays = () => {
+      setIsSpreadByDays(!isSpreadByDays);
+    };
 
+    const handlePaymentMethod = selectedMethod => {
+      setPaymentMethod(selectedMethod);
+    };
 
-  const handlePaymentMethod = selectedMethod => {
-    setPaymentMethod(selectedMethod);
-  };
+    // const handleFile = fileSent => {
+    //   console.log(fileSent);
+    //   // setFile(fileSent)
+    // };
 
-  // const handleFile = fileSent => {
-  //   console.log(fileSent);
-  //   // setFile(fileSent)
-  // };
+    const handleImagePickerPress = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
 
-  const handleImagePickerPress = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+      }
+    };
 
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
-  };
+    const handleCamera = async () => {
+      let result = await ImagePicker.launchCameraAsync({
+        cameraType: ImagePicker.CameraType.back,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
 
-  const handleCamera = async () => {
-    let result = await ImagePicker.launchCameraAsync({
-      cameraType: ImagePicker.CameraType.back,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+      }
+    };
 
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
-  };
-
-  return (
-    <>
-      <View className="mt-10">
-        <TouchableOpacity onPress={handleGoBack}>
-          <Image
-            source={require('../../assets/images/singleArrow.png')}
-            className="ml-5 mt-6 w-20 h-20"
-          />
-        </TouchableOpacity>
-      </View>
-
-      <View className="flex-1">
-        <View className="flex flex-row justify-between mx-10 mt-5">
-          <Text className=" text-3xl font-semibold">{categoryName}</Text>
-          <TouchableOpacity>
-            <FontAwesome6 name="trash-can" size={32} color="red" />
+    return (
+      <>
+        <View className="mt-10">
+          <TouchableOpacity onPress={handleGoBack}>
+            <Image
+              source={require('../../assets/images/singleArrow.png')}
+              className="ml-5 mt-6 w-20 h-20"
+            />
           </TouchableOpacity>
         </View>
 
-        <View className="items-center">
-          <View className="mt-4 mb-6 bg-lightGray rounded-md">
-            <View className="w-[380px] flex flex-row justify-between items-center">
-              <Image
-                source={categoryImage}
-                className="w-[60px] h-[60px] m-2 rounded-xl"
-              />
-              <TextInput
-                className="text-3xl"
-                placeholder="0.00"
-                placeholderTextColor="#999"
-                value={value}
-                keyboardType="numeric"
-                onChangeText={text => setValue(text)}
-              />
-              <View className="flex pr-2">
-                <TouchableOpacity onPress={toggleCurrencyDropdown}>
-                  <Text className="bg-lightGreen text-white text-xl p-2 rounded-md">
-                    {selectedCurrency}
-                  </Text>
-                </TouchableOpacity>
+        <View className="flex-1">
+          <View className="flex flex-row justify-between mx-10 mt-5">
+            <Text className=" text-3xl font-semibold">{categoryName}</Text>
+            <TouchableOpacity>
+              <FontAwesome6 name="trash-can" size={32} color="red" />
+            </TouchableOpacity>
+          </View>
+
+          <View className="items-center">
+            <View className="mt-4 mb-6 bg-lightGray rounded-md">
+              <View className="w-[380px] flex flex-row justify-between items-center">
+                <Image
+                  source={categoryImage}
+                  className="w-[60px] h-[60px] m-2 rounded-xl"
+                />
+                <TextInput
+                  className="text-3xl"
+                  placeholder="0.00"
+                  placeholderTextColor="#999"
+                  value={value}
+                  keyboardType="numeric"
+                  onChangeText={text => setValue(text)}
+                />
+                <View className="flex pr-2">
+                  <TouchableOpacity onPress={toggleCurrencyDropdown}>
+                    <Text className="bg-lightGreen text-white text-xl p-2 rounded-md">
+                      {selectedCurrency}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-          <View />
+            <View />
 
-          {/* !icon into placeholder */}
-          <View style="relative">
-            {/* <MaterialIcons
+            {/* !icon into placeholder */}
+            <View style="relative">
+              {/* <MaterialIcons
             name="edit"
             size={24}
             color="#999"
             className="absolute"
           /> */}
-            {currencyDropdownVisible && (
-              <DropdownCurrency
-                selectedCurrency={selectedCurrency}
-                onChange={handleCurrencyChange}
+              {currencyDropdownVisible && (
+                <DropdownCurrency
+                  selectedCurrency={selectedCurrency}
+                  onChange={handleCurrencyChange}
+                />
+              )}
+
+              <TextInput
+                className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
+                placeholder="Description"
+                placeholderTextColor="black"
+                onChangeText={text => setDescription(text)}
+              ></TextInput>
+              <View />
+
+              {/* Calendar Single Date */}
+              <View className={`mt-4 ${isSpreadByDays ? 'hidden' : 'flex'}`}>
+                <TouchableOpacity
+                  onPress={showSingleDatePicker}
+                  className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-3 pr-3"
+                >
+                  <DateTimePickerModal
+                    isVisible={isSingleDatePickerVisible}
+                    mode="date"
+                    onConfirm={handleSingleDateConfirm}
+                    onCancel={hideSingleDatePicker}
+                  />
+                  <View className="flex flex-row items-center">
+                    <MaterialIcons
+                      name="calendar-month"
+                      size={30}
+                      color="black"
+                    />
+                    {singleDate ? (
+                      <Text className="py-3 pl-2 text-[19px]">
+                        {singleDate.toDateString()}
+                      </Text>
+                    ) : (
+                      <Text className="py-3 pl-2 text-[19px]">Date</Text>
+                    )}
+                  </View>
+                  <TouchableOpacity
+                    onPress={handleToggleSpreadByDays}
+                    className="bg-[#FDA541] w-[105px] rounded-md"
+                  >
+                    <Text className="text-white text-center p-1">
+                      Spread by days
+                    </Text>
+                  </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
+
+              {/* Calendar Spread by days */}
+              <View className={`mt-4 ${isSpreadByDays ? 'flex' : 'hidden'}`}>
+                {/* Start Date */}
+                <TouchableOpacity
+                  onPress={() => {
+                    setStartDatePickerVisibility(true);
+                  }}
+                  className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-3 pr-3 w-[380px]"
+                >
+                  <DateTimePickerModal
+                    isVisible={isStartDatePickerVisible}
+                    mode="date"
+                    onConfirm={handleStartDateConfirm}
+                    onCancel={hideStartDatePicker}
+                  />
+                  <View className="flex flex-row items-center">
+                    <MaterialIcons
+                      name="calendar-month"
+                      size={30}
+                      color="black"
+                    />
+                    {startDate ? (
+                      <>
+                        <Text className="pl-1">Start</Text>
+                        <Text className="py-3 pl-2 text-[19px]">
+                          {startDate.toDateString()}
+                        </Text>
+                      </>
+                    ) : (
+                      <Text className="py-3 pl-2 text-[19px]">
+                        Select start date
+                      </Text>
+                    )}
+                  </View>
+                  <TouchableOpacity
+                    onPress={handleToggleSpreadByDays}
+                    className="bg-[#FDA541] w-[105px] rounded-md"
+                  >
+                    <Text className="text-white text-center p-1">
+                      Cancel spread
+                    </Text>
+                  </TouchableOpacity>
+                </TouchableOpacity>
+
+                {/* End Date */}
+                <TouchableOpacity
+                  onPress={() => {
+                    setEndDatePickerVisibility(true);
+                  }}
+                  className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-3 pr-3 mt-1 w-[380px]"
+                >
+                  <DateTimePickerModal
+                    isVisible={isEndDatePickerVisible}
+                    mode="date"
+                    onConfirm={handleEndDateConfirm}
+                    onCancel={hideEndDatePicker}
+                  />
+                  <View className="flex flex-row items-center">
+                    {endDate ? (
+                      <>
+                        <Text className="pl-10">End</Text>
+                        <Text className="py-3 pl-2 text-[19px]">
+                          {endDate.toDateString()}
+                        </Text>
+                      </>
+                    ) : (
+                      <Text className="py-3 pl-9 text-[19px]">
+                        Select end date
+                      </Text>
+                    )}
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View className="mt-4">
+                <TouchableOpacity
+                  onPress={togglePaymentModal}
+                  className=" bg-lightGray rounded-md"
+                >
+                  <View className="flex flex-row justify-start items-center pl-3">
+                    <MaterialCommunityIcons
+                      name="credit-card-plus-outline"
+                      size={28}
+                      color="black"
+                    />
+                    <Text className="py-3 pl-2 text-[19px]">
+                      {paymentMethod ? paymentMethod : 'Payment Method'}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <PaymentMethodModal
+                modalVisible={isPaymentMethodModalVisible}
+                closeModal={togglePaymentModal}
+                handlePaymentMethod={handlePaymentMethod}
+                onCameraPress={() => {
+                  uploadImage();
+                }}
               />
-            )}
 
-            <TextInput
-              className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
-              placeholder="Description"
-              placeholderTextColor="black"
-              onChangeText={text => setDescription(text)}
-            ></TextInput>
-            <View />
-
-            {/* Calendar Single Date */}
-            <View className={`mt-4 ${isSpreadByDays ? 'hidden' : 'flex'}`}>
-              <TouchableOpacity
-                onPress={showSingleDatePicker}
-                className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-3 pr-3"
-              >
-                <DateTimePickerModal
-                  isVisible={isSingleDatePickerVisible}
-                  mode="date"
-                  onConfirm={handleSingleDateConfirm}
-                  onCancel={hideSingleDatePicker}
-                />
-                <View className="flex flex-row items-center">
-                  <MaterialIcons
-                    name="calendar-month"
-                    size={30}
-                    color="black"
-                  />
-                  {singleDate ? (
-                    <Text className="py-3 pl-2 text-[19px]">
-                      {singleDate.toDateString()}
-                    </Text>
-                  ) : (
-                    <Text className="py-3 pl-2 text-[19px]">Date</Text>
-                  )}
-                </View>
+              <View className="mt-4">
                 <TouchableOpacity
-                  onPress={handleToggleSpreadByDays}
-                  className="bg-[#FDA541] w-[105px] rounded-md"
+                  onPress={toggleUploadPictureModal}
+                  className=" bg-lightGray rounded-md"
                 >
-                  <Text className="text-white text-center p-1">
-                    Spread by days
+                  <View className="flex flex-row justify-start items-center pl-3">
+                    <FontAwesome name="cloud-upload" size={24} color="black" />
+                    <Text className="py-3 pl-2 text-[19px]">
+                      Upload Picture
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+
+              <UploadPictureModal
+                modalVisible={isUploadPictureModalVisible}
+                closeModal={toggleUploadPictureModal}
+                handleGallery={handleImagePickerPress}
+                handleCamera={handleCamera}
+              />
+
+              {image && (
+                <Image
+                  source={{ uri: image }}
+                  className="h-[150px] w-[150px]"
+                />
+              )}
+
+              <View className="items-center mt-48">
+                <TouchableOpacity
+                  onPress={handleSavePress}
+                  className="bg-green w-[180px] rounded-lg"
+                >
+                  <Text className="text-white text-center p-4 text-[19px]">
+                    Save
                   </Text>
                 </TouchableOpacity>
-              </TouchableOpacity>
-            </View>
-
-            {/* Calendar Spread by days */}
-            <View className={`mt-4 ${isSpreadByDays ? 'flex' : 'hidden'}`}>
-              {/* Start Date */}
-              <TouchableOpacity
-                onPress={() => {
-                  setStartDatePickerVisibility(true);
-                }}
-                className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-3 pr-3 w-[380px]"
-              >
-                <DateTimePickerModal
-                  isVisible={isStartDatePickerVisible}
-                  mode="date"
-                  onConfirm={handleStartDateConfirm}
-                  onCancel={hideStartDatePicker}
-                />
-                <View className="flex flex-row items-center">
-                  <MaterialIcons
-                    name="calendar-month"
-                    size={30}
-                    color="black"
-                  />
-                  {startDate ? (
-                    <>
-                      <Text className="pl-1">Start</Text>
-                      <Text className="py-3 pl-2 text-[19px]">
-                        {startDate.toDateString()}
-                      </Text>
-                    </>
-                  ) : (
-                    <Text className="py-3 pl-2 text-[19px]">
-                      Select start date
-                    </Text>
-                  )}
-                </View>
-                <TouchableOpacity
-                  onPress={handleToggleSpreadByDays}
-                  className="bg-[#FDA541] w-[105px] rounded-md"
-                >
-                  <Text className="text-white text-center p-1">
-                    Cancel spread
-                  </Text>
-                </TouchableOpacity>
-              </TouchableOpacity>
-
-              {/* End Date */}
-              <TouchableOpacity
-                onPress={() => {
-                  setEndDatePickerVisibility(true);
-                }}
-                className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-3 pr-3 mt-1 w-[380px]"
-              >
-                <DateTimePickerModal
-                  isVisible={isEndDatePickerVisible}
-                  mode="date"
-                  onConfirm={handleEndDateConfirm}
-                  onCancel={hideEndDatePicker}
-                />
-                <View className="flex flex-row items-center">
-                  {endDate ? (
-                    <>
-                      <Text className="pl-10">End</Text>
-                      <Text className="py-3 pl-2 text-[19px]">
-                        {endDate.toDateString()}
-                      </Text>
-                    </>
-                  ) : (
-                    <Text className="py-3 pl-9 text-[19px]">
-                      Select end date
-                    </Text>
-                  )}
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View className="mt-4">
-              <TouchableOpacity
-                onPress={togglePaymentModal}
-                className=" bg-lightGray rounded-md"
-              >
-                <View className="flex flex-row justify-start items-center pl-3">
-                  <MaterialCommunityIcons
-                    name="credit-card-plus-outline"
-                    size={28}
-                    color="black"
-                  />
-                  <Text className="py-3 pl-2 text-[19px]">
-                    {paymentMethod ? paymentMethod : 'Payment Method'}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            <PaymentMethodModal
-              modalVisible={isPaymentMethodModalVisible}
-              closeModal={togglePaymentModal}
-              handlePaymentMethod={handlePaymentMethod}
-              onCameraPress={() => {
-                uploadImage();
-              }}
-            />
-
-            <View className="mt-4">
-              <TouchableOpacity
-                onPress={toggleUploadPictureModal}
-                className=" bg-lightGray rounded-md"
-              >
-                <View className="flex flex-row justify-start items-center pl-3">
-                  <FontAwesome name="cloud-upload" size={24} color="black" />
-                  <Text className="py-3 pl-2 text-[19px]">Upload Picture</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            <UploadPictureModal
-              modalVisible={isUploadPictureModalVisible}
-              closeModal={toggleUploadPictureModal}
-              handleGallery={handleImagePickerPress}
-              handleCamera={handleCamera}
-            />
-
-            {image && (
-              <Image source={{ uri: image }} className="h-[150px] w-[150px]" />
-            )}
-
-            <View className="items-center mt-48">
-              <TouchableOpacity
-                onPress={handleSavePress}
-                className="bg-green w-[180px] rounded-lg"
-              >
-                <Text className="text-white text-center p-4 text-[19px]">
-                  Save
-                </Text>
-              </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
-      </View>
-    </>
-  );
+      </>
+    );
+  };
 }
