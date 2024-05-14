@@ -5,14 +5,14 @@ import { Dropdown } from 'react-native-element-dropdown';
 import Freecurrencyapi from '@everapi/freecurrencyapi-js';
 
 const data = [
-  { label: 'Item 1', value: '1' },
-  { label: 'Item 2', value: '2' },
-  { label: 'Item 3', value: '3' },
-  { label: 'Item 4', value: '4' },
-  { label: 'Item 5', value: '5' },
-  { label: 'Item 6', value: '6' },
-  { label: 'Item 7', value: '7' },
-  { label: 'Item 8', value: '8' },
+  { label: 'ABC', value: '1' },
+  { label: 'ABC', value: '2' },
+  { label: 'ABC', value: '3' },
+  { label: 'ABC', value: '4' },
+  { label: 'ABC', value: '5' },
+  { label: 'ABC', value: '6' },
+  { label: 'ABC', value: '7' },
+  { label: 'ABC', value: '8' },
 ];
 
 const DropdownCurrency = () => {
@@ -61,7 +61,7 @@ const DropdownCurrency = () => {
   return (
     <View className="mt-4">
       <Dropdown
-        className=" bg-lightGray rounded-md w-[380px] text-lg p-3 text-[#999] "
+        className=" bg-lightGray rounded-md w-[380px]  text-xl p-4 text-[#999] "
         style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
 
   placeholderStyle: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#999',
   },
   selectedTextStyle: {

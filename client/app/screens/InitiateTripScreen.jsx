@@ -1,5 +1,4 @@
-
-import { View, Text, Image, TouchableOpacity, Button } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
 // import TabNavigation from "../navigations/TabNavigation";
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -10,7 +9,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
 import { addTrip, updateTrip } from '../api/api';
-
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function InitiateTripScreen() {
   const navigation = useNavigation();
@@ -20,8 +19,7 @@ export default function InitiateTripScreen() {
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
 
-
- const { dispatch, trips } = useTripsContext();
+  const { dispatch, trips } = useTripsContext();
   const { user, setUser } = useUserContext();
 
   const tripData = {
@@ -76,7 +74,6 @@ export default function InitiateTripScreen() {
     console.log('User', user);
   }, [user]);
 
-
   const handleEnterName = () => {
     navigation.navigate('MyTrips', { screen: 'MyTripsScreen' });
   };
@@ -93,7 +90,6 @@ export default function InitiateTripScreen() {
     setStartDatePickerVisibility(false);
   };
 
-
   const showEndDatePicker = () => {
     setEndDatePickerVisibility(true);
   };
@@ -102,7 +98,7 @@ export default function InitiateTripScreen() {
     setEndDatePickerVisibility(false);
   };
 
-    const handleStartDateConfirm = date => {
+  const handleStartDateConfirm = date => {
     setStartDate(date);
     setStartDatePickerVisibility(false);
   };
@@ -112,9 +108,17 @@ export default function InitiateTripScreen() {
     setEndDatePickerVisibility(false);
   };
 
+  const handleNameChange = name => {
+    // I do not know how to handle that part
+    console.log('Entered name:', name);
+  };
+
+  const handleBudgetChange = amount => {
+    setBudget(amount);
+  };
 
   return (
-    <>
+    <ScrollView>
       <View className="mt-10">
         <TouchableOpacity onPress={handleGoBack}>
           <Image
@@ -131,27 +135,24 @@ export default function InitiateTripScreen() {
 
       <View className="flex-1 items-center">
         <View className="mt-4">
-          <TouchableOpacity
-            onPress={handleEnterName}
-            className="bg-lightGray rounded-md"
-          >
-            <Text className="w-[380px] text-lg p-3 text-[#999]">
-              Enter a name{' '}
-            </Text>
-          </TouchableOpacity>
+          <TextInput
+            onChangeText={handleNameChange}
+            placeholder="Enter a name"
+            className="w-[380px] text-lg p-3 text-[#999] bg-lightGray rounded-md"
+          />
         </View>
 
-        <View className="mt-4">
+        <View className="mt-2">
           <DropdownCurrency />
-          <Text></Text>
         </View>
 
-        <View className="mt-4">
-          <TouchableOpacity className=" bg-lightGray rounded-md">
-            <Text className="w-[380px] p-3 text-lg text-[#999]">
-              Budget (optional)
-            </Text>
-          </TouchableOpacity>
+        <View className="mt-6 text bg-lightGray rounded-md">
+          <TextInput
+            onChangeText={handleBudgetChange} // handle changes to the budget
+            placeholder="Enter budget amount (optional)"
+            keyboardType="numeric" // this is the keyboard
+            className="w-[380] p-3 text-lg text-[#999] rounded-md"
+          />
         </View>
 
         <View className="mt-16">
@@ -160,7 +161,7 @@ export default function InitiateTripScreen() {
             className="bg-lightGray rounded-md"
           >
             <Text className="w-[380px] text-lg pt-3 pl-3 pb-2 text-[#999]">
-              Select start date
+              Select test start date
             </Text>
             {startDate && (
               <Text className="pl-3 pb-3 text-lg text-green font-extrabold">
@@ -176,7 +177,7 @@ export default function InitiateTripScreen() {
           />
         </View>
 
-        <View className="mt-2">
+        <View className="mt-2 ">
           <TouchableOpacity
             onPress={() => setEndDatePickerVisibility(true)}
             className="bg-lightGray rounded-md"
@@ -209,7 +210,6 @@ export default function InitiateTripScreen() {
             {endDate && startDate
               ? `${Math.abs(endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)} days`
               : '__ days'}
-
           </Text>
         </View>
 
@@ -222,6 +222,6 @@ export default function InitiateTripScreen() {
           </TouchableOpacity>
         </View>
       </View>
-    </>
+    </ScrollView>
   );
 }

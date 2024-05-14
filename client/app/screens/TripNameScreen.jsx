@@ -6,7 +6,6 @@ import { deleteExpense, deleteTrip } from '../api/api';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
 
-
 export default function TripNameScreen({ totalSpent }) {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
@@ -186,7 +185,6 @@ export default function TripNameScreen({ totalSpent }) {
             <Text className="text-right text-lg">Total amount of the day</Text>
           </View>
 
-
           <View className="items-center">
             <View className="mt-3 mb-6 bg-lightGray rounded-md">
               <View className="w-[380px] flex flex-row justify-between">
@@ -221,7 +219,6 @@ export default function TripNameScreen({ totalSpent }) {
             <Text className="text-right text-lg">Total amount of the day</Text>
           </View>
 
-
           <View className="items-center">
             <View className="mt-3 mb-1 bg-lightGray rounded-md">
               <View className="w-[380px] flex flex-row justify-between">
@@ -244,10 +241,8 @@ export default function TripNameScreen({ totalSpent }) {
                   </View>
                 </View>
               </View>
-
             </View>
           </View>
-
 
           <View className="items-center">
             <View className="mt-3 mb-1 bg-lightGray rounded-md">
@@ -271,7 +266,6 @@ export default function TripNameScreen({ totalSpent }) {
               </View>
             </View>
           </View>
-
 
           <View className="items-center">
             <View className="mt-3 mb-1 bg-lightGray rounded-md">
