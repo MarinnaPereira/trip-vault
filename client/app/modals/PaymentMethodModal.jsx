@@ -6,12 +6,28 @@ import { Octicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import OtherPaymentModal from './OtherPaymentModal';
 
-const PaymentMethodModal = ({ modalVisible, closeModal }) => {
+const PaymentMethodModal = ({
+  modalVisible,
+  closeModal,
+  handlePaymentMethod,
+}) => {
   const [isOtherPaymentModalVisible, setIsOtherPaymentModalVisible] =
     useState(false);
+  const [selectedMethod, setSelectedMethod] = useState(null);
 
   const toggleOtherPaymentModal = () => {
     setIsOtherPaymentModalVisible(!isOtherPaymentModalVisible);
+  };
+
+  // const handleOtherPaymentSave = otherPaymentValue => {
+  //   // console.log(otherPaymentValue);
+  //   handlePress(otherPaymentValue);
+  // };
+
+  const handlePress = text => {
+    setSelectedMethod(text);
+    handlePaymentMethod(text);
+    closeModal();
   };
 
   return (
@@ -31,7 +47,7 @@ const PaymentMethodModal = ({ modalVisible, closeModal }) => {
         }}
       >
         <View className="bg-white rounded-md">
-          <TouchableOpacity onPress={closeModal}>
+          <TouchableOpacity onPress={() => handlePress('Cash')}>
             <View className="w-[380px] flex flex-row justify-start items-center pl-3">
               <MaterialCommunityIcons
                 name="cash-multiple"
@@ -42,14 +58,14 @@ const PaymentMethodModal = ({ modalVisible, closeModal }) => {
             </View>
           </TouchableOpacity>
           <View className="h-px bg-gray" />
-          <TouchableOpacity onPress={closeModal}>
+          <TouchableOpacity onPress={() => handlePress('Credit Card')}>
             <View className="w-[380px] flex flex-row justify-start items-center pl-3">
               <FontAwesome6 name="credit-card" size={24} color="black" />
               <Text className="py-3 pl-2 text-[19px]">Credit Card</Text>
             </View>
           </TouchableOpacity>
           <View className="h-px bg-gray" />
-          <TouchableOpacity onPress={closeModal}>
+          <TouchableOpacity onPress={() => handlePress('Debit Card')}>
             <View className="w-[380px] flex flex-row justify-start items-center pl-3">
               <Octicons name="credit-card" size={28} color="black" />
               <Text className="py-3 pl-2 text-[19px]">Debit Card</Text>
@@ -60,14 +76,22 @@ const PaymentMethodModal = ({ modalVisible, closeModal }) => {
             <View className="w-[380px] flex flex-row justify-start items-center pl-3">
               <MaterialIcons name="edit" size={28} color="black" />
               <Text className="py-3 pl-2 text-[19px]">
-                Other Payment method
+                Other Payment Method
               </Text>
+            </View>
+          </TouchableOpacity>
+          <View className="h-px bg-gray" />
+          <TouchableOpacity onPress={closeModal}>
+            <View className="w-[380px] flex flex-row justify-center items-center pl-3">
+              <Text className="py-3 pl-2 text-[19px] text-red-500">Cancel</Text>
             </View>
           </TouchableOpacity>
         </View>
         <OtherPaymentModal
           modalVisible={isOtherPaymentModalVisible}
           closeModal={toggleOtherPaymentModal}
+          // onSave={handleOtherPaymentSave}
+          setSelectedMethod={setSelectedMethod}
         />
       </View>
     </Modal>

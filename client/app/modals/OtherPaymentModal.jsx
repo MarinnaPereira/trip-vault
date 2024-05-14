@@ -1,8 +1,19 @@
 import { Modal, View, Text, TouchableOpacity, TextInput } from 'react-native';
-import React from 'react';
+import { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 
-export default function OtherPaymentModal({ modalVisible, closeModal }) {
+export default function OtherPaymentModal({
+  modalVisible,
+  closeModal,
+  setSelectedMethod,
+}) {
+  // const [otherPayment, setOtherPayment] = useState(null);
+
+  const handleSave = () => {
+    //   console.log(otherPayment);
+    // onSave(otherPayment);
+    closeModal();
+  };
   return (
     <Modal
       visible={modalVisible}
@@ -27,7 +38,7 @@ export default function OtherPaymentModal({ modalVisible, closeModal }) {
                 </Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleSave}>
               <View className="bg-green rounded-md m-4">
                 <Text className="px-3 py-1 text-[19px] text-white">Save</Text>
               </View>
@@ -37,7 +48,11 @@ export default function OtherPaymentModal({ modalVisible, closeModal }) {
           <View>
             <View className="w-[380px] flex flex-row justify-start items-center pl-5">
               <MaterialIcons name="edit" size={24} color="black" />
-              <Text className="p-3 pl-1 text-[19px]">Enter Payment Type</Text>
+              <Text>Enter Payment Type</Text>
+              <TextInput
+                className="p-3 pl-1 text-[19px]"
+                onChangeText={text => setSelectedMethod(text)}
+              ></TextInput>
             </View>
             <View className="flex items-center mb-4 justify-center">
               <TextInput className="w-[340px] bg-lightGray rounded-md p-5 text-[19px]"></TextInput>
