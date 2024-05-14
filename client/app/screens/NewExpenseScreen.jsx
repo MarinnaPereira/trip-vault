@@ -14,16 +14,19 @@ import { useCurrencyContext } from '../contexts/currencyContext';
 import { addExpense, updateExpense } from '../api/api';
 
 import transport from '../../assets/images/plane.png';
+import DropdownCurrency from './DropdownCurrency';
 
 export default function NewExpenseScreen({ navigation, route }) {
   const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] =
     useState(false);
   const [isUploadPictureModalVisible, setIsUploadPictureModalVisible] =
     useState(false);
+  const [currencyDropdownVisible, setCurrencyDropdownVisible] = useState(false);
   // const [selectedCategory, setSelectedCategory] = useState(null);
   const [expense, setExpense] = useState(null); // for checking if it's creating or updating
   const [file, setFile] = useState(null);
   const [value, setValue] = useState(null);
+  const [selectedCurrency, setSelectedCurrency] = useState('EUR');
 
   let categoryName;
   let categoryImage;
@@ -109,12 +112,21 @@ export default function NewExpenseScreen({ navigation, route }) {
   //   navigation.navigate('TripName', { screen: 'TripNameScreen' });
   // };
 
+  const handleCurrencyChange = currency => {
+    setSelectedCurrency(currency);
+    setCurrencyDropdownVisible(false);
+  };
+
   const togglePaymentModal = () => {
     setIsPaymentMethodModalVisible(!isPaymentMethodModalVisible);
   };
 
   const toggleUploadPictureModal = () => {
     setIsUploadPictureModalVisible(!isUploadPictureModalVisible);
+  };
+
+  const toggleCurrencyDropdown = () => {
+    setCurrencyDropdownVisible(!currencyDropdownVisible);
   };
 
   return (
@@ -152,9 +164,11 @@ export default function NewExpenseScreen({ navigation, route }) {
                 onChangeText={text => setValue(text)}
               />
               <View className="flex pr-2">
-                <Text className="bg-lightGreen text-white text-xl p-2 rounded-md">
-                  EUR
-                </Text>
+                <TouchableOpacity onPress={toggleCurrencyDropdown}>
+                  <Text className="bg-lightGreen text-white text-xl p-2 rounded-md">
+                    {selectedCurrency}
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -168,6 +182,13 @@ export default function NewExpenseScreen({ navigation, route }) {
             color="#999"
             className="absolute"
           /> */}
+            {currencyDropdownVisible && (
+              <DropdownCurrency
+                selectedCurrency={selectedCurrency}
+                onChange={handleCurrencyChange}
+              />
+            )}
+
             <TextInput
               className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
               placeholder="Description"
