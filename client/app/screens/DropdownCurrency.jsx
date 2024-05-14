@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useCurrencyContext } from '../contexts/currencyContext';
 
-const DropdownCurrency = ({ onChange }) => {
+const DropdownCurrency = ({ selectedCurrency, onChange }) => {
   const { availableCurrencies } = useCurrencyContext();
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);

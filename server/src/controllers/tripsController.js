@@ -19,6 +19,8 @@ export const getAllTrips = async (req, res, next) => {
 export const addTrip = async (req, res, next) => {
   const userId = req.userInfo._id;
   const { name, start, end, currency, budget } = req.body;
+  console.log(req.body);
+
   if (!isValidObjectId(userId)) {
     return res.status(400).json({ message: 'Invalid userId' });
   }
@@ -31,10 +33,17 @@ export const addTrip = async (req, res, next) => {
       currency,
       budget,
     });
+    console.log('Saving new trip...');
     const savedTrip = await newTrip.save();
+    console.log('New trip saved:', savedTrip);
+    console.log('Finding user by ID...');
     const user = await User.findById(userId);
+    console.log('User found:', user);
+    console.log("Updating user's selected trip...");
     user.selectedTrip = savedTrip._id;
     await user.save();
+    console.log('User updated with new trip');
+
     res.json(savedTrip);
   } catch (error) {
     next(error);

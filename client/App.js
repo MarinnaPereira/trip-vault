@@ -73,10 +73,10 @@ export default function App() {
               />
 
               {/* <Stack.Screen
-          name="InitiateTrip"
-          component={InitiateTripScreen}
-          options={{ headerShown: false }}
-        /> */}
+                name="InitiateTrip"
+                component={InitiateTripScreen}
+                options={{ headerShown: false }}
+              /> */}
 
               <Stack.Screen
                 name="TrackFirstExpenseScreen"

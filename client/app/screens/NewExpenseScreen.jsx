@@ -13,15 +13,19 @@ import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
 import { addExpense, updateExpense } from '../api/api';
-
-import transport from '../../assets/images/plane.png';
 import { ScrollView } from 'react-native-gesture-handler';
+import DropdownCurrency from './DropdownCurrency';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+//import transport from '../../assets/images/plane.png';
 
-export default function NewExpenseScreen({ navigation, route }) {
+export default function NewExpenseScreen({ navigation }) {
   const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] =
     useState(false);
   const [isUploadPictureModalVisible, setIsUploadPictureModalVisible] =
     useState(false);
+
+  const [currencyDropdownVisible, setCurrencyDropdownVisible] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState('EUR');
   // const [expense, setExpense] = useState(null); // for checking if it's creating or updating
 
   // const [file, setFile] = useState(null);
@@ -29,6 +33,16 @@ export default function NewExpenseScreen({ navigation, route }) {
   const [description, setDescription] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [image, setImage] = useState();
+  const [singleDate, setSingleDate] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
+  const [isSingleDatePickerVisible, setSingleDatePickerVisibility] =
+    useState(false);
+  const [isStartDatePickerVisible, setStartDatePickerVisibility] =
+    useState(false);
+  const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
+  const [isSpreadByDays, setIsSpreadByDays] = useState(false);
 
   let categoryName;
   let categoryImage;
@@ -36,8 +50,8 @@ export default function NewExpenseScreen({ navigation, route }) {
     //   categoryName = 'Transportation';
     //   categoryImage = transport;
     // } else {
-    categoryName = route.params.categoryName;
-    categoryImage = route.params.categoryImage;
+    // categoryName = route.params.categoryName;
+    // categoryImage = route.params.categoryImage;
   }
 
   const { trips, dispatch } = useTripsContext();
@@ -114,12 +128,64 @@ export default function NewExpenseScreen({ navigation, route }) {
   //   navigation.navigate('TripName', { screen: 'TripNameScreen' });
   // };
 
+  const handleCurrencyChange = currency => {
+    setSelectedCurrency(currency);
+    setCurrencyDropdownVisible(false);
+  };
+
   const togglePaymentModal = () => {
     setIsPaymentMethodModalVisible(!isPaymentMethodModalVisible);
   };
 
   const toggleUploadPictureModal = () => {
     setIsUploadPictureModalVisible(!isUploadPictureModalVisible);
+  };
+
+  const toggleCurrencyDropdown = () => {
+    setCurrencyDropdownVisible(!currencyDropdownVisible);
+  };
+
+  const showSingleDatePicker = () => {
+    setSingleDatePickerVisibility(true);
+  };
+
+  const hideSingleDatePicker = () => {
+    setSingleDatePickerVisibility(false);
+  };
+
+  const showStartDatePicker = () => {
+    setStartDatePickerVisibility(true);
+  };
+
+  const hideStartDatePicker = () => {
+    setStartDatePickerVisibility(false);
+  };
+
+  const showEndDatePicker = () => {
+    setEndDatePickerVisibility(true);
+  };
+
+  const hideEndDatePicker = () => {
+    setSingleDatePickerVisibility(false);
+  };
+
+  const handleSingleDateConfirm = date => {
+    setSingleDate(date);
+    setSingleDatePickerVisibility(false);
+  };
+
+  const handleStartDateConfirm = date => {
+    setStartDate(date);
+    setStartDatePickerVisibility(false);
+  };
+
+  const handleEndDateConfirm = date => {
+    setEndDate(date);
+    setEndDatePickerVisibility(false);
+  };
+
+  const handleToggleSpreadByDays = () => {
+    setIsSpreadByDays(!isSpreadByDays);
   };
 
   const handlePaymentMethod = selectedMethod => {
@@ -156,6 +222,7 @@ export default function NewExpenseScreen({ navigation, route }) {
       setImage(result.assets[0].uri);
     }
   };
+
   return (
     <ScrollView>
       <View className="mt-10">
@@ -191,9 +258,11 @@ export default function NewExpenseScreen({ navigation, route }) {
                 onChangeText={text => setValue(text)}
               />
               <View className="flex pr-2">
-                <Text className="bg-lightGreen text-white text-xl p-2 rounded-md">
-                  EUR
-                </Text>
+                <TouchableOpacity onPress={toggleCurrencyDropdown}>
+                  <Text className="bg-lightGreen text-white text-xl p-2 rounded-md">
+                    {selectedCurrency}
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -207,6 +276,13 @@ export default function NewExpenseScreen({ navigation, route }) {
             color="#999"
             className="absolute"
           /> */}
+            {currencyDropdownVisible && (
+              <DropdownCurrency
+                selectedCurrency={selectedCurrency}
+                onChange={handleCurrencyChange}
+              />
+            )}
+
             <TextInput
               className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
               placeholder="Description"
@@ -215,19 +291,116 @@ export default function NewExpenseScreen({ navigation, route }) {
             ></TextInput>
             <View />
 
-            <View className="mt-4">
-              <TouchableOpacity className=" bg-lightGray rounded-md">
-                <View className="flex flex-row justify-start items-center pl-3">
+            {/* Calendar Single Date */}
+            <View className={`mt-4 ${isSpreadByDays ? 'hidden' : 'flex'}`}>
+              <TouchableOpacity
+                onPress={showSingleDatePicker}
+                className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-3 pr-3"
+              >
+                <DateTimePickerModal
+                  isVisible={isSingleDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleSingleDateConfirm}
+                  onCancel={hideSingleDatePicker}
+                />
+                <View className="flex flex-row items-center">
                   <MaterialIcons
                     name="calendar-month"
                     size={30}
                     color="black"
                   />
-                  <Text className="py-3 pl-2 text-[19px]">Date</Text>
+                  {singleDate ? (
+                    <Text className="py-3 pl-2 text-[19px]">
+                      {singleDate.toDateString()}
+                    </Text>
+                  ) : (
+                    <Text className="py-3 pl-2 text-[19px]">Date</Text>
+                  )}
                 </View>
+                <TouchableOpacity
+                  onPress={handleToggleSpreadByDays}
+                  className="bg-[#FDA541] w-[105px] rounded-md"
+                >
+                  <Text className="text-white text-center p-1">
+                    Spread by days
+                  </Text>
+                </TouchableOpacity>
               </TouchableOpacity>
             </View>
 
+            {/* Calendar Spread by days */}
+            <View className={`mt-4 ${isSpreadByDays ? 'flex' : 'hidden'}`}>
+              {/* Start Date */}
+              <TouchableOpacity
+                onPress={() => {
+                  setStartDatePickerVisibility(true);
+                }}
+                className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-3 pr-3 w-[380px]"
+              >
+                <DateTimePickerModal
+                  isVisible={isStartDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleStartDateConfirm}
+                  onCancel={hideStartDatePicker}
+                />
+                <View className="flex flex-row items-center">
+                  <MaterialIcons
+                    name="calendar-month"
+                    size={30}
+                    color="black"
+                  />
+                  {startDate ? (
+                    <>
+                      <Text className="pl-1">Start</Text>
+                      <Text className="py-3 pl-2 text-[19px]">
+                        {startDate.toDateString()}
+                      </Text>
+                    </>
+                  ) : (
+                    <Text className="py-3 pl-2 text-[19px]">
+                      Select start date
+                    </Text>
+                  )}
+                </View>
+                <TouchableOpacity
+                  onPress={handleToggleSpreadByDays}
+                  className="bg-[#FDA541] w-[105px] rounded-md"
+                >
+                  <Text className="text-white text-center p-1">
+                    Cancel spread
+                  </Text>
+                </TouchableOpacity>
+              </TouchableOpacity>
+
+              {/* End Date */}
+              <TouchableOpacity
+                onPress={() => {
+                  setEndDatePickerVisibility(true);
+                }}
+                className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-3 pr-3 mt-1 w-[380px]"
+              >
+                <DateTimePickerModal
+                  isVisible={isEndDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleEndDateConfirm}
+                  onCancel={hideEndDatePicker}
+                />
+                <View className="flex flex-row items-center">
+                  {endDate ? (
+                    <>
+                      <Text className="pl-10">End</Text>
+                      <Text className="py-3 pl-2 text-[19px]">
+                        {endDate.toDateString()}
+                      </Text>
+                    </>
+                  ) : (
+                    <Text className="py-3 pl-9 text-[19px]">
+                      Select end date
+                    </Text>
+                  )}
+                </View>
+              </TouchableOpacity>
+            </View>
             <View className="mt-4">
               <TouchableOpacity
                 onPress={togglePaymentModal}
