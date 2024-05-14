@@ -87,11 +87,11 @@ export default function App() {
               options={{ headerShown: false }}
             /> */}
 
-        <Stack.Screen
+        {/* <Stack.Screen
           name="DonutPieChart"
           component={DonutPieChart}
           options={{ headerShown: false }}
-        />
+        /> */}
         {/* <Stack.Screen
               name="TripNameScreen"
               component={TripNameScreen}
@@ -115,11 +115,11 @@ export default function App() {
 
         {/* <Stack.Screen name="Trip" component={TripScreen} /> */}
 
-        {/* <Stack.Screen
-              name="NewExpense"
-              component={NewExpenseScreen}
-              options={{ headerShown: false }}
-            /> */}
+        <Stack.Screen
+          name="NewExpense"
+          component={NewExpenseScreen}
+          options={{ headerShown: false }}
+        />
         {/* <Stack.Screen
               name="EditExpense"
               component={EditExpenseScreen}
