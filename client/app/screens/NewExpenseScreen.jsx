@@ -15,6 +15,7 @@ import { useCurrencyContext } from '../contexts/currencyContext';
 import { addExpense, updateExpense } from '../api/api';
 
 import transport from '../../assets/images/plane.png';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function NewExpenseScreen({ navigation, route }) {
   const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] =
@@ -23,7 +24,7 @@ export default function NewExpenseScreen({ navigation, route }) {
     useState(false);
   // const [expense, setExpense] = useState(null); // for checking if it's creating or updating
 
-  const [file, setFile] = useState(null);
+  // const [file, setFile] = useState(null);
   const [value, setValue] = useState(null);
   const [description, setDescription] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState(null);
@@ -64,7 +65,7 @@ export default function NewExpenseScreen({ navigation, route }) {
     formData.append('dates[]', '2024-05-01');
     formData.append('dates[]', '2024-05-04');
     formData.append('paymentMethod', paymentMethod);
-    // formData.append('file', file');
+    formData.append('file', image);
 
     const newExpense = await addExpense(formData);
     const { selectedTrip } = user;
@@ -156,7 +157,7 @@ export default function NewExpenseScreen({ navigation, route }) {
     }
   };
   return (
-    <>
+    <ScrollView>
       <View className="mt-10">
         <TouchableOpacity onPress={handleGoBack}>
           <Image
@@ -289,6 +290,6 @@ export default function NewExpenseScreen({ navigation, route }) {
           </View>
         </View>
       </View>
-    </>
+    </ScrollView>
   );
 }
