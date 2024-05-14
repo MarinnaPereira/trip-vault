@@ -30,113 +30,113 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <UserProvider>
-      <TripsProvider>
-        <CurrencyProvider>
-          <NavigationContainer>
-            <Stack.Navigator>
-              {/* <Stack.Screen
+    // <UserProvider>
+    //   <TripsProvider>
+    //     <CurrencyProvider>
+    <NavigationContainer>
+      <Stack.Navigator>
+        {/* <Stack.Screen
                 name="TabNavigation"
                 component={TabNavigation}
                 options={{ headerShown: false }}
               /> */}
-              <Stack.Screen
+        {/* <Stack.Screen
                 name="Welcome"
                 component={WelcomeScreen}
                 options={{ headerShown: false }}
-              />
-              <Stack.Screen
+              /> */}
+        {/* <Stack.Screen
                 name="Login"
                 component={LoginScreen}
                 options={{ headerShown: false }}
-              />
-              <Stack.Screen
+              /> */}
+        {/* <Stack.Screen
                 name="Avatar"
                 component={AvatarScreen}
                 options={{ headerShown: false }}
-              />
-              <Stack.Screen
+              /> */}
+        {/* <Stack.Screen
                 name="Register"
                 component={RegisterScreen}
                 options={{ headerShown: false }}
-              />
-              <Stack.Screen
+              /> */}
+        {/* <Stack.Screen
                 name="Category"
                 component={CategoryScreen}
                 options={{ headerShown: false }}
-              />
+              /> */}
 
-              <Stack.Screen
+        {/* <Stack.Screen
                 name="UnlockFirstTrip"
                 component={UnlockFirstTripScreen}
                 options={{ headerShown: false }}
-              />
+              /> */}
 
-              {/* <Stack.Screen
+        {/* <Stack.Screen
                 name="InitiateTrip"
                 component={InitiateTripScreen}
                 options={{ headerShown: false }}
               /> */}
 
-              <Stack.Screen
+        {/* <Stack.Screen
                 name="TrackFirstExpenseScreen"
                 component={TrackFirstExpenseScreen}
                 options={{ headerShown: false }}
-              />
+              /> */}
 
-              <Stack.Screen
+        {/* <Stack.Screen
                 name="InitiateTripScreen"
                 component={InitiateTripScreen}
                 options={{ headerShown: false }}
-              />
-              {/* <Stack.Screen
+              /> */}
+        <Stack.Screen
           name="DonutPieChart"
           component={DonutPieChart}
           options={{ headerShown: false }}
-        /> */}
-              <Stack.Screen
+        />
+        {/* <Stack.Screen
                 name="TripNameScreen"
                 component={TripNameScreen}
                 options={{ headerShown: false }}
-              />
+              /> */}
 
-              <Stack.Screen
+        {/* <Stack.Screen
                 name="DropdownCurrency"
                 component={DropdownCurrency}
                 options={{ headerShown: false }}
-              />
-              <Stack.Screen
+              /> */}
+        {/* <Stack.Screen
                 name="SearchBar"
                 component={SearchBar}
                 options={{ headerShown: false }}
-              />
+              /> */}
 
-              <Stack.Screen
+        {/* <Stack.Screen
                 name="NewExpense"
                 component={NewExpenseScreen}
                 options={{ headerShown: false }}
-              />
+              /> */}
 
-              <Stack.Screen
+        {/* <Stack.Screen
                 name="MyAccount"
                 component={MyAccountScreen}
                 options={{ headerShown: false }}
-              />
-              {/* <Stack.Screen
+              /> */}
+        {/* <Stack.Screen
                 name="MyTrips"
                 component={MyTripsScreen}
                 options={{ headerShown: false }}
               /> */}
-              {/* <Stack.Screen name="Stats" component={StatsScreen} /> */}
-              {/* <Stack.Screen name="PaymentMethod" component={PaymentMethodModal} options={{ headerShown: false }}/> */}
-              {/* <Stack.Screen name="UploadPicture" component={UploadPictureModal} options={{ headerShown: false }}/> */}
-              {/* <Stack.Screen name="EditUsername" component={EditUsernameModal} options={{ headerShown: false }}/> */}
-              {/* <Stack.Screen name="OtherPayment" component={OtherPaymentModal} options={{ headerShown: false }}/> */}
-              {/* <Stack.Screen name="Picture" component={PictureScreen} options={{ headerShown: false }}/> */}
-            </Stack.Navigator>
-          </NavigationContainer>
-        </CurrencyProvider>
-      </TripsProvider>
-    </UserProvider>
+        {/* <Stack.Screen name="Stats" component={StatsScreen} /> */}
+        {/* <Stack.Screen name="PaymentMethod" component={PaymentMethodModal} options={{ headerShown: false }}/> */}
+        {/* <Stack.Screen name="UploadPicture" component={UploadPictureModal} options={{ headerShown: false }}/> */}
+        {/* <Stack.Screen name="EditUsername" component={EditUsernameModal} options={{ headerShown: false }}/> */}
+        {/* <Stack.Screen name="OtherPayment" component={OtherPaymentModal} options={{ headerShown: false }}/> */}
+        {/* <Stack.Screen name="Picture" component={PictureScreen} options={{ headerShown: false }}/> */}
+      </Stack.Navigator>
+    </NavigationContainer>
+    //     </CurrencyProvider>
+    //   </TripsProvider>
+    // </UserProvider>
   );
 }
