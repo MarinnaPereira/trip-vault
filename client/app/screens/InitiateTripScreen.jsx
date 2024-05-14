@@ -10,12 +10,12 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { DateTime } from 'luxon';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
+import { useCurrencyContext } from '../contexts/currencyContext';
 import { addTrip } from '../api/api';
 import DropdownCurrency from './DropdownCurrency';
-import { useCurrencyContext } from '../contexts/currencyContext';
-import { DateTime } from 'luxon';
 
 export default function InitiateTripScreen() {
   const navigation = useNavigation();
@@ -26,8 +26,8 @@ export default function InitiateTripScreen() {
   const [isStartDatePickerVisible, setStartDatePickerVisibility] =
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
-  const { dispatch, trips } = useTripsContext();
   const { user, setUser } = useUserContext();
+  const { dispatch, trips } = useTripsContext();
   const { baseCurrency, setBaseCurrency, availableCurrencies } =
     useCurrencyContext();
 
@@ -47,7 +47,7 @@ export default function InitiateTripScreen() {
         type: 'ADD_TRIP',
         payload: newTrip,
       });
-      setUser({ ...user, selectedTrip: newTrip._id });
+      setUser({ ...user, selectedTrip: newTrip });
     } catch (error) {
       console.error('Error creating trip:', error);
     }

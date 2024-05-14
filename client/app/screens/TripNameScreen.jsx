@@ -1,23 +1,28 @@
-import { ScrollView } from 'react-native-gesture-handler';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, Modal } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { Entypo, FontAwesome6 } from '@expo/vector-icons';
-import { deleteExpense, deleteTrip } from '../api/api';
-import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
+import { useTripsContext } from '../contexts/tripsContext';
+import { useCurrencyContext } from '../contexts/currencyContext';
+import { deleteTrip } from '../api/api';
 
 export default function TripNameScreen({ totalSpent }) {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
 
-  // const { trips, dispatch, pinnedTrip } = useTripsContext();
-
-  // useEffect(() => {
-  //   console.log('pinnedTRip', pinnedTrip);
-  // }, []);
-
+  const { trips, dispatch, pinnedTrip } = useTripsContext();
   const { user, setUser } = useUserContext();
+  const {
+    calculateTotalExpenses,
+    calculateDailyAverage,
+    calculateRemainingBalance,
+  } = useCurrencyContext();
+
+  useEffect(() => {
+    console.log('pinnedTrip', pinnedTrip);
+  }, []);
 
   //* testing deleting trip
   // call api deleteTrip
@@ -81,6 +86,12 @@ export default function TripNameScreen({ totalSpent }) {
     toggleMenu();
     toggleDeleteConfirmation();
   };
+
+  // tripExpenses = pinnedTrip.expenses;
+  // const totalSpent = calculateTotalExpenses(tripExpenses, pinnedTrip.currency)
+
+  // const dailyAverage = calculateDailyAverage(totalSpent, TRIP LENGTH)
+  // const balance = calculateRemainingBalance(pinnedTrip.budget, totalSpent)
 
   return (
     <ScrollView>
@@ -154,11 +165,18 @@ export default function TripNameScreen({ totalSpent }) {
       </Modal>
       <View className="mt-20 justify-start items-left">
         <Text className="text-3xl mt-20 ml-8 mb-7 text-[#00b0a3] font-bold items-start">
-          {/* {pinnedTrip ? pinnedTrip.name : 'Trip name'} */}
-          Trip name
+          {pinnedTrip ? pinnedTrip.name : 'Trip name'}
         </Text>
       </View>
       <View className="flex-1 items-center">
+        {/* <View>
+          <View className="bg-[#f24f13] rounded-md">
+            <Text className="w-[310px] p-3 text-[#fdfdfd] text-center font-bold">
+              This trip ended in dd/mm/yyyy{' '}
+            </Text>
+          </View>
+          <Text>{totalSpent}</Text>
+        </View> */}
         <View>
           <View className="bg-lightGray rounded-md">
             <Text className="w-[380px] p-3 text-lg text-[#999]">

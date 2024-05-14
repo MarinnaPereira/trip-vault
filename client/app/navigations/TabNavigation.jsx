@@ -5,7 +5,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MyTripsScreen from '../screens/MyTripsScreen';
 import StatsScreen from '../screens/StatsScreen';
 import MyAccountScreen from '../screens/MyAccountScreen';
-import TripScreen from '../screens/TripScreen';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';

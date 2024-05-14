@@ -1,13 +1,8 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
-import InitiateTripScreen from './InitiateTripScreen';
 
 export default function UnlockFirstTripScreen({ navigation }) {
-  // const navigation = useNavigation();
-
   const handleUnlockFirstTrip = () => {
-    navigation.navigate('InitiateTrip', { screen: 'InitiateTripScreen' });
+    navigation.navigate('InitiateTripScreen', { screen: 'InitiateTripScreen' });
   };
 
   return (

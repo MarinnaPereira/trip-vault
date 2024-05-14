@@ -3,7 +3,12 @@ import React from 'react';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
-export default function UploadPictureModal({ modalVisible, closeModal }) {
+export default function UploadPictureModal({
+  modalVisible,
+  closeModal,
+  handleGallery,
+  handleCamera,
+}) {
   return (
     <Modal
       visible={modalVisible}
@@ -21,19 +26,21 @@ export default function UploadPictureModal({ modalVisible, closeModal }) {
         }}
       >
         <View className="bg-white rounded-md">
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleCamera}>
             <View className="w-[380px] flex flex-row justify-start items-center pl-3">
               <Entypo name="camera" size={24} color="black" />
               <Text className="py-3 pl-2 text-[19px]">Take Picture</Text>
             </View>
           </TouchableOpacity>
           <View className="h-px bg-gray" />
-          <TouchableOpacity>
+
+          <TouchableOpacity onPress={handleGallery}>
             <View className="w-[380px] flex flex-row justify-start items-center pl-3">
               <FontAwesome name="picture-o" size={24} color="black" />
               <Text className="py-3 pl-2 text-[19px]">Choose From Gallery</Text>
             </View>
           </TouchableOpacity>
+
           <View className="h-px bg-gray" />
           <TouchableOpacity onPress={closeModal}>
             <View className="w-[380px] flex flex-row justify-center items-center pl-3">

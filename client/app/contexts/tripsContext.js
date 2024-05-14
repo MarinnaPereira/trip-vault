@@ -56,7 +56,7 @@ const tripsReducer = (state, action) => {
 
 export const TripsProvider = ({ children }) => {
   const [trips, dispatch] = useReducer(tripsReducer, []);
-  const [pinnedTrip, setPinnedTrip] = useState({});
+  const [pinnedTrip, setPinnedTrip] = useState(null);
 
   return (
     <TripsContext.Provider

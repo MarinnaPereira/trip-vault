@@ -5,21 +5,32 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 
 import PaymentMethodModal from '../modals/PaymentMethodModal';
 import UploadPictureModal from '../modals/UploadPictureModal';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
+import { useCurrencyContext } from '../contexts/currencyContext';
 import { addExpense, updateExpense } from '../api/api';
+
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+//import transport from '../../assets/images/plane.png';
+
 
 export default function NewExpenseScreen({ navigation }) {
   const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] =
     useState(false);
   const [isUploadPictureModalVisible, setIsUploadPictureModalVisible] =
     useState(false);
-  const [expense, setExpense] = useState(null); // for checking if it's creating or updating
+
+  // const [expense, setExpense] = useState(null); // for checking if it's creating or updating
+
   const [file, setFile] = useState(null);
+  const [value, setValue] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState(null);
+  const [image, setImage] = useState();
 
   const [singleDate, setSingleDate] = useState(null);
   const [startDate, setStartDate] = useState(null);
@@ -44,22 +55,29 @@ export default function NewExpenseScreen({ navigation }) {
 
   const { trips, dispatch } = useTripsContext();
   const { user } = useUserContext();
+  const { convertCurrency } = useCurrencyContext();
 
-  const handleFileChange = e => {
-    setFile(e.target.files[0]);
-  };
+  // const tripCurrency = pinnedTrip.currency
+  // if(currency !== tripCurrency) {
+  // const convertedAMount = convertCurrency(value, currency, tripCurrency);
+  // }
+
+  // const handleFileChange = e => {
+  //   setFile(e.target.files[0]);
+  // };
 
   //* addExpense
   const saveExpense = async () => {
     const formData = new FormData();
 
     formData.append('categoryName', categoryName);
-    formData.append('value', '150');
+    formData.append('value', value);
     formData.append('currency', 'EUR');
-    formData.append('description', 'lala');
+    // if(convertedAmount) {form.append('convertedAmount', convertedAmount)}
+    formData.append('description', description);
     formData.append('dates[]', '2024-05-01');
     formData.append('dates[]', '2024-05-04');
-    formData.append('paymentMethod', 'Cash');
+    formData.append('paymentMethod', paymentMethod);
     // formData.append('file', file');
 
     const newExpense = await addExpense(formData);
@@ -95,7 +113,6 @@ export default function NewExpenseScreen({ navigation }) {
   // const handleSavePress2 = async () => {
   //   const updatedExpense = await saveExpense();
   //   // remember to update current trip
-
   // };
 
   // useEffect(() => {
@@ -113,6 +130,7 @@ export default function NewExpenseScreen({ navigation }) {
   const toggleUploadPictureModal = () => {
     setIsUploadPictureModalVisible(!isUploadPictureModalVisible);
   };
+
 
   const showSingleDatePicker = () => {
     setSingleDatePickerVisibility(true);
@@ -157,6 +175,42 @@ export default function NewExpenseScreen({ navigation }) {
     setIsSpreadByDays(!isSpreadByDays);
   };
 
+
+  const handlePaymentMethod = selectedMethod => {
+    setPaymentMethod(selectedMethod);
+  };
+
+  // const handleFile = fileSent => {
+  //   console.log(fileSent);
+  //   // setFile(fileSent)
+  // };
+
+  const handleImagePickerPress = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const handleCamera = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      cameraType: ImagePicker.CameraType.back,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   return (
     <>
       <View className="mt-10">
@@ -183,7 +237,14 @@ export default function NewExpenseScreen({ navigation }) {
                 source={categoryImage}
                 className="w-[60px] h-[60px] m-2 rounded-xl"
               />
-              <Text className="text-3xl">100.00</Text>
+              <TextInput
+                className="text-3xl"
+                placeholder="0.00"
+                placeholderTextColor="#999"
+                value={value}
+                keyboardType="numeric"
+                onChangeText={text => setValue(text)}
+              />
               <View className="flex pr-2">
                 <Text className="bg-lightGreen text-white text-xl p-2 rounded-md">
                   EUR
@@ -205,6 +266,7 @@ export default function NewExpenseScreen({ navigation }) {
               className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
               placeholder="Description"
               placeholderTextColor="black"
+              onChangeText={text => setDescription(text)}
             ></TextInput>
             <View />
 
@@ -329,13 +391,19 @@ export default function NewExpenseScreen({ navigation }) {
                     size={28}
                     color="black"
                   />
-                  <Text className="py-3 pl-2 text-[19px]">Payment Method</Text>
+                  <Text className="py-3 pl-2 text-[19px]">
+                    {paymentMethod ? paymentMethod : 'Payment Method'}
+                  </Text>
                 </View>
               </TouchableOpacity>
             </View>
             <PaymentMethodModal
               modalVisible={isPaymentMethodModalVisible}
               closeModal={togglePaymentModal}
+              handlePaymentMethod={handlePaymentMethod}
+              onCameraPress={() => {
+                uploadImage();
+              }}
             />
 
             <View className="mt-4">
@@ -349,10 +417,17 @@ export default function NewExpenseScreen({ navigation }) {
                 </View>
               </TouchableOpacity>
             </View>
+
             <UploadPictureModal
               modalVisible={isUploadPictureModalVisible}
               closeModal={toggleUploadPictureModal}
+              handleGallery={handleImagePickerPress}
+              handleCamera={handleCamera}
             />
+
+            {image && (
+              <Image source={{ uri: image }} className="h-[150px] w-[150px]" />
+            )}
 
             <View className="items-center mt-48">
               <TouchableOpacity

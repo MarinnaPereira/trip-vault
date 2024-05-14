@@ -21,7 +21,7 @@ userSchema.statics.register = async data => {
 userSchema.statics.login = async data => {
   const user = await User.findOne({
     $or: [{ username: data.credential }, { email: data.credential }],
-  });
+  }).populate('selectedTrip');
   if (!user) return false;
   const match = await compare(data.password, user.password);
   if (!match) {

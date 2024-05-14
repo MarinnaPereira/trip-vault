@@ -18,7 +18,7 @@ export const getAllTrips = async (req, res, next) => {
 
 export const addTrip = async (req, res, next) => {
   const userId = req.userInfo._id;
-  const { name, start, end, duration, currency, budget } = req.body;
+  const { name, start, end, currency, budget } = req.body;
   if (!isValidObjectId(userId)) {
     return res.status(400).json({ message: 'Invalid userId' });
   }
@@ -28,7 +28,6 @@ export const addTrip = async (req, res, next) => {
       name,
       start,
       end,
-      duration,
       currency,
       budget,
     });
