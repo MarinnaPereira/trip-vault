@@ -1,4 +1,5 @@
 import { createContext, useReducer, useContext, useState } from 'react';
+import { DateTime } from 'luxon';
 
 export const TripsContext = createContext();
 
@@ -58,9 +59,53 @@ export const TripsProvider = ({ children }) => {
   const [trips, dispatch] = useReducer(tripsReducer, []);
   const [pinnedTrip, setPinnedTrip] = useState(null);
 
+  const calculateTripDuration = trip => {
+    const { start, end } = trip;
+    const tripDuration = Math.ceil(
+      // Using Math.ceil to round up the number of days
+      DateTime.fromISO(end) // Parse end date string to Luxon DateTime object
+        .diff(DateTime.fromISO(start), 'days').days + 1, // Calculate difference in days // Add 1 to include both start and end days
+    );
+    return parseInt(tripDuration);
+  };
+
+  const calculateTotalSpent = trip => {
+    const tripExpenses = trip.expenses;
+    let totalSpent = 0;
+
+    for (const expense of tripExpenses) {
+      if (expense.convertedAmount) {
+        totalSpent += expense.convertedAmount;
+      } else {
+        totalSpent += expense.value;
+      }
+    }
+
+    return totalSpent.toFixed(2);
+  };
+
+  const calculateDailyAverage = (totalSpent, tripDuration) => {
+    const dailyAverage = (totalSpent / tripDuration).toFixed(2);
+    return dailyAverage;
+  };
+
+  const calculateBalance = (budget, totalSpent) => {
+    const balance = budget - totalSpent;
+    return balance;
+  };
+
   return (
     <TripsContext.Provider
-      value={{ trips, dispatch, pinnedTrip, setPinnedTrip }}
+      value={{
+        trips,
+        dispatch,
+        pinnedTrip,
+        setPinnedTrip,
+        calculateTripDuration,
+        calculateTotalSpent,
+        calculateDailyAverage,
+        calculateBalance,
+      }}
     >
       {children}
     </TripsContext.Provider>

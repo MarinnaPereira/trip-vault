@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import MyTripsScreen from '../screens/MyTripsScreen';
 import TripNameScreen from '../screens/TripNameScreen';
-import StatsScreen from '../screens/StatsScreen';
+import DonutPieChart from '../screens/DonutPieChart';
 import MyAccountScreen from '../screens/MyAccountScreen';
 
 import { MaterialIcons } from '@expo/vector-icons';
@@ -57,8 +57,8 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="Stats"
-        component={StatsScreen}
+        name="DonutPieChart"
+        component={DonutPieChart}
         options={{
           headerShown: false,
           tabBarLabel: ({ color }) => (

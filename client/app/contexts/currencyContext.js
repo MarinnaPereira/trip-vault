@@ -53,6 +53,7 @@ export const CurrencyProvider = ({ children }) => {
       const currencyList = Object.keys(response.data.data).map(code => ({
         code,
         name: response.data.data[code].name,
+        symbol: response.data.data[code].symbol,
       }));
       setAvailableCurrencies(currencyList);
     } catch (error) {
@@ -65,6 +66,11 @@ export const CurrencyProvider = ({ children }) => {
     const rate = exchangeRates[toCurrency] / exchangeRates[fromCurrency];
     return (amount * rate).toFixed(2);
   };
+
+  function getCurrencySymbol(code) {
+    const currency = availableCurrencies.find(curr => curr.code === code);
+    return currency ? currency.symbol : null;
+  }
 
   const calculateTotalExpenses = (expenses, baseCurrency) => {
     return expenses.reduce((total, expense) => {
@@ -99,6 +105,7 @@ export const CurrencyProvider = ({ children }) => {
         setBaseCurrency,
         fetchExchangeRates,
         convertCurrency,
+        getCurrencySymbol,
         calculateTotalExpenses,
         calculateDailyAverage,
         calculateRemainingBalance,

@@ -5,7 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import { pie, arc } from 'd3-shape';
 
-const DonutPieChartAlternative2 = ({ width = 300, height = 300 }) => {
+const DonutPieChart = ({ width = 300, height = 300 }) => {
   const handleDownload = () => {
     // We can use libraries like react-native-fs or
     // react-native-fetch-blob to handle file downloads
@@ -216,4 +216,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DonutPieChartAlternative2;
+export default DonutPieChart;

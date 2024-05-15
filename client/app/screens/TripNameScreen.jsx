@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, Modal } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { DateTime } from 'luxon';
 import { Entypo, FontAwesome6 } from '@expo/vector-icons';
 import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
@@ -8,22 +8,47 @@ import { useCurrencyContext } from '../contexts/currencyContext';
 import { deleteTrip } from '../api/api';
 import ExpenseList from './ExpenseList';
 
-export default function TripNameScreen({ totalSpent }) {
+export default function TripNameScreen({ navigation }) {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
 
-  const { trips, dispatch, pinnedTrip } = useTripsContext();
   const { user, setUser } = useUserContext();
   const {
-    calculateTotalExpenses,
+    trips,
+    dispatch,
+    pinnedTrip,
+    calculateTripDuration,
+    calculateTotalSpent,
     calculateDailyAverage,
-    calculateRemainingBalance,
-  } = useCurrencyContext();
+    calculateBalance,
+  } = useTripsContext();
+
+  const { getCurrencySymbol } = useCurrencyContext();
+
+  // const {
+  //   calculateTotalExpenses,
+  //   calculateDailyAverage,
+  //   calculateRemainingBalance,
+  // } = useCurrencyContext();
 
   useEffect(() => {
     console.log('pinnedTrip', pinnedTrip);
   }, []);
+
+  const totalSpent = calculateTotalSpent(pinnedTrip);
+  const tripDuration = calculateTripDuration(pinnedTrip);
+  const dailyAverage = calculateDailyAverage(totalSpent, tripDuration);
+  const balance =
+    pinnedTrip.budget && calculateBalance(pinnedTrip.budget, totalSpent);
+
+  const tripCurrencySymbol = getCurrencySymbol(pinnedTrip.currency);
+
+  const isTripOver = pinnedTrip => {
+    const endDate = DateTime.fromISO(pinnedTrip.end);
+    const today = DateTime.local();
+    return endDate < today;
+  };
 
   //* testing deleting trip
   // call api deleteTrip
@@ -88,11 +113,9 @@ export default function TripNameScreen({ totalSpent }) {
     toggleDeleteConfirmation();
   };
 
-  // tripExpenses = pinnedTrip.expenses;
-  // const totalSpent = calculateTotalExpenses(tripExpenses, pinnedTrip.currency)
-
-  // const dailyAverage = calculateDailyAverage(totalSpent, TRIP LENGTH)
-  // const balance = calculateRemainingBalance(pinnedTrip.budget, totalSpent)
+  const handleAddPress = () => {
+    navigation.navigate('Category', { screen: 'CategoryScreen' });
+  };
 
   return (
     <>
@@ -170,46 +193,56 @@ export default function TripNameScreen({ totalSpent }) {
         </Text>
       </View>
       <View className="flex-1 items-center">
-        {/* <View>
-          <View className="bg-[#f24f13] rounded-md">
-            <Text className="w-[310px] p-3 text-[#fdfdfd] text-center font-bold">
-              This trip ended in dd/mm/yyyy{' '}
-            </Text>
+        {/* {isTripOver && (
+          <View>
+            <View className="bg-[#f24f13] rounded-md">
+              <Text className="w-[310px] p-3 text-[#fdfdfd] text-center font-bold">
+                This trip ended in dd/mm/yyyy{' '}
+              </Text>
+            </View>
+            <Text>{totalSpent}</Text>
           </View>
-          <Text>{totalSpent}</Text>
-        </View> */}
+        )} */}
         <View>
-          <View className="bg-lightGray rounded-md">
+          <View className="bg-lightGray rounded-md mb-4">
             <Text className="w-[380px] p-3 text-lg text-[#999]">
               Total Spent{' '}
             </Text>
-            <Text className="ml-auto mr-4 text-xl">€</Text>
+            <Text className="ml-auto mr-4 text-xl">
+              {totalSpent + tripCurrencySymbol}
+            </Text>
           </View>
-          <Text>{totalSpent}</Text>
         </View>
 
         <View className="flex-row justify-between items-center">
           <View className="bg-lightGray rounded-md">
             <Text className="w-[182px] p-3 text-lg text-[#999]">Balance</Text>
-            <Text className="ml-auto mr-4 text-xl">€</Text>
+            <Text className="ml-auto mr-4 text-xl">
+              {balance + tripCurrencySymbol}
+            </Text>
           </View>
 
           <View className="bg-lightGray rounded-md ml-4">
             <Text className="w-[182px] p-3 text-lg text-[#999]">
               Daily Average
             </Text>
-            <Text className="ml-auto mr-4 text-xl">€</Text>
+            <Text className="ml-auto mr-4 text-xl">
+              {dailyAverage + tripCurrencySymbol}
+            </Text>
           </View>
         </View>
       </View>
 
       <View className="mt-12 flex-1 text-lg items-center">
         <View>
-          <ExpenseList expenses={pinnedTrip.expenses} />
+          <ExpenseList
+            expenses={pinnedTrip.expenses}
+            tripCurrencySymbol={tripCurrencySymbol}
+          />
         </View>
       </View>
 
-      <View className="flex-1 items-center mt-10">
+      {/* <View className="flex-1 items-center mt-10">
         <View>
           <View className="flex-row justify-between">
             <Text className="text-left text-lg">dd/mm/yyyy</Text>
@@ -312,10 +345,10 @@ export default function TripNameScreen({ totalSpent }) {
             </View>
           </View>
         </View>
-      </View>
+      </View> */}
 
       <View className="flex flex-row justify-end">
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleAddPress}>
           <Image
             source={require('../../assets/images/plus.png')}
             className="mr-6 w-28 h-28"

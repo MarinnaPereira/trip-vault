@@ -1,9 +1,11 @@
 import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
 import categories from '../../assets/categories';
 import { useState } from 'react';
+import { useTripsContext } from '../contexts/tripsContext';
 
 export default function Category({ navigation }) {
   const [expense, setExpense] = useState('null');
+  const { pinnedTrip } = useTripsContext();
 
   const handleCategoryPress = category => {
     navigation.navigate('NewExpense', {
@@ -13,8 +15,8 @@ export default function Category({ navigation }) {
   };
 
   const handleGoBack = () => {
-    if (expense._id) {
-      navigation.navigate('NewExpense', { screen: 'NewExpenseScreen' });
+    if (pinnedTrip.expenses.length !== 0) {
+      navigation.navigate('TripNameScreen', { screen: 'TripNameScreen' });
     } else {
       navigation.navigate('TrackFirstExpenseScreen', {
         screen: 'TrackFirstExpenseScreen',

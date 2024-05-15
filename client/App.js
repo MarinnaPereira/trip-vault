@@ -18,7 +18,6 @@ import SearchBar from './app/screens/SearchBar';
 import TripNameScreen from './app/screens/TripNameScreen';
 import NewExpenseScreen from './app/screens/NewExpenseScreen';
 import MyTripsScreen from './app/screens/MyTripsScreen';
-import StatsScreen from './app/screens/StatsScreen';
 import DonutPieChart from './app/screens/DonutPieChart';
 import PaymentMethodModal from './app/modals/PaymentMethodModal';
 import UploadPictureModal from './app/modals/UploadPictureModal';
@@ -44,9 +43,8 @@ export default function App() {
                 name="Avatar"
                 component={AvatarScreen}
                 options={{ headerShown: false }}
-              />{' '}
-              */}
-              {/* <Stack.Screen
+              />
+              <Stack.Screen
                 name="Register"
                 component={RegisterScreen}
                 options={{ headerShown: false }}
@@ -93,38 +91,37 @@ export default function App() {
                 component={TabNavigation}
                 options={{ headerShown: false }}
               />
-              {/* <Stack.Screen
+              <Stack.Screen
                 name="InitiateTrip"
                 component={InitiateTripScreen}
                 options={{ headerShown: false }}
-              /> */}
-              {/* <Stack.Screen
-          name="DonutPieChart"
-          component={DonutPieChart}
-          options={{ headerShown: false }}
-        /> */}
-              {/* <Stack.Screen
+              />
+              <Stack.Screen
+                name="DonutPieChart"
+                component={DonutPieChart}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
                 name="DropdownCurrency"
                 component={DropdownCurrency}
                 options={{ headerShown: false }}
-              /> */}
-              {/* <Stack.Screen
+              />
+              <Stack.Screen
                 name="SearchBar"
                 component={SearchBar}
                 options={{ headerShown: false }}
               />
 
-        {/* <Stack.Screen
+              <Stack.Screen
                 name="MyAccount"
                 component={MyAccountScreen}
                 options={{ headerShown: false }}
-              /> */}
+              />
               {/* <Stack.Screen
                 name="MyTrips"
                 component={MyTripsScreen}
                 options={{ headerShown: false }}
-              /> */}
-              {/* <Stack.Screen name="Stats" component={StatsScreen} /> */}
+              />
               {/* <Stack.Screen name="PaymentMethod" component={PaymentMethodModal} options={{ headerShown: false }}/> */}
               {/* <Stack.Screen name="UploadPicture" component={UploadPictureModal} options={{ headerShown: false }}/> */}
               {/* <Stack.Screen name="EditUsername" component={EditUsernameModal} options={{ headerShown: false }}/> */}
@@ -132,11 +129,8 @@ export default function App() {
               {/* <Stack.Screen name="Picture" component={PictureScreen} options={{ headerShown: false }}/> */}
             </Stack.Navigator>
           </NavigationContainer>
-          //{' '}
         </CurrencyProvider>
-        //{' '}
       </TripsProvider>
-      //{' '}
     </UserProvider>
   );
 }

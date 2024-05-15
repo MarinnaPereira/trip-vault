@@ -1,5 +1,7 @@
-import React from 'react';
 import { SectionList, Text, View, Image } from 'react-native';
+import { DateTime } from 'luxon';
+
+import { useCurrencyContext } from '../contexts/currencyContext';
 import categories from '../../assets/categories';
 
 const findCategoryImage = categoryName => {
@@ -9,7 +11,9 @@ const findCategoryImage = categoryName => {
     : categories.find(cat => cat.name === 'Others').image;
 };
 
-const ExpenseList = ({ expenses }) => {
+const ExpenseList = ({ expenses, tripCurrencySymbol }) => {
+  const { getCurrencySymbol } = useCurrencyContext();
+
   const prepareSections = expenses => {
     const grouped = expenses.reduce((acc, expense) => {
       const date = expense.dates[0]; // Assuming dates[0] is the date to group by
@@ -26,43 +30,72 @@ const ExpenseList = ({ expenses }) => {
 
   const sections = prepareSections(expenses || []);
 
+  const capitalizeFirstLetter = str => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
   const renderItem = ({ item }) => (
-    <View className="mt-3 mb-6 bg-lightGray rounded-md">
-      <View className="flex-row justify-between w-[380px] p-3 items-center">
+    <View className="mt-3 mb-2 bg-lightGray rounded-md">
+      <View className="flex-row justify-between w-[380px] p-1 items-center">
         <Image
           source={findCategoryImage(item.categoryName)}
           className="w-[60px] h-[60px] m-2 rounded-xl"
         />
-        <View className="flex-1 justify-center">
+        <View className="flex-1 justify-center gap-1">
           <View className="flex flex-row justify-between">
             <Text className="text-[19px] font-semibold">
               {item.categoryName}
             </Text>
-            <Text className="text-[19px]  font-semibold mr-3">
-              {item.currency + ' '}
-              {item.value.toFixed(2)}
+            <Text className="text-[19px] font-semibold mr-3">
+              {item.convertedAmount
+                ? tripCurrencySymbol + item.convertedAmount
+                : getCurrencySymbol(item.currency) + item.value.toFixed(2)}
             </Text>
           </View>
           <View className="flex flex-row justify-between">
-            <Text className="text-[15px]">{item.description}</Text>
-
+            {item.description ? (
+              <Text className="text-[15px]">
+                {capitalizeFirstLetter(item.description)}
+              </Text>
+            ) : (
+              <Text></Text>
+            )}
             <Text className="text-[15px] mr-3">
-              {item.currency + ' '}
-              {item.value.toFixed(2)}
+              {item.convertedAmount
+                ? getCurrencySymbol(item.currency) + item.value.toFixed(2)
+                : ''}
             </Text>
-            {/* Placeholder for converted amount */}
           </View>
         </View>
       </View>
     </View>
   );
 
-  const renderSectionHeader = ({ section: { title } }) => (
+  const isDateToday = dateString => {
+    const date = DateTime.fromISO(dateString);
+    const today = DateTime.local().startOf('day');
+    return date.hasSame(today, 'day');
+  };
+
+  const formatDate = title => {
+    const date = new Date(title).toLocaleDateString();
+    return isDateToday(title) ? 'Today' : date;
+  };
+
+  const totalAmountOfSection = data => {
+    const total = data.reduce((acc, expense) => {
+      const spent = expense.convertedAmount || expense.value;
+      return acc + spent;
+    }, 0);
+    return total;
+  };
+
+  const renderSectionHeader = ({ section: { title, data } }) => (
     <View className="flex-row justify-between px-3">
-      <Text className="text-left text-lg">
-        {new Date(title).toLocaleDateString()}
+      <Text className="text-left text-lg">{formatDate(title)}</Text>
+      <Text className="text-right text-lg">
+        {tripCurrencySymbol + totalAmountOfSection(data)}
       </Text>
-      <Text className="text-right text-lg">Total amount of the day</Text>
     </View>
   );
 

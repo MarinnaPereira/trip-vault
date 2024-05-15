@@ -19,7 +19,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 export default function NewExpenseScreen({ navigation, route }) {
   const { user } = useUserContext();
-  const { trips, dispatch, pinnedTrip } = useTripsContext();
+  const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
   const { convertCurrency } = useCurrencyContext();
 
   const categoryName = route.params.categoryName;
@@ -92,6 +92,8 @@ export default function NewExpenseScreen({ navigation, route }) {
       payload: newExpense,
     });
 
+    setPinnedTrip(selectedTrip); //!check if it is working!!!!!!
+
     // *update expense
     // const expenseId = '663a857170c7112af6015994'; //hardcoded for now
     // const updatedExpense = await updateExpense(formData, expenseId);
@@ -108,9 +110,9 @@ export default function NewExpenseScreen({ navigation, route }) {
   const handleSavePress = async () => {
     await saveExpense();
 
-    // navigation.navigate('TripNameScreen', {
-    //   screen: 'TripNameScreen',
-    // });
+    navigation.navigate('TripNameScreen', {
+      screen: 'TripNameScreen',
+    });
   };
 
   //* update expense
@@ -124,7 +126,11 @@ export default function NewExpenseScreen({ navigation, route }) {
   // }, [trips]);
 
   const handleGoBack = () => {
-    navigation.navigate('Category', { screen: 'CategoryScreen' });
+    if (pinnedTrip.expenses.length !== 0) {
+      navigation.navigate('TripNameScreen', { screen: 'TripNameScreenScreen' });
+    } else {
+      navigation.navigate('Category', { screen: 'CategoryScreen' });
+    }
   };
 
   const handleCurrencyChange = currency => {
