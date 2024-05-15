@@ -1,28 +1,29 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
-import PieChart from 'react-native-pie-chart';
+import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
+import { pie, arc } from 'd3-shape';
 
-const DonutPieChart = () => {
+const DonutPieChartAlternative2 = ({ width = 300, height = 300 }) => {
   const handleDownload = () => {
     // We can use libraries like react-native-fs or
     // react-native-fetch-blob to handle file downloads
     console.log('Download button pressed');
   };
-  const widthAndHeight = 280;
-  const series = [123, 221, 123, 289, 237, 234, 220, 222, 225];
-  const sliceColor = [
-    '#d9ab7a',
-    '#e17559',
-    '#771200',
-    '#fda541',
-    '#f24f13',
-    '#cb1c2d',
-    '#04d9b2',
-    '#00b0a3',
-    '#0f333f',
+
+  const data = [
+    { value: 10, color: '#d9ab7a', label: 'beige' },
+    { value: 15, color: '#e17559', label: 'peach' },
+    { value: 10, color: '#771200', label: 'burgundy' },
+    { value: 15, color: '#fda541', label: 'yellow' },
+    { value: 8, color: '#f24f13', label: 'orange' },
+    { value: 12, color: '#cb1c2d', label: 'rose' },
+    { value: 7, color: '#04d9b2', label: 'turquoise' },
+    { value: 9, color: '#00b0a3', label: 'alcoholic' },
+    { value: 14, color: '#0f333f', label: 'blue' },
   ];
+
   const categories = [
     {
       id: 1,
@@ -71,11 +72,18 @@ const DonutPieChart = () => {
     },
   ];
 
+  const radius = Math.min(width, height) / 2;
+  const pieChart = pie().value(d => d.value)(data);
+  const createArc = arc()
+    .innerRadius(radius * 0.45)
+    .outerRadius(radius);
+
   return (
-    <ScrollView>
-      <View className="flex-1, p-20">
+    <ScrollView style={styles.container}>
+      {/* Download Button */}
+      <View style={styles.containerDownloadButton}>
         <TouchableOpacity
-          className="absolute top-16 right-6"
+          style={styles.downloadButton}
           onPress={handleDownload}
         >
           <AntDesign
@@ -85,33 +93,127 @@ const DonutPieChart = () => {
             style={{ fontSize: 32 }}
           />
         </TouchableOpacity>
+      </View>
+      {/* Daily Average Amount */}
+      <View style={styles.containerDailyAverage}>
+        <Text style={styles.dailyAverage}>Daily Average : €</Text>
+      </View>
 
-        <View className="flex justify-center">
-          <View>
-            <PieChart
-              widthAndHeight={widthAndHeight}
-              series={series}
-              sliceColor={sliceColor}
-              doughnut={false}
-              coverRadius={0.45}
-            />
-          </View>
-          <View className="mt-20">
-            {categories.map(item => (
-              <View className="flex flex-row " key={item.id}>
-                <View
-                  className={`justify-center p-5 bg-${item.color} rounded-10 w-16 h-1`}
-                ></View>
-                <View>
-                  <Text className="text-black text-lg">{item.name}</Text>
-                </View>
+      {/* Pie Chart */}
+      <View style={styles.containerChart}>
+        <Svg width={width} height={height}>
+          <G x={width / 2} y={height / 2}>
+            {pieChart.map((slice, index) => {
+              const [centroidX, centroidY] = createArc.centroid(slice);
+              return (
+                <G key={index}>
+                  <Path d={createArc(slice)} fill={data[index].color} />
+                  <SvgText
+                    x={centroidX}
+                    y={centroidY}
+                    fill="white"
+                    textAnchor="middle"
+                    alignmentBaseline="middle"
+                    fontSize="16"
+                    stroke="#000"
+                    strokeWidth={0.1}
+                  >
+                    {`${slice.value}%`}
+                  </SvgText>
+                </G>
+              );
+            })}
+          </G>
+        </Svg>
+      </View>
+
+      <View style={styles.categories}>
+        {categories.map(item => (
+          <View style={styles.categoryItem} key={item.id}>
+            <View
+              style={[styles.colorIndicator, { backgroundColor: item.color }]}
+            ></View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flex: 1,
+              }}
+            >
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={styles.categoryName}>{item.name}</Text>
               </View>
-            ))}
+              <Text style={styles.valueCategory}>Value €</Text>
+            </View>
           </View>
-        </View>
+        ))}
       </View>
     </ScrollView>
   );
 };
 
-export default DonutPieChart;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  containerDownloadButton: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+  },
+  downloadButton: {
+    marginTop: 45,
+    marginEnd: 25,
+  },
+  containerDailyAverage: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+  },
+  dailyAverage: {
+    color: '#00b0a3',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 10,
+    marginLeft: 30,
+  },
+  containerChart: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 20,
+    marginTop: 15,
+  },
+  categories: {
+    marginTop: 50,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    marginLeft: 50,
+  },
+  categoryItem: {
+    flexDirection: 'row',
+    marginBottom: 8,
+    backgroundColor: 'lightgray',
+    borderRadius: 8,
+    padding: 10,
+    width: 350,
+  },
+  colorIndicator: {
+    marginTop: 6,
+    marginRight: 8,
+    width: 24,
+    height: 24,
+    borderRadius: 1,
+  },
+  categoryName: {
+    color: '#7d7b7b',
+    fontSize: 18,
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  valueCategory: {
+    color: '#7d7b7b',
+    fontSize: 18,
+  },
+});
+
+export default DonutPieChartAlternative2;
