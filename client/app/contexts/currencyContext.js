@@ -63,7 +63,7 @@ export const CurrencyProvider = ({ children }) => {
   const convertCurrency = (amount, fromCurrency, toCurrency) => {
     if (fromCurrency === toCurrency) return amount;
     const rate = exchangeRates[toCurrency] / exchangeRates[fromCurrency];
-    return amount * rate;
+    return (amount * rate).toFixed(2);
   };
 
   const calculateTotalExpenses = (expenses, baseCurrency) => {

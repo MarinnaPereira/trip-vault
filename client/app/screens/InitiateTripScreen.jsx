@@ -27,7 +27,7 @@ export default function InitiateTripScreen() {
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
   const { user, setUser } = useUserContext();
-  const { dispatch, trips } = useTripsContext();
+  const { dispatch, trips, pinnedTrip, setPinnedTrip } = useTripsContext();
   const { baseCurrency, setBaseCurrency, availableCurrencies } =
     useCurrencyContext();
 
@@ -39,6 +39,7 @@ export default function InitiateTripScreen() {
     budget: parseFloat(budget) || 0,
   };
 
+  console.log(tripData);
   let newTrip;
   const createTrip = async () => {
     try {
@@ -48,6 +49,7 @@ export default function InitiateTripScreen() {
         payload: newTrip,
       });
       setUser({ ...user, selectedTrip: newTrip });
+      setPinnedTrip(newTrip);
     } catch (error) {
       console.error('Error creating trip:', error);
     }

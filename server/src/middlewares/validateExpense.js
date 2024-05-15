@@ -63,7 +63,7 @@ export const validateExpense = [
     .escape(),
 
   (req, res, next) => {
-    console.log(req.body);
+    console.log('req.body on validate', req.body);
 
     const errors = validationResult(req);
     console.log('errors', errors);

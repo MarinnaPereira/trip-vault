@@ -1,7 +1,8 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BASE_URL } from '@env';
 
-const baseUrl = 'http://192.168.178.46:8080';
+const baseUrl = `${BASE_URL}`;
 
 const getToken = async () => {
   const token = await AsyncStorage.getItem('token');
@@ -21,7 +22,7 @@ export const registerUser = async newUser => {
     console.log(res.data);
     return res.data; // return object with the registered user info
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
   }
 };
 
@@ -34,7 +35,7 @@ export const loginUser = async userData => {
     console.log(res.data);
     return res.data; // return object with 'token' and 'user' properties
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
   }
 };
 
@@ -57,7 +58,7 @@ export const updateUser = async updatedUser => {
     console.log(res.data);
     return res.data; // return object with the updated user info
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
   }
 };
 
@@ -75,7 +76,7 @@ export const deleteUser = async user => {
     console.log(res.data);
     return res.data; // return just a message
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
   }
 };
 
@@ -93,7 +94,7 @@ export const getAllTrips = async () => {
     console.log(res.data);
     return res.data; // return an array with all trips
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
   }
 };
 
@@ -111,7 +112,7 @@ export const addTrip = async newTrip => {
     console.log(res.data);
     return res.data; // return object with the new trip info
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
   }
 };
 
@@ -132,7 +133,7 @@ export const updateTrip = async updatedTrip => {
     console.log(res.data);
     return res.data; // return object with the updated trip info
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
   }
 };
 
@@ -150,7 +151,7 @@ export const deleteTrip = async trip => {
     console.log(res.data);
     return res.data; // return just a message
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
   }
 };
 
@@ -162,7 +163,7 @@ export const deleteTrip = async trip => {
 //     const token = await getToken();
 //     console.log(token);
 //     console.log(formData);
-//     const res = await axios.post(`${baseUrl}/expenses`, formData, {
+//     const res = await axios.postForm(`${baseUrl}/expenses`, formData, {
 //       headers: {
 //         Authorization: `Bearer ${token}`,
 //       },
@@ -170,7 +171,7 @@ export const deleteTrip = async trip => {
 //     console.log(res.data);
 //     return res.data; // return object with the new expense info
 //   } catch (err) {
-//     console.error(err);
+//     console.error(err.message);
 //   }
 // };
 
@@ -178,11 +179,13 @@ export const addExpense = async formData => {
   try {
     const token = await getToken();
     console.log(token);
-    console.log(formData);
+    console.log('type', typeof formData);
 
     const response = await fetch(`${baseUrl}/expenses`, {
       method: 'POST',
       headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
       },
       body: formData,
@@ -196,8 +199,7 @@ export const addExpense = async formData => {
     console.log(data);
     return data; // return object with the new expense info
   } catch (err) {
-    console.error(err);
-    throw err; // Re-throw the error to propagate it to the caller
+    console.error(err.message);
   }
 };
 
@@ -223,8 +225,7 @@ export const updateExpense = async (formData, expenseId) => {
     console.log(data);
     return data; // return object with the updated expense info
   } catch (err) {
-    console.error(err);
-    throw err; // Re-throw the error to propagate it to the caller
+    console.error(err.message);
   }
 };
 // !update trip

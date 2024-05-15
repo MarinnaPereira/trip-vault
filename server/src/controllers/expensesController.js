@@ -21,32 +21,43 @@ export const getAllExpenses = async (req, res, next) => {
 export const addExpense = async (req, res, next) => {
   try {
     const tripId = req.tripId;
-    const { categoryName, value, currency, description, dates, paymentMethod } =
-      req.body;
+    const {
+      categoryName,
+      value,
+      convertedAmount,
+      currency,
+      description,
+      dates,
+      paymentMethod,
+    } = req.body;
 
     const trip = await Trip.findById(tripId);
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
     }
+    console.log('req.body on controller', req.body);
 
-    const receiptPath = req.file ? req.file.path : undefined;
-    console.log(req.file);
+    console.log('req.file', req.file);
+    console.log('req.body', req.body);
 
     const newExpense = {
       categoryName,
       value,
       currency,
+      convertedAmount,
       description,
       dates,
-      // dates: dates ? dates.split(',').map(date => new Date(date)) : [],
       paymentMethod,
-      receipt: receiptPath,
+      receipt: req.file ? req.file.path : undefined,
     };
-
     trip.expenses.push(newExpense);
     await trip.save();
     res.status(201).json(newExpense);
   } catch (error) {
+    // ! delete file
+    // if (req.file) {
+    //   fse.remove(req.file.path);
+    // }
     next(error);
   }
 };
@@ -85,6 +96,13 @@ export const downloadReceipt = async (req, res, next) => {
     return res.status(404).json({ message: 'Receipt not found' });
   }
   res.sendFile(res.locals.expense.receipt), { root: '.' };
+
+  //   .get("/:path",async(req,res,next)=>{
+
+  // const absolutePath = path.resolve(path)
+
+  // res.sendFile(absolutePath)
+  // })
 };
 
 export const updateExpense = async (req, res, next) => {

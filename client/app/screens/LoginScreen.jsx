@@ -27,6 +27,7 @@ export default function LoginScreen({ navigation }) {
         password,
       };
       const data = await loginUser(userData);
+      console.log('data', data);
       await AsyncStorage.setItem('token', data.token);
       setUser(data.user);
       console.log('user', user);

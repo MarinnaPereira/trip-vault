@@ -3,6 +3,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import MyTripsScreen from '../screens/MyTripsScreen';
+import TripNameScreen from '../screens/TripNameScreen';
 import StatsScreen from '../screens/StatsScreen';
 import MyAccountScreen from '../screens/MyAccountScreen';
 
@@ -40,8 +41,8 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="Trip"
-        component={TripScreen}
+        name="TripNameScreen"
+        component={TripNameScreen}
         options={{
           headerShown: false,
           tabBarLabel: ({ color }) => (

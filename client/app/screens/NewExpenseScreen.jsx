@@ -16,23 +16,24 @@ import { addExpense, updateExpense } from '../api/api';
 import { ScrollView } from 'react-native-gesture-handler';
 import DropdownCurrency from './DropdownCurrency';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-//import transport from '../../assets/images/plane.png';
 
-export default function NewExpenseScreen({ navigation }) {
-  const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] =
-    useState(false);
-  const [isUploadPictureModalVisible, setIsUploadPictureModalVisible] =
-    useState(false);
+export default function NewExpenseScreen({ navigation, route }) {
+  const { user } = useUserContext();
+  const { trips, dispatch, pinnedTrip } = useTripsContext();
+  const { convertCurrency } = useCurrencyContext();
 
-  const [currencyDropdownVisible, setCurrencyDropdownVisible] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState('EUR');
+  const categoryName = route.params.categoryName;
+  const categoryImage = route.params.categoryImage;
+
   // const [expense, setExpense] = useState(null); // for checking if it's creating or updating
 
-  // const [file, setFile] = useState(null);
   const [value, setValue] = useState(null);
+  const [selectedCurrency, setSelectedCurrency] = useState(
+    pinnedTrip ? pinnedTrip.currency : 'EUR',
+  );
   const [description, setDescription] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState(null);
-  const [image, setImage] = useState();
+  const [image, setImage] = useState(null);
   const [singleDate, setSingleDate] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -44,28 +45,22 @@ export default function NewExpenseScreen({ navigation }) {
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
   const [isSpreadByDays, setIsSpreadByDays] = useState(false);
 
-  let categoryName;
-  let categoryImage;
-  if (true) {
-    //   categoryName = 'Transportation';
-    //   categoryImage = transport;
-    // } else {
-    // categoryName = route.params.categoryName;
-    // categoryImage = route.params.categoryImage;
+  const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] =
+    useState(false);
+  const [isUploadPictureModalVisible, setIsUploadPictureModalVisible] =
+    useState(false);
+
+  const [currencyDropdownVisible, setCurrencyDropdownVisible] = useState(false);
+
+  const tripCurrency = pinnedTrip.currency;
+  const getConvertedAmount = () =>
+    convertCurrency(value, selectedCurrency, tripCurrency);
+
+  let convertedAmount;
+  if (tripCurrency !== selectedCurrency) {
+    convertedAmount = getConvertedAmount();
+    console.log(typeof convertedAmount);
   }
-
-  const { trips, dispatch } = useTripsContext();
-  const { user } = useUserContext();
-  const { convertCurrency } = useCurrencyContext();
-
-  // const tripCurrency = pinnedTrip.currency
-  // if(currency !== tripCurrency) {
-  // const convertedAMount = convertCurrency(value, currency, tripCurrency);
-  // }
-
-  // const handleFileChange = e => {
-  //   setFile(e.target.files[0]);
-  // };
 
   //* addExpense
   const saveExpense = async () => {
@@ -73,13 +68,21 @@ export default function NewExpenseScreen({ navigation }) {
 
     formData.append('categoryName', categoryName);
     formData.append('value', value);
-    formData.append('currency', 'EUR');
-    // if(convertedAmount) {form.append('convertedAmount', convertedAmount)}
+    formData.append('currency', selectedCurrency);
+    convertedAmount && formData.append('convertedAmount', convertedAmount);
     formData.append('description', description);
-    formData.append('dates[]', '2024-05-01');
-    formData.append('dates[]', '2024-05-04');
+    singleDate && formData.append('dates[]', singleDate.toISOString());
+    startDate && formData.append('dates[]', startDate.toISOString());
+    endDate && formData.append('dates[]', endDate.toISOString());
     formData.append('paymentMethod', paymentMethod);
-    formData.append('file', image);
+    image &&
+      formData.append('file', {
+        uri: image.uri,
+        type: image.mimeType,
+        name: new Date() + '_receipt' + '.jpeg',
+      });
+
+    console.log('formData', formData);
 
     const newExpense = await addExpense(formData);
     const { selectedTrip } = user;
@@ -105,9 +108,9 @@ export default function NewExpenseScreen({ navigation }) {
   const handleSavePress = async () => {
     await saveExpense();
 
-    navigation.navigate('TripNameScreen', {
-      screen: 'TripNameScreen',
-    });
+    // navigation.navigate('TripNameScreen', {
+    //   screen: 'TripNameScreen',
+    // });
   };
 
   //* update expense
@@ -123,10 +126,6 @@ export default function NewExpenseScreen({ navigation }) {
   const handleGoBack = () => {
     navigation.navigate('Category', { screen: 'CategoryScreen' });
   };
-
-  // const handleSavePress = () => {
-  //   navigation.navigate('TripName', { screen: 'TripNameScreen' });
-  // };
 
   const handleCurrencyChange = currency => {
     setSelectedCurrency(currency);
@@ -171,16 +170,20 @@ export default function NewExpenseScreen({ navigation }) {
 
   const handleSingleDateConfirm = date => {
     setSingleDate(date);
+    setStartDate(null);
+    setEndDate(null);
     setSingleDatePickerVisibility(false);
   };
 
   const handleStartDateConfirm = date => {
     setStartDate(date);
+    setSingleDate(null);
     setStartDatePickerVisibility(false);
   };
 
   const handleEndDateConfirm = date => {
     setEndDate(date);
+    setSingleDate(null);
     setEndDatePickerVisibility(false);
   };
 
@@ -192,11 +195,6 @@ export default function NewExpenseScreen({ navigation }) {
     setPaymentMethod(selectedMethod);
   };
 
-  // const handleFile = fileSent => {
-  //   console.log(fileSent);
-  //   // setFile(fileSent)
-  // };
-
   const handleImagePickerPress = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -206,20 +204,23 @@ export default function NewExpenseScreen({ navigation }) {
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setImage(result.assets[0]);
     }
   };
 
   const handleCamera = async () => {
     let result = await ImagePicker.launchCameraAsync({
       cameraType: ImagePicker.CameraType.back,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      console.log('result', result.assets[0]);
+      // setImage({ uri: result.assets[0].uri });
+      setImage(result.assets[0]);
     }
   };
 
@@ -243,7 +244,7 @@ export default function NewExpenseScreen({ navigation }) {
         </View>
 
         <View className="items-center">
-          <View className="mt-4 mb-6 bg-lightGray rounded-md">
+          <View className="mt-4 mb-4 bg-lightGray rounded-md">
             <View className="w-[380px] flex flex-row justify-between items-center">
               <Image
                 source={categoryImage}
@@ -284,7 +285,7 @@ export default function NewExpenseScreen({ navigation }) {
             )}
 
             <TextInput
-              className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
+              className="w-[380px] bg-lightGray rounded-md p-3 text-[19px] mt-2"
               placeholder="Description"
               placeholderTextColor="black"
               onChangeText={text => setDescription(text)}
@@ -447,10 +448,13 @@ export default function NewExpenseScreen({ navigation }) {
             />
 
             {image && (
-              <Image source={{ uri: image }} className="h-[150px] w-[150px]" />
+              <Image
+                source={{ uri: image.uri }}
+                className="h-[150px] w-[150px] self-center mt-5"
+              />
             )}
 
-            <View className="items-center mt-48">
+            <View className="items-center mt-6">
               <TouchableOpacity
                 onPress={handleSavePress}
                 className="bg-green w-[180px] rounded-lg"

@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import upload from '../middlewares/uploadFile.js';
+import { handleUpload } from '../middlewares/uploadFile.js';
+import multer from 'multer';
 
 import {
   getAllExpenses,
@@ -16,10 +17,12 @@ import { sanitizeExpenseToUpdate } from '../middlewares/sanitizeExpenseToUpdate.
 
 export const expensesRouter = Router();
 
+const upload = multer({ dest: 'uploads/' });
+
 expensesRouter
   .route('/')
   .get(verifyToken, getAllExpenses)
-  .post(verifyToken, upload.single('receipt'), validateExpense, addExpense);
+  .post(verifyToken, upload.single('file'), validateExpense, addExpense);
 
 expensesRouter
   .route('/:id')
