@@ -44,8 +44,9 @@ export default function App() {
                 name="Avatar"
                 component={AvatarScreen}
                 options={{ headerShown: false }}
-              />
-              <Stack.Screen
+              />{' '}
+              */}
+              {/* <Stack.Screen
                 name="Register"
                 component={RegisterScreen}
                 options={{ headerShown: false }}
@@ -97,29 +98,27 @@ export default function App() {
                 component={InitiateTripScreen}
                 options={{ headerShown: false }}
               /> */}
-
               {/* <Stack.Screen
           name="DonutPieChart"
           component={DonutPieChart}
           options={{ headerShown: false }}
         /> */}
-
-              <Stack.Screen
+              {/* <Stack.Screen
                 name="DropdownCurrency"
                 component={DropdownCurrency}
                 options={{ headerShown: false }}
-              />
-              <Stack.Screen
+              /> */}
+              {/* <Stack.Screen
                 name="SearchBar"
                 component={SearchBar}
                 options={{ headerShown: false }}
               />
 
-              <Stack.Screen
+        {/* <Stack.Screen
                 name="MyAccount"
                 component={MyAccountScreen}
                 options={{ headerShown: false }}
-              />
+              /> */}
               {/* <Stack.Screen
                 name="MyTrips"
                 component={MyTripsScreen}
@@ -133,8 +132,11 @@ export default function App() {
               {/* <Stack.Screen name="Picture" component={PictureScreen} options={{ headerShown: false }}/> */}
             </Stack.Navigator>
           </NavigationContainer>
+          //{' '}
         </CurrencyProvider>
+        //{' '}
       </TripsProvider>
+      //{' '}
     </UserProvider>
   );
 }
