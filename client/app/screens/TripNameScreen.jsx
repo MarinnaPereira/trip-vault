@@ -6,6 +6,7 @@ import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
 import { deleteTrip } from '../api/api';
+import ExpenseList from './ExpenseList';
 
 export default function TripNameScreen({ totalSpent }) {
   const [isMenuVisible, setMenuVisible] = useState(false);
@@ -94,7 +95,7 @@ export default function TripNameScreen({ totalSpent }) {
   // const balance = calculateRemainingBalance(pinnedTrip.budget, totalSpent)
 
   return (
-    <ScrollView>
+    <>
       <View className="absolute top-6 right-0 z-50 mt-10 mr-10">
         <TouchableOpacity onPress={toggleMenu}>
           <Entypo name="dots-three-vertical" size={24} color="darkgrey" />
@@ -204,35 +205,7 @@ export default function TripNameScreen({ totalSpent }) {
 
       <View className="mt-12 flex-1 text-lg items-center">
         <View>
-          <View className="flex-row justify-between">
-            <Text className="text-left text-lg">Today</Text>
-            <Text className="text-right text-lg">Total amount of the day</Text>
-          </View>
-
-          <View className="items-center">
-            <View className="mt-3 mb-6 bg-lightGray rounded-md">
-              <View className="w-[380px] flex flex-row justify-between">
-                <Image
-                  source={require('../../assets/images/restaurant.png')}
-                  className="w-[60px] h-[60px] m-2 rounded-xl"
-                />
-                <View className="flex-1 justify-center">
-                  <View className="flex flex-row justify-between">
-                    <Text className="text-[19px] font-semibold">
-                      Description
-                    </Text>
-                    <Text className="text-[19px]  font-semibold mr-3">
-                      €100
-                    </Text>
-                  </View>
-                  <View className="flex flex-row justify-between">
-                    <Text className="text-[15px]">Restaurant</Text>
-                    <Text className="text-[15px] mr-3">$110</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </View>
+          <ExpenseList expenses={pinnedTrip.expenses} />
         </View>
       </View>
 
@@ -349,6 +322,6 @@ export default function TripNameScreen({ totalSpent }) {
           />
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </>
   );
 }

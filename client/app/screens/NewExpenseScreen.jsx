@@ -18,8 +18,6 @@ import DropdownCurrency from './DropdownCurrency';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 //import transport from '../../assets/images/plane.png';
 
-
-
 export default function NewExpenseScreen({ navigation }) {
   const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] =
     useState(false);
@@ -46,7 +44,6 @@ export default function NewExpenseScreen({ navigation }) {
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
   const [isSpreadByDays, setIsSpreadByDays] = useState(false);
-
 
   let categoryName;
   let categoryImage;
@@ -128,7 +125,6 @@ export default function NewExpenseScreen({ navigation }) {
     navigation.navigate('Category', { screen: 'CategoryScreen' });
   };
 
-
   // const handleSavePress = () => {
   //   navigation.navigate('TripName', { screen: 'TripNameScreen' });
   // };
@@ -148,6 +144,7 @@ export default function NewExpenseScreen({ navigation }) {
 
   const toggleCurrencyDropdown = () => {
     setCurrencyDropdownVisible(!currencyDropdownVisible);
+  };
 
   const showSingleDatePicker = () => {
     setSingleDatePickerVisibility(true);
@@ -191,7 +188,6 @@ export default function NewExpenseScreen({ navigation }) {
   const handleToggleSpreadByDays = () => {
     setIsSpreadByDays(!isSpreadByDays);
   };
-
 
   const handlePaymentMethod = selectedMethod => {
     setPaymentMethod(selectedMethod);
