@@ -18,7 +18,7 @@ import DropdownCurrency from './DropdownCurrency';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 //import transport from '../../assets/images/plane.png';
 
-export default function NewExpenseScreen({ navigation }) {
+export default function NewExpenseScreen({ navigation, route }) {
   const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] =
     useState(false);
   const [isUploadPictureModalVisible, setIsUploadPictureModalVisible] =
@@ -51,8 +51,8 @@ export default function NewExpenseScreen({ navigation }) {
     //   categoryName = 'Transportation';
     //   categoryImage = transport;
     // } else {
-    // categoryName = route.params.categoryName;
-    // categoryImage = route.params.categoryImage;
+    categoryName = route.params.categoryName;
+    categoryImage = route.params.categoryImage;
   }
 
   const { trips, dispatch } = useTripsContext();
