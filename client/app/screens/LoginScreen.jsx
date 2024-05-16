@@ -58,16 +58,25 @@ export default function LoginScreen({ navigation }) {
 
   const handleNavigation = async () => {
     if (!allTrips) {
-      navigation.navigate('UnlockFirstTrip', {
-        screen: 'UnlockFirstTripScreen',
+      navigation.navigate('Main', {
+        screen: 'PinnedTripStack',
+        params: {
+          screen: 'UnlockFirstTripScreen',
+        },
       });
     } else if (pinnedTrip.expenses.length === 0) {
-      navigation.navigate('TrackFirstExpenseScreen', {
-        screen: 'TrackFirstExpenseScreen',
+      navigation.navigate('Main', {
+        screen: 'PinnedTripStack',
+        params: {
+          screen: 'TrackFirstExpense',
+        },
       });
     } else {
-      navigation.navigate('TripNameScreen', {
-        screen: 'TripNameScreen',
+      navigation.navigate('Main', {
+        screen: 'PinnedTripStack',
+        params: {
+          screen: 'TripNameScreen',
+        },
       });
     }
   };

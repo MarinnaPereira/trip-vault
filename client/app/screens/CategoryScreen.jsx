@@ -16,7 +16,7 @@ export default function Category({ navigation }) {
 
   const handleGoBack = () => {
     if (pinnedTrip.expenses.length !== 0) {
-      navigation.navigate('TripNameScreen', { screen: 'TripNameScreen' });
+      navigation.navigate('PinnedTrip', { screen: 'TripNameScreen' });
     } else {
       navigation.navigate('TrackFirstExpenseScreen', {
         screen: 'TrackFirstExpenseScreen',

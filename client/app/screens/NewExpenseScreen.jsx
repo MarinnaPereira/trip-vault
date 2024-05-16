@@ -113,7 +113,7 @@ export default function NewExpenseScreen({ navigation, route }) {
   const handleSavePress = async () => {
     await saveExpense();
 
-    navigation.navigate('TripNameScreen', {
+    navigation.navigate('PinnedTrip', {
       screen: 'TripNameScreen',
     });
   };
@@ -130,7 +130,7 @@ export default function NewExpenseScreen({ navigation, route }) {
 
   const handleGoBack = () => {
     if (pinnedTrip.expenses.length !== 0) {
-      navigation.navigate('TripNameScreen', { screen: 'TripNameScreenScreen' });
+      navigation.navigate('Category', { screen: 'CategoryScreen' });
     } else {
       navigation.navigate('Category', { screen: 'CategoryScreen' });
     }
