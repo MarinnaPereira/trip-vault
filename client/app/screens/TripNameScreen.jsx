@@ -18,6 +18,7 @@ export default function TripNameScreen({ navigation }) {
     trips,
     dispatch,
     pinnedTrip,
+    setPinnedTrip,
     calculateTripDuration,
     calculateTotalSpent,
     calculateDailyAverage,
@@ -26,15 +27,13 @@ export default function TripNameScreen({ navigation }) {
 
   const { getCurrencySymbol } = useCurrencyContext();
 
+  const { selectedTrip } = user;
+
   // const {
   //   calculateTotalExpenses,
   //   calculateDailyAverage,
   //   calculateRemainingBalance,
   // } = useCurrencyContext();
-
-  useEffect(() => {
-    console.log('pinnedTrip', pinnedTrip);
-  }, []);
 
   const totalSpent = calculateTotalSpent(pinnedTrip);
   const tripDuration = calculateTripDuration(pinnedTrip);
@@ -44,11 +43,20 @@ export default function TripNameScreen({ navigation }) {
 
   const tripCurrencySymbol = getCurrencySymbol(pinnedTrip.currency);
 
-  const isTripOver = pinnedTrip => {
-    const endDate = DateTime.fromISO(pinnedTrip.end);
-    const today = DateTime.local();
-    return endDate < today;
-  };
+  // const isTripOver = pinnedTrip => {
+  //   const endDate = DateTime.fromISO(pinnedTrip.end);
+  //   const today = DateTime.local();
+  //   // console.log('endDate:', endDate.toISO()); // Debug statement
+  //   // console.log('today:', today.toISO()); // Debug statement
+  //   return endDate < today;
+  // };
+
+  // const isTripOver = pinnedTrip => {
+  //   const endDate = new Date(pinnedTrip.end);
+  //   console.log(endDate);
+  //   const today = new Date();
+  //   return endDate < today;
+  // };
 
   //* testing deleting trip
   // call api deleteTrip
@@ -88,9 +96,9 @@ export default function TripNameScreen({ navigation }) {
   //   });
   // }, [trips]); // Logging trips when it changes
 
-  useEffect(() => {
-    console.log('User', user);
-  }, [user]);
+  // useEffect(() => {
+  //   console.log('User', user);
+  // }, [user]);
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
@@ -187,22 +195,25 @@ export default function TripNameScreen({ navigation }) {
           </View>
         </View>
       </Modal>
-      <View className="mt-20 justify-start items-left">
-        <Text className="text-3xl mt-20 ml-8 mb-7 text-[#00b0a3] font-bold items-start">
+      <View className="mt-20 ml-7 justify-start items-left">
+        <Text className="text-3xl mt-20 text-[#00b0a3]  font-bold items-start">
           {pinnedTrip ? pinnedTrip.name : 'Trip name'}
         </Text>
+        <Text className="text-lg mb-4 font-bold text-[#999]">
+          {new Date(pinnedTrip.start).toLocaleDateString()} –{' '}
+          {new Date(pinnedTrip.end).toLocaleDateString()}
+        </Text>
       </View>
+
       <View className="flex-1 items-center">
         {/* {isTripOver && (
-          <View>
-            <View className="bg-[#f24f13] rounded-md">
-              <Text className="w-[310px] p-3 text-[#fdfdfd] text-center font-bold">
-                This trip ended in dd/mm/yyyy{' '}
-              </Text>
-            </View>
-            <Text>{totalSpent}</Text>
+          <View className="bg-[#f24f13] rounded-md mb-4">
+            <Text className="w-[310px] p-3 text-[#fdfdfd] text-center font-bold">
+              This trip ended in {new Date(pinnedTrip.end).toLocaleDateString()}
+            </Text>
           </View>
         )} */}
+
         <View>
           <View className="bg-lightGray rounded-md mb-4">
             <Text className="w-[380px] p-3 text-lg text-[#999]">
@@ -233,7 +244,7 @@ export default function TripNameScreen({ navigation }) {
         </View>
       </View>
 
-      <View className="mt-12 flex-1 text-lg items-center">
+      <View className="flex-1 text-lg items-center">
         <View>
           <ExpenseList
             expenses={pinnedTrip.expenses}

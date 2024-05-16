@@ -24,7 +24,7 @@ const ExpenseList = ({ expenses, tripCurrencySymbol }) => {
 
     // Convert object to array and sort sections by date
     return Object.keys(grouped)
-      .sort()
+      .sort((a, b) => new Date(b) - new Date(a))
       .map(date => grouped[date]);
   };
 
@@ -34,42 +34,46 @@ const ExpenseList = ({ expenses, tripCurrencySymbol }) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
 
-  const renderItem = ({ item }) => (
-    <View className="mt-3 mb-2 bg-lightGray rounded-md">
-      <View className="flex-row justify-between w-[380px] p-1 items-center">
-        <Image
-          source={findCategoryImage(item.categoryName)}
-          className="w-[60px] h-[60px] m-2 rounded-xl"
-        />
-        <View className="flex-1 justify-center gap-1">
-          <View className="flex flex-row justify-between">
-            <Text className="text-[19px] font-semibold">
-              {item.categoryName}
-            </Text>
-            <Text className="text-[19px] font-semibold mr-3">
-              {item.convertedAmount
-                ? tripCurrencySymbol + item.convertedAmount
-                : getCurrencySymbol(item.currency) + item.value.toFixed(2)}
-            </Text>
-          </View>
-          <View className="flex flex-row justify-between">
-            {item.description ? (
-              <Text className="text-[15px]">
-                {capitalizeFirstLetter(item.description)}
+  const renderItem = ({ item }) => {
+    return (
+      <View className="mt-3 mb-2 bg-lightGray rounded-md">
+        <View className="flex-row justify-between w-[380px] p-1 items-center">
+          <Image
+            source={findCategoryImage(item.categoryName)}
+            className="w-[60px] h-[60px] m-2 rounded-xl"
+          />
+          <View className="flex-1 justify-center gap-1">
+            <View className="flex flex-row justify-between">
+              <Text className="text-[19px] font-semibold">
+                {item.categoryName}
               </Text>
-            ) : (
-              <Text></Text>
-            )}
-            <Text className="text-[15px] mr-3">
-              {item.convertedAmount
-                ? getCurrencySymbol(item.currency) + item.value.toFixed(2)
-                : ''}
-            </Text>
+              <Text className="text-[19px] font-semibold mr-3">
+                {item.convertedAmount
+                  ? tripCurrencySymbol + item.convertedAmount
+                  : getCurrencySymbol(item.currency) +
+                    Number(item.value || 0).toFixed(2)}
+              </Text>
+            </View>
+            <View className="flex flex-row justify-between">
+              {item.description && item.description !== 'null' ? (
+                <Text className="text-[15px]">
+                  {capitalizeFirstLetter(item.description)}
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
+              <Text className="text-[15px] mr-3">
+                {item.convertedAmount
+                  ? getCurrencySymbol(item.currency) +
+                    Number(item.value || 0).toFixed(2)
+                  : ''}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
-    </View>
-  );
+    );
+  };
 
   const isDateToday = dateString => {
     const date = DateTime.fromISO(dateString);
@@ -87,7 +91,7 @@ const ExpenseList = ({ expenses, tripCurrencySymbol }) => {
       const spent = expense.convertedAmount || expense.value;
       return acc + spent;
     }, 0);
-    return total;
+    return Number(total || 0).toFixed(2);
   };
 
   const renderSectionHeader = ({ section: { title, data } }) => (
@@ -102,7 +106,7 @@ const ExpenseList = ({ expenses, tripCurrencySymbol }) => {
   return (
     <SectionList
       sections={sections}
-      keyExtractor={(item, index) => item._id + index}
+      keyExtractor={item => item._id}
       renderItem={renderItem}
       renderSectionHeader={renderSectionHeader}
     />

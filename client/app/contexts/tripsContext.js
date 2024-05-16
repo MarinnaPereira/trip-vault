@@ -22,11 +22,15 @@ const tripsReducer = (state, action) => {
     case 'DELETE_ALL_TRIPS':
       return [];
     case 'ADD_EXPENSE':
-      return state.map(trip =>
-        trip._id === action.tripId
+      console.log('action', action);
+
+      return state.map(trip => {
+        console.log('tripId', trip._id);
+        console.log(trip._id === action.trip._id);
+        return trip._id === action.trip._id
           ? { ...trip, expenses: [...trip.expenses, action.payload] }
-          : trip,
-      );
+          : trip;
+      });
     case 'UPDATE_EXPENSE':
       return state.map(trip =>
         trip._id === action.tripId
@@ -81,7 +85,7 @@ export const TripsProvider = ({ children }) => {
       }
     }
 
-    return totalSpent.toFixed(2);
+    return Number(totalSpent).toFixed(2);
   };
 
   const calculateDailyAverage = (totalSpent, tripDuration) => {
@@ -91,7 +95,7 @@ export const TripsProvider = ({ children }) => {
 
   const calculateBalance = (budget, totalSpent) => {
     const balance = budget - totalSpent;
-    return balance;
+    return balance.toFixed(2);
   };
 
   return (

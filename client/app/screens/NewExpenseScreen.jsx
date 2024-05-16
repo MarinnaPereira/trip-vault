@@ -18,9 +18,11 @@ import DropdownCurrency from './DropdownCurrency';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 export default function NewExpenseScreen({ navigation, route }) {
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
   const { convertCurrency } = useCurrencyContext();
+
+  const { selectedTrip } = user;
 
   const categoryName = route.params.categoryName;
   const categoryImage = route.params.categoryImage;
@@ -59,7 +61,6 @@ export default function NewExpenseScreen({ navigation, route }) {
   let convertedAmount;
   if (tripCurrency !== selectedCurrency) {
     convertedAmount = getConvertedAmount();
-    console.log(typeof convertedAmount);
   }
 
   //* addExpense
@@ -82,17 +83,19 @@ export default function NewExpenseScreen({ navigation, route }) {
         name: new Date() + '_receipt' + '.jpeg',
       });
 
-    console.log('formData', formData);
-
     const newExpense = await addExpense(formData);
-    const { selectedTrip } = user;
+    console.log('newExpense', newExpense);
     dispatch({
       type: 'ADD_EXPENSE',
-      tripId: selectedTrip,
+      trip: selectedTrip,
       payload: newExpense,
     });
 
-    setPinnedTrip(selectedTrip); //!check if it is working!!!!!!
+    setUser(user => {
+      const newUser = { ...user };
+      newUser.selectedTrip.expenses.push(newExpense);
+      return newUser;
+    });
 
     // *update expense
     // const expenseId = '663a857170c7112af6015994'; //hardcoded for now
@@ -224,8 +227,6 @@ export default function NewExpenseScreen({ navigation, route }) {
     });
 
     if (!result.canceled) {
-      console.log('result', result.assets[0]);
-      // setImage({ uri: result.assets[0].uri });
       setImage(result.assets[0]);
     }
   };
