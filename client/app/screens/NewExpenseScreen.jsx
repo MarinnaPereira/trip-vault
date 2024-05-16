@@ -54,7 +54,7 @@ export default function NewExpenseScreen({ navigation, route }) {
 
   const [currencyDropdownVisible, setCurrencyDropdownVisible] = useState(false);
 
-  const tripCurrency = pinnedTrip.currency;
+  // const tripCurrency = pinnedTrip.currency;
   const getConvertedAmount = () =>
     convertCurrency(value, selectedCurrency, tripCurrency);
 
@@ -290,9 +290,11 @@ export default function NewExpenseScreen({ navigation, route }) {
                 onChange={handleCurrencyChange}
               />
             )}
+          </View>
 
+          <View>
             <TextInput
-              className="w-[380px] bg-lightGray rounded-md p-3 text-[19px] mt-2"
+              className={`w-[380px] bg-lightGray rounded-md p-3 text-[19px] ${!currencyDropdownVisible ? '' : 'mt-8'}`}
               placeholder="Description"
               placeholderTextColor="black"
               onChangeText={text => setDescription(text)}
