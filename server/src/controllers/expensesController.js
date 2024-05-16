@@ -52,7 +52,8 @@ export const addExpense = async (req, res, next) => {
     };
     trip.expenses.push(newExpense);
     await trip.save();
-    res.status(201).json(newExpense);
+    const savedExpense = trip.expenses[trip.expenses.length - 1];
+    res.status(201).json(savedExpense);
   } catch (error) {
     // ! delete file
     // if (req.file) {

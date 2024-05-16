@@ -1,11 +1,39 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import { pie, arc } from 'd3-shape';
 
+import { useTripsContext } from '../contexts/tripsContext';
+
 const DonutPieChart = ({ width = 300, height = 300 }) => {
+  const [totalPerCategory, setTotalPerCategory] = useState([]);
+  const { pinnedTrip } = useTripsContext();
+
+  const calculateTotalSpentPerCategory = expenses => {
+    const totalSpentPerCategory = {};
+
+    expenses.forEach(expense => {
+      const spent = expense.convertedAmount || expense.value;
+      if (!totalSpentPerCategory[expense.categoryName]) {
+        totalSpentPerCategory[expense.categoryName] = 0;
+      }
+      totalSpentPerCategory[expense.categoryName] += spent;
+    });
+
+    return totalSpentPerCategory;
+  };
+
+  useEffect(() => {
+    console.log(pinnedTrip);
+    setTotalPerCategory(calculateTotalSpentPerCategory(pinnedTrip.expenses));
+  }, []);
+
+  useEffect(() => {
+    console.log(totalPerCategory);
+  }, [totalPerCategory]);
+
   const handleDownload = () => {
     // We can use libraries like react-native-fs or
     // react-native-fetch-blob to handle file downloads

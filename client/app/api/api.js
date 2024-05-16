@@ -196,7 +196,7 @@ export const addExpense = async formData => {
     }
 
     const data = await response.json();
-    console.log(data);
+    console.log('data', data);
     return data; // return object with the new expense info
   } catch (err) {
     console.error(err.message);
