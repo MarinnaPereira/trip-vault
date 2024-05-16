@@ -72,7 +72,6 @@ export const TripsProvider = ({ children }) => {
   const calculateTotalSpent = trip => {
     const tripExpenses = trip.expenses;
     let totalSpent = 0;
-
     for (const expense of tripExpenses) {
       if (expense.convertedAmount) {
         totalSpent += expense.convertedAmount;
@@ -80,8 +79,7 @@ export const TripsProvider = ({ children }) => {
         totalSpent += expense.value;
       }
     }
-
-    return totalSpent.toFixed(2);
+    return Number(totalSpent).toFixed(2);
   };
 
   const calculateDailyAverage = (totalSpent, tripDuration) => {
