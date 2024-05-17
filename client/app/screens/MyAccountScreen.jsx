@@ -90,12 +90,7 @@ export default function MyAccountScreen({ route, navigation }) {
     setIsLogged(false);
     await AsyncStorage.removeItem('token');
 
-    navigation.navigate('Main', {
-      screen: 'AuthStack',
-      params: {
-        screen: 'WelcomeScreen',
-      },
-    });
+    navigation.navigate('Auth');
   };
 
   return (

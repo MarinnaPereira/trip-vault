@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 
 export default function UnlockFirstTripScreen({ navigation }) {
   const handleUnlockFirstTrip = () => {
-    navigation.navigate('InitiateTripScreen', { screen: 'InitiateTripScreen' });
+    navigation.navigate('InitiateTrip');
   };
 
   return (
