@@ -44,6 +44,7 @@ export default function LoginScreen({ navigation }) {
   const fetchUserTrips = async () => {
     try {
       allTrips = await getAllTrips();
+      console.log(allTrips);
       if (allTrips) {
         dispatch({
           type: 'ADD_ALL_TRIPS',

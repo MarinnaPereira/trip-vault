@@ -16,20 +16,27 @@ export default function MyTripsScreen({ navigation }) {
     console.log('Clicked Trip:', item);
     setPinnedTrip(item);
     user.selectedTrip = item; //! update user on backend
-    navigation.navigate('TripNameScreen', {
-      screen: 'TripNameScreen',
+
+    navigation.navigate('Main', {
+      screen: 'PinnedTripStack',
+      params: {
+        screen: 'TripNameScreen',
+      },
     });
   };
 
   const handleAddTrip = () => {
-    navigation.navigate('InitiateTripScreen', {
-      screen: 'InitiateTripScreen',
+    navigation.navigate('Main', {
+      screen: 'PinnedTripStack',
+      params: {
+        screen: 'InitiateTripScreen',
+      },
     });
   };
 
   return (
     <FlatList
-      data={trips}
+      data={filteredTrips}
       keyExtractor={item => item._id}
       ListHeaderComponent={
         <>

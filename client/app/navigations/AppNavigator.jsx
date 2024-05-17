@@ -44,13 +44,13 @@ function PinnedTripStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="PinnedTrip" component={TripNameScreen} />
-      <Stack.Screen name="Category" component={CategoryScreen} />
-      <Stack.Screen name="NewExpense" component={NewExpenseScreen} />
       <Stack.Screen name="UnlockFirstTrip" component={UnlockFirstTripScreen} />
       <Stack.Screen
         name="TrackFirstExpense"
         component={TrackFirstExpenseScreen}
       />
+      <Stack.Screen name="Category" component={CategoryScreen} />
+      <Stack.Screen name="NewExpense" component={NewExpenseScreen} />
     </Stack.Navigator>
   );
 }

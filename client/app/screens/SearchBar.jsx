@@ -5,7 +5,8 @@ import { Feather } from '@expo/vector-icons';
 const SearchBar = ({ trips, setFilteredTrips }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearch = () => {
+  const handleSearch = text => {
+    setSearchQuery(text);
     const filteredTrips = trips.filter(trip =>
       trip.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
@@ -24,10 +25,10 @@ const SearchBar = ({ trips, setFilteredTrips }) => {
         <TextInput
           placeholder="Search trip by name..."
           value={searchQuery}
-          onChangeText={text => setSearchQuery(text)}
+          onChangeText={text => handleSearch(text)}
           className="flex-1 pl-4 text-lg text-[#999] placeholder-gray-500"
         />
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleClearSearch}>
           <Feather name="x" size={24} color="gray" />
         </TouchableOpacity>
       </View>
