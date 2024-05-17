@@ -63,11 +63,8 @@ export default function LoginScreen({ navigation }) {
         screen: 'UnlockFirstTripScreen',
       });
     } else if (pinnedTrip.expenses.length === 0) {
-      navigation.navigate('Main', {
-        screen: 'PinnedTripStack',
-        params: {
-          screen: 'TrackFirstExpense',
-        },
+      navigation.navigate('Track', {
+        screen: 'TrackFirstExpenseScreen',
       });
     } else {
       navigation.navigate('Main', {

@@ -57,8 +57,11 @@ export default function InitiateTripScreen() {
 
   const handleSavePress = async () => {
     await createTrip();
-    navigation.navigate('TrackFirstExpenseScreen', {
-      screen: 'TrackFirstExpenseScreen',
+    navigation.navigate('Main', {
+      screen: 'PinnedTripStack',
+      params: {
+        screen: 'TrackFirstExpenseScreen',
+      },
     });
   };
 

@@ -45,25 +45,25 @@ function PinnedTripStack() {
     </Stack.Navigator>
   );
 }
+
 function MyAccountStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="MyAccount" component={MyAccountScreen} />
-      <Stack.Screen name="Avatar" component={AvatarScreen} />
-    </Stack.Navigator>
-  );
-}
-function UnlockFirstTripStack() {
-  return (
     <Stack.Navigator>
-      <Stack.Screen name="UnlockFirstTrip" component={UnlockFirstTripScreen} />
-      <Stack.Screen name="InitiateTrip" component={InitiateTripScreen} />
       <Stack.Screen
         name="TrackFirstExpense"
         component={TrackFirstExpenseScreen}
       />
       <Stack.Screen name="Category" component={CategoryScreen} />
       <Stack.Screen name="NewExpense" component={NewExpenseScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function UnlockFirstTripStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="UnlockFirstTrip" component={UnlockFirstTripScreen} />
+      <Stack.Screen name="InitiateTrip" component={InitiateTripScreen} />
     </Stack.Navigator>
   );
 }
@@ -79,6 +79,7 @@ function TrackFirstExpenseStack() {
     </Stack.Navigator>
   );
 }
+
 function MainTabNavigator() {
   return (
     <Tab.Navigator>
@@ -133,7 +134,7 @@ function MainTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="MyAccount"
+        name="MyAccountStack"
         component={MyAccountStack}
         options={{
           headerShown: false,
