@@ -63,7 +63,11 @@ export default function InitiateTripScreen() {
   };
 
   const handleGoBack = () => {
-    navigation.navigate('UnlockFirstTrip', { screen: 'UnlockFirstTripScreen' });
+    trips.length > 0
+      ? navigation.navigate('MyTrips', { screen: 'MyTripsScreen' })
+      : navigation.navigate('UnlockFirstTrip', {
+          screen: 'UnlockFirstTripScreen',
+        });
   };
 
   const showStartDatePicker = () => {

@@ -66,8 +66,11 @@ export default function LoginScreen({ navigation }) {
         screen: 'TrackFirstExpenseScreen',
       });
     } else {
-      navigation.navigate('TripNameScreen', {
-        screen: 'TripNameScreen',
+      // navigation.navigate('TripNameScreen', {
+      //   screen: 'TripNameScreen',
+      // });
+      navigation.navigate('MyTrips', {
+        screen: 'MyTripsScreen',
       });
     }
   };

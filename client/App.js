@@ -117,12 +117,12 @@ export default function App() {
                 component={MyAccountScreen}
                 options={{ headerShown: false }}
               />
-              {/* <Stack.Screen
+              <Stack.Screen
                 name="MyTrips"
                 component={MyTripsScreen}
                 options={{ headerShown: false }}
               />
-              {/* <Stack.Screen name="PaymentMethod" component={PaymentMethodModal} options={{ headerShown: false }}/> */}
+              {/* <Stack.Screen name="PaymentMethod" component={PaymentMethodModal} options={{ headerShown: false }}/>
               {/* <Stack.Screen name="UploadPicture" component={UploadPictureModal} options={{ headerShown: false }}/> */}
               {/* <Stack.Screen name="EditUsername" component={EditUsernameModal} options={{ headerShown: false }}/> */}
               {/* <Stack.Screen name="OtherPayment" component={OtherPaymentModal} options={{ headerShown: false }}/> */}
