@@ -4,7 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import { View, Text } from 'react-native';
-
 import WelcomeScreen from '../screens/WelcomeScreen';
 import AvatarScreen from '../screens/AvatarScreen';
 import RegisterScreen from '../screens/RegisterScreen';
@@ -16,11 +15,10 @@ import MyAccountScreen from '../screens/MyAccountScreen';
 import NewExpenseScreen from '../screens/NewExpenseScreen';
 import CategoryScreen from '../screens/CategoryScreen';
 import UnlockFirstTripScreen from '../screens/UnlockFirstTripScreen';
+import InitiateTripScreen from '../screens/InitiateTripScreen';
 import TrackFirstExpenseScreen from '../screens/TrackFirstExpenseScreen';
-
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
 function AuthStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -31,7 +29,6 @@ function AuthStack() {
     </Stack.Navigator>
   );
 }
-
 // function newUserStack() {
 //   <Stack.Navigator>
 //     <Stack.Screen name="" component={}/>
@@ -39,12 +36,28 @@ function AuthStack() {
 //     <Stack.Screen name="" component={}/>
 //   </Stack.Navigator>
 // }
-
 function PinnedTripStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="PinnedTrip" component={TripNameScreen} />
+      <Stack.Screen name="Category" component={CategoryScreen} />
+      <Stack.Screen name="NewExpense" component={NewExpenseScreen} />
+    </Stack.Navigator>
+  );
+}
+function MyAccountStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="MyAccount" component={MyAccountScreen} />
+      <Stack.Screen name="Avatar" component={AvatarScreen} />
+    </Stack.Navigator>
+  );
+}
+function UnlockFirstTripStack() {
+  return (
+    <Stack.Navigator>
       <Stack.Screen name="UnlockFirstTrip" component={UnlockFirstTripScreen} />
+      <Stack.Screen name="InitiateTrip" component={InitiateTripScreen} />
       <Stack.Screen
         name="TrackFirstExpense"
         component={TrackFirstExpenseScreen}
@@ -54,16 +67,18 @@ function PinnedTripStack() {
     </Stack.Navigator>
   );
 }
-
-function AccountStack() {
+function TrackFirstExpenseStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="MyAccount" component={MyAccountScreen} />
-      <Stack.Screen name="Avatar" component={AvatarScreen} />
+    <Stack.Navigator>
+      <Stack.Screen
+        name="TrackFirstExpense"
+        component={TrackFirstExpenseScreen}
+      />
+      <Stack.Screen name="Category" component={CategoryScreen} />
+      <Stack.Screen name="NewExpense" component={NewExpenseScreen} />
     </Stack.Navigator>
   );
 }
-
 function MainTabNavigator() {
   return (
     <Tab.Navigator>
@@ -119,7 +134,7 @@ function MainTabNavigator() {
       />
       <Tab.Screen
         name="MyAccount"
-        component={MyAccountScreen}
+        component={MyAccountStack}
         options={{
           headerShown: false,
           tabBarLabel: ({ color }) => (
@@ -134,12 +149,13 @@ function MainTabNavigator() {
     </Tab.Navigator>
   );
 }
-
 export default function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Auth" component={AuthStack} />
+        <Stack.Screen name="Unlock" component={UnlockFirstTripStack} />
+        <Stack.Screen name="Track" component={TrackFirstExpenseStack} />
         <Stack.Screen name="Main" component={MainTabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>

@@ -59,11 +59,8 @@ export default function LoginScreen({ navigation }) {
 
   const handleNavigation = async () => {
     if (!allTrips) {
-      navigation.navigate('Main', {
-        screen: 'PinnedTripStack',
-        params: {
-          screen: 'UnlockFirstTripScreen',
-        },
+      navigation.navigate('Unlock', {
+        screen: 'UnlockFirstTripScreen',
       });
     } else if (pinnedTrip.expenses.length === 0) {
       navigation.navigate('Main', {

@@ -1,22 +1,35 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, FlatList } from 'react-native';
-import { Entypo, FontAwesome6 } from '@expo/vector-icons';
-import SearchBar from './SearchBar';
 
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
+import { updateUser } from '../api/api';
+import SearchBar from './SearchBar';
 
 export default function MyTripsScreen({ navigation }) {
-  const { trips, pinnedTrip, setPinnedTrip } = useTripsContext();
+  const { trips, setPinnedTrip } = useTripsContext();
   const { user, setUser } = useUserContext();
+  const [filteredTrips, setFilteredTrips] = useState(trips);
 
-  const [filteredTrips, setFilteredTrips] = useState([]);
-
-  const handleTripPress = item => {
-    console.log('Clicked Trip:', item);
+  const handleTripPress = async item => {
     setPinnedTrip(item);
-    user.selectedTrip = item; //! update user on backend
+    const updatedUser = { ...user, selectedTrip: item };
+    setUser(updatedUser);
+  };
 
+  useEffect(() => {
+    console.log('user my trips', user);
+    (async () => {
+      const newSelectedTripId = user.selectedTrip._id;
+      await updateUser({
+        ...user,
+        selectedTrip: newSelectedTripId,
+      });
+    })();
+    handleNavigation();
+  }, [user]);
+
+  const handleNavigation = () => {
     navigation.navigate('Main', {
       screen: 'PinnedTripStack',
       params: {
@@ -36,7 +49,7 @@ export default function MyTripsScreen({ navigation }) {
 
   return (
     <FlatList
-      data={filteredTrips}
+      data={trips}
       keyExtractor={item => item._id}
       ListHeaderComponent={
         <>
@@ -50,7 +63,7 @@ export default function MyTripsScreen({ navigation }) {
             <View>
               <SearchBar trips={trips} setFilteredTrips={setFilteredTrips} />
 
-              {trips.map(item => (
+              {filteredTrips.map(item => (
                 <TouchableOpacity
                   onPress={() => handleTripPress(item)}
                   key={item._id}

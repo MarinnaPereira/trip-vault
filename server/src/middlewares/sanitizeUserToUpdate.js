@@ -9,6 +9,7 @@ export const sanitizeUserToUpdate = (req, res, next) => {
     email: user.email,
     password: body.password || user.password,
     avatar: body.avatar || user.avatar,
+    selectedTrip: body.selectedTrip || user.selectedTrip,
   };
   console.log('whole user:', wholeUser);
 

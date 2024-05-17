@@ -7,10 +7,8 @@ import { deleteUser, updateUser } from '../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EditUsernameModal from '../modals/EditUsernameModal';
 
-export default function MyAccountScreen({ route, navigation }) {
+export default function MyAccountScreen({ navigation }) {
   const [isEditUserModalVisible, setIsEditUserModalVisible] = useState(false);
-
-  // const { username, email } = route.params;
 
   const { user, setIsLogged, setUser } = useUserContext();
   const { trips, dispatch } = useTripsContext();
@@ -90,12 +88,7 @@ export default function MyAccountScreen({ route, navigation }) {
     setIsLogged(false);
     await AsyncStorage.removeItem('token');
 
-    navigation.navigate('Main', {
-      screen: 'AuthStack',
-      params: {
-        screen: 'WelcomeScreen',
-      },
-    });
+    navigation.navigate('Auth');
   };
 
   return (
@@ -110,7 +103,7 @@ export default function MyAccountScreen({ route, navigation }) {
             <MaterialIcons name="edit" size={24} color="black" />
           </TouchableOpacity>
           {/* Display the email dynamically. Replace 'example@gmail.com' with the fetched email. */}
-          <Text className="mt-2 text-[19px]">example@gmail.com</Text>
+          <Text className="mt-2 text-[19px]">{user.email}</Text>
         </View>
         <View />
 
@@ -120,7 +113,7 @@ export default function MyAccountScreen({ route, navigation }) {
 
         <View className="items-center">
           <View className="mt-4 w-[380px]">
-            <Text className="text-left text-[19px]">username</Text>
+            <Text className="text-left text-[19px]">{user.username}</Text>
             <TouchableOpacity
               onPress={toggleModal}
               className="bg-lightGray rounded-md"

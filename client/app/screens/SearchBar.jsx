@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Modal, Text } from 'react-native';
+import { View, TextInput, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 const SearchBar = ({ trips, setFilteredTrips }) => {
@@ -11,6 +11,7 @@ const SearchBar = ({ trips, setFilteredTrips }) => {
       trip.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
     setFilteredTrips(filteredTrips);
+    if (text === '') setFilteredTrips(trips);
   };
 
   const handleClearSearch = () => {
