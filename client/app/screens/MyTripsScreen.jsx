@@ -21,12 +21,13 @@ export default function MyTripsScreen({ navigation }) {
     console.log('user my trips', user);
     (async () => {
       const newSelectedTripId = user.selectedTrip._id;
-      await updateUser({
+      const res = await updateUser({
         ...user,
         selectedTrip: newSelectedTripId,
       });
+
+      if (res.status === 'ok') handleNavigation();
     })();
-    handleNavigation();
   }, [user]);
 
   const handleNavigation = () => {

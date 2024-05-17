@@ -29,13 +29,7 @@ function AuthStack() {
     </Stack.Navigator>
   );
 }
-// function newUserStack() {
-//   <Stack.Navigator>
-//     <Stack.Screen name="" component={}/>
-//     <Stack.Screen name="" component={}/>
-//     <Stack.Screen name="" component={}/>
-//   </Stack.Navigator>
-// }
+
 function PinnedTripStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -49,10 +43,7 @@ function PinnedTripStack() {
 function MyAccountStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="TrackFirstExpense"
-        component={TrackFirstExpenseScreen}
-      />
+      <Stack.Screen name="MyAccount" component={MyAccountScreen} />
       <Stack.Screen name="Category" component={CategoryScreen} />
       <Stack.Screen name="NewExpense" component={NewExpenseScreen} />
     </Stack.Navigator>
