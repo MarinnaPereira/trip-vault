@@ -84,6 +84,12 @@ export default function MyAccountScreen({ navigation, route }) {
 
   // *logout
 
+  useEffect(() => {
+    if (!user) {
+      navigation.replace('Auth', { screen: 'Welcome' });
+    }
+  }, [user, navigation]);
+
   const handleLogoutPress = async () => {
     setUser(null);
     dispatch({
@@ -91,14 +97,16 @@ export default function MyAccountScreen({ navigation, route }) {
     });
     setIsLogged(false);
     await AsyncStorage.removeItem('token');
-
-    navigation.navigate('Auth', { screen: 'Welcome' });
+    console.log('Token deleted');
+    navigation.replace('Auth', { screen: 'Welcome' });
   };
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
+  if (!user) {
+    return null;
+  }
   return (
     <>
       <View className="mt-24">
