@@ -27,7 +27,7 @@ export default function TripNameScreen({ navigation }) {
 
   const { getCurrencySymbol } = useCurrencyContext();
 
-  const { selectedTrip } = user;
+  // const { selectedTrip } = user;
 
   // const {
   //   calculateTotalExpenses,

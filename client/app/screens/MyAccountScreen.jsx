@@ -59,21 +59,29 @@ export default function MyAccountScreen({ navigation, route }) {
 
   // *logout
 
-  // const handleLogoutPress = async () => {
-  //   setUser(null);
-  //   dispatch({
-  //     type: 'DELETE_ALL_TRIPS',
-  //   });
-  //   setIsLogged(false);
-  //   await AsyncStorage.removeItem('token');
+  useEffect(() => {
+    if (!user) {
+      navigation.replace('Auth', { screen: 'Welcome' });
+    }
+  }, [user, navigation]);
 
-  //   navigation.navigate('Auth', { screen: 'Welcome' });
-  // };
-
+  const handleLogoutPress = async () => {
+    setUser(null);
+    dispatch({
+      type: 'DELETE_ALL_TRIPS',
+    });
+    setIsLogged(false);
+    await AsyncStorage.removeItem('token');
+    console.log('Token deleted');
+    navigation.replace('Auth', { screen: 'Welcome' });
+  };
   // const togglePasswordVisibility = () => {
   //   setShowPassword(!showPassword);
   // };
 
+  if (!user) {
+    return null;
+  }
   return (
     <>
       <View className="mt-24">
