@@ -108,7 +108,7 @@ export default function MyAccountScreen({ navigation, route }) {
         <View />
 
         <View className="mt-5">
-          <Text className="text-3xl ml-7 mb-7 text-[#00b0a3] font-bold items-start">
+          <Text className="text-3xl ml-4 mb-7 text-[#00b0a3] font-bold items-start">
             My Account
           </Text>
         </View>

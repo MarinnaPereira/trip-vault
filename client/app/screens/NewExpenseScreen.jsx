@@ -240,14 +240,14 @@ export default function NewExpenseScreen({ navigation, route }) {
         <TouchableOpacity onPress={handleGoBack}>
           <Image
             source={require('../../assets/images/singleArrow.png')}
-            className="ml-5 mt-6 w-20 h-20"
-          />
+            className="ml-1 mt-6 w-20 h-20"
+                      />
         </TouchableOpacity>
       </View>
 
       <View className="flex-1">
-        <View className="flex flex-row justify-between mx-10 mt-5">
-          <Text className=" text-3xl font-semibold">{categoryName}</Text>
+        <View className="flex flex-row justify-between mx-4 mt-5">
+          <Text className=" text-3xl font-semibold text-[#00B0A3]">{categoryName}</Text>
           <TouchableOpacity>
             <FontAwesome6 name="trash-can" size={32} color="red" />
           </TouchableOpacity>

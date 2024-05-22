@@ -63,11 +63,10 @@ export default function MyTripsScreen({ navigation }) {
         ListHeaderComponent={
           <>
             <View className="mt-24 justify-start items-left">
-              <Text className="text-3xl ml-7 mb-7 text-[#00b0a3] font-bold items-start">
-                My Trips
-              </Text>
+               <Text className="text-3xl ml-4 mb-7 text-[#00b0a3] font-bold items-start">
+              My Trips
+            </Text>
             </View>
-
             <View className=" flex-1 items-center">
               <View>
                 <SearchBar trips={trips} setFilteredTrips={setFilteredTrips} />
@@ -98,7 +97,7 @@ export default function MyTripsScreen({ navigation }) {
             <TouchableOpacity onPress={handleAddTrip}>
               <Image
                 source={require('../../assets/images/plus.png')}
-                className="mr-5 w-28 h-28"
+                 className="mr-2 w-20 h-20"
               />
             </TouchableOpacity>
           </View>

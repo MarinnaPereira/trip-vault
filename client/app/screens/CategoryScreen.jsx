@@ -39,13 +39,13 @@ export default function Category({ navigation }) {
         <TouchableOpacity onPress={handleGoBack}>
           <Image
             source={require('../../assets/images/singleArrow.png')}
-            className="ml-5 mt-6 w-20 h-20"
+            className="ml-1 mt-6 mb-2 w-[80px] h-[80px]"
           />
         </TouchableOpacity>
       </View>
 
-      <View className="items-center mt-5">
-        <Text className="text-3xl font-semibold">Pick a category</Text>
+      <View className="items-center">
+        <Text className="text-3xl font-semibold text-[#00B0A3]">Pick a category</Text>
         <View className="mt-3">
           <FlatList
             data={categories}

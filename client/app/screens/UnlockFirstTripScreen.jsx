@@ -13,7 +13,7 @@ export default function UnlockFirstTripScreen({ navigation }) {
       <TouchableOpacity onPress={handleUnlockFirstTrip}>
         <Image
           source={require('../../assets/images/plus.png')}
-          className="w-28 h-28 mt-8"
+          className="w-[88px] h-[88px]"
         />
       </TouchableOpacity>
 
