@@ -16,7 +16,6 @@ export default function TripNameScreen({ navigation }) {
   const { user, setUser } = useUserContext();
   const {
     trips,
-    dispatch,
     pinnedTrip,
     setPinnedTrip,
     calculateTripDuration,

@@ -7,12 +7,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import EditUsernameModal from '../modals/EditUsernameModal';
 import { Ionicons } from '@expo/vector-icons';
 import avatars from '../../assets/avatars';
+import { useTripsContext } from '../contexts/tripsContext';
 
 export default function MyAccountScreen({ navigation, route }) {
   const [isEditUserModalVisible, setIsEditUserModalVisible] = useState(false);
   // const [showPassword, setShowPassword] = useState(false);
 
   const { user, setIsLogged, setUser } = useUserContext();
+  const { setTrips } = useTripsContext;
 
   const findAvatarImage = userAvatar => {
     const avatar = avatars.find(avatar => avatar.name === userAvatar);
@@ -67,9 +69,10 @@ export default function MyAccountScreen({ navigation, route }) {
 
   const handleLogoutPress = async () => {
     setUser(null);
-    dispatch({
-      type: 'DELETE_ALL_TRIPS',
-    });
+    setTrips([]);
+    // dispatch({
+    //   type: 'DELETE_ALL_TRIPS',
+    // });
     setIsLogged(false);
     await AsyncStorage.removeItem('token');
     console.log('Token deleted');
