@@ -18,7 +18,6 @@ export default function Avatar({ navigation }) {
         params: { avatar: avatarName },
       });
     }
-    }
   };
 
   const handleGoBack = () => {

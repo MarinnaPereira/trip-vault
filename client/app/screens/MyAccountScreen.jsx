@@ -86,7 +86,9 @@ export default function MyAccountScreen({ navigation, route }) {
           )}
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Avatar', { screen: 'AvatarScreen' });
+              navigation.navigate('Shared', {
+                screen: 'Avatar',
+              });
             }}
             className="bg-lightGray p-2 rounded-full mt-[-25px] ml-[100px]"
           >
