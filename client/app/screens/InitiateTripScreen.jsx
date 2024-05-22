@@ -127,12 +127,12 @@ export default function InitiateTripScreen() {
         <TouchableOpacity onPress={handleGoBack}>
           <Image
             source={require('../../assets/images/singleArrow.png')}
-            className="ml-5 mt-6 w-20 h-20"
+            className="ml-1 mt-6 w-20 h-20"
           />
         </TouchableOpacity>
       </View>
       <View className="mt-5 justify-start items-left">
-        <Text className="text-3xl ml-8 mb-7 text-[#00B0A3] font-bold items-start">
+        <Text className="text-3xl ml-4 mb-7 text-[#00B0A3] font-bold items-start">
           Initiate a trip
         </Text>
       </View>

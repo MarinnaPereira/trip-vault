@@ -1,5 +1,14 @@
 import { useState, useEffect } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUserContext } from '../contexts/userContext';
@@ -93,12 +102,19 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this value as needed
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+
     <View className="flex-1 items-center">
-      <Image
-        source={require('./../../assets/images/trip-vault-logo.png')}
-        className="w-[120px] h-[120px] mt-24"
-      />
-      <Text className="mt-12 text-3xl font-semibold">Login</Text>
+       <Image
+            source={require('./../../assets/images/TripVault-LogoBig.png')}
+            className="w-[180px] h-[180px] mt-24"
+          />
+      <Text className="mt-12 text-3xl font-semibold text-[#00B0A3]">Login</Text>
       <Text className="text-[19px]">Login to your account</Text>
       <TextInput
         className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
@@ -122,18 +138,21 @@ export default function LoginScreen({ navigation }) {
           onPress={togglePasswordVisibility}
         />
       </View>
+          <Text className="mt-36 text-[19px]">Don't have an account?</Text>
+          <TouchableOpacity onPress={handleRegisterPress}>
+            <Text className="mt-2 text-orange text-[19px]">Register</Text>
+          </TouchableOpacity>
 
-      <Text className="mt-36 text-[19px]">Don't have an account?</Text>
-      <TouchableOpacity onPress={handleRegisterPress}>
-        <Text className="mt-2 text-orange text-[19px]">Register</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={handleLoginPress}
-        className="bg-green w-[300px] rounded-lg mt-4"
-      >
-        <Text className="text-white text-center p-4 text-[19px]">Login</Text>
-      </TouchableOpacity>
-    </View>
+          <TouchableOpacity
+            onPress={handleLoginPress}
+            className="bg-green w-[300px] rounded-lg mt-4"
+          >
+            <Text className="text-white text-center p-4 text-[19px]">
+              Login
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

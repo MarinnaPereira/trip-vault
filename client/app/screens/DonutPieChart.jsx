@@ -6,10 +6,29 @@ import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import { pie, arc } from 'd3-shape';
 
 import { useTripsContext } from '../contexts/tripsContext';
+import { useCurrencyContext } from '../contexts/currencyContext';
 
 const DonutPieChart = ({ width = 300, height = 300 }) => {
-  const [totalPerCategory, setTotalPerCategory] = useState([]);
-  const { pinnedTrip } = useTripsContext();
+  const [totalPerCategory, setTotalPerCategory] = useState({});
+  const {
+    pinnedTrip,
+    calculateTotalSpent,
+    calculateTripDuration,
+    calculateDailyAverage,
+  } = useTripsContext();
+  const { getCurrencySymbol } = useCurrencyContext();
+
+  const categories = [
+    { id: 1, name: 'Accommodation', color: '#d9ab7a' },
+    { id: 2, name: 'Activities', color: '#e17559' },
+    { id: 3, name: 'Groceries', color: '#771200' },
+    { id: 4, name: 'Restaurants', color: '#fda541' },
+    { id: 5, name: 'Services', color: '#f24f13' },
+    { id: 6, name: 'Shopping', color: '#cb1c2d' },
+    { id: 7, name: 'Taxes & Fees', color: '#04d9b2' },
+    { id: 8, name: 'Transportation', color: '#00b0a3' },
+    { id: 9, name: 'Others', color: '#0f333f' },
+  ];
 
   const calculateTotalSpentPerCategory = expenses => {
     const totalSpentPerCategory = {};
@@ -26,85 +45,42 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
   };
 
   useEffect(() => {
-    console.log(pinnedTrip);
-    setTotalPerCategory(calculateTotalSpentPerCategory(pinnedTrip.expenses));
-  }, []);
+    if (pinnedTrip && pinnedTrip.expenses) {
+      setTotalPerCategory(calculateTotalSpentPerCategory(pinnedTrip.expenses));
+    }
+  }, [pinnedTrip]);
 
-  useEffect(() => {
-    console.log(totalPerCategory);
-  }, [totalPerCategory]);
+  // Prepare data for the pie chart
+  const data = categories
+    .map(category => ({
+      ...category,
+      value: totalPerCategory[category.name] || 0,
+    }))
+    .filter(category => category.value > 0);
 
+  const radius = Math.min(width, height) / 2;
+  const pieChart = pie()
+    .value(d => d.value)
+    .sort(
+      (a, b) =>
+        categories.findIndex(cat => cat.name === a.label) -
+        categories.findIndex(cat => cat.name === b.label),
+    )(data);
+  const createArc = arc()
+    .innerRadius(radius * 0.45)
+    .outerRadius(radius);
+
+  const totalSpent = calculateTotalSpent(pinnedTrip);
+  const tripDuration = calculateTripDuration(pinnedTrip);
+  const dailyAverage = calculateDailyAverage(totalSpent, tripDuration);
+  const tripCurrencySymbol = getCurrencySymbol(pinnedTrip.currency);
+
+  // Here we will handle the download button
   const handleDownload = () => {
     // We can use libraries like react-native-fs or
     // react-native-fetch-blob to handle file downloads
     console.log('Download button pressed');
   };
-
-  const data = [
-    { value: 10, color: '#d9ab7a', label: 'beige' },
-    { value: 15, color: '#e17559', label: 'peach' },
-    { value: 10, color: '#771200', label: 'burgundy' },
-    { value: 15, color: '#fda541', label: 'yellow' },
-    { value: 8, color: '#f24f13', label: 'orange' },
-    { value: 12, color: '#cb1c2d', label: 'rose' },
-    { value: 7, color: '#04d9b2', label: 'turquoise' },
-    { value: 9, color: '#00b0a3', label: 'alcoholic' },
-    { value: 14, color: '#0f333f', label: 'blue' },
-  ];
-
-  const categories = [
-    {
-      id: 1,
-      name: 'Accommodation',
-      color: '#d9ab7a',
-    },
-    {
-      id: 2,
-      name: 'Activities',
-      color: '#e17559',
-    },
-    {
-      id: 3,
-      name: 'Groceries',
-      color: '#771200',
-    },
-    {
-      id: 4,
-      name: 'Restaurants',
-      color: '#fda541',
-    },
-    {
-      id: 5,
-      name: 'Services',
-      color: '#f24f13',
-    },
-    {
-      id: 6,
-      name: 'Shopping',
-      color: '#cb1c2d',
-    },
-    {
-      id: 7,
-      name: 'Taxes & Fees',
-      color: '#04d9b2',
-    },
-    {
-      id: 8,
-      name: 'Transportation',
-      color: '#00b0a3',
-    },
-    {
-      id: 9,
-      name: 'Others',
-      color: '#0f333f',
-    },
-  ];
-
-  const radius = Math.min(width, height) / 2;
-  const pieChart = pie().value(d => d.value)(data);
-  const createArc = arc()
-    .innerRadius(radius * 0.45)
-    .outerRadius(radius);
 
   return (
     <ScrollView style={styles.container}>
@@ -124,7 +100,9 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
       </View>
       {/* Daily Average Amount */}
       <View style={styles.containerDailyAverage}>
-        <Text style={styles.dailyAverage}>Daily Average : €</Text>
+        <Text style={styles.dailyAverage}>
+          Daily Average : {dailyAverage} {tripCurrencySymbol}
+        </Text>
       </View>
 
       {/* Pie Chart */}
@@ -135,7 +113,7 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
               const [centroidX, centroidY] = createArc.centroid(slice);
               return (
                 <G key={index}>
-                  <Path d={createArc(slice)} fill={data[index].color} />
+                  <Path d={createArc(slice)} fill={slice.data.color} />
                   <SvgText
                     x={centroidX}
                     y={centroidY}
@@ -146,7 +124,7 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
                     stroke="#000"
                     strokeWidth={0.1}
                   >
-                    {`${slice.value}%`}
+                    {`${((slice.data.value / data.reduce((acc, cur) => acc + cur.value, 0)) * 100).toFixed(1)}%`}
                   </SvgText>
                 </G>
               );
@@ -172,7 +150,12 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={styles.categoryName}>{item.name}</Text>
               </View>
-              <Text style={styles.valueCategory}>Value €</Text>
+              <Text style={styles.valueCategory}>
+                {totalPerCategory[item.name]
+                  ? totalPerCategory[item.name].toFixed(2)
+                  : 0}{' '}
+                €
+              </Text>
             </View>
           </View>
         ))}
@@ -215,7 +198,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    marginLeft: 50,
+    marginLeft: 30,
   },
   categoryItem: {
     flexDirection: 'row',

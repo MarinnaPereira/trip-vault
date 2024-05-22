@@ -138,25 +138,18 @@ export default function TripNameScreen({ navigation }) {
           </View>
         </View>
       </Modal>
-      <View className="mt-20 ml-7 justify-start items-left">
-        <Text className="text-3xl mt-20 text-[#00b0a3]  font-bold items-start">
+
+      <View className="mt-20 ml-4 justify-start items-left">
+        <Text className="text-3xl mt-4 text-[#00b0a3] font-bold items-start">
           {pinnedTrip ? pinnedTrip.name : 'Trip name'}
         </Text>
-        <Text className="text-lg mb-4 font-bold text-[#999]">
+        <Text className="text-lg mb-4 font-bold">
           {new Date(pinnedTrip.start).toLocaleDateString()} –{' '}
           {new Date(pinnedTrip.end).toLocaleDateString()}
         </Text>
       </View>
 
       <View className="flex-1 items-center">
-        {/* {isTripOver && (
-          <View className="bg-[#f24f13] rounded-md mb-4">
-            <Text className="w-[310px] p-3 text-[#fdfdfd] text-center font-bold">
-              This trip ended in {new Date(pinnedTrip.end).toLocaleDateString()}
-            </Text>
-          </View>
-        )} */}
-
         <View>
           <View className="bg-lightGray rounded-md mb-4">
             <Text className="w-[380px] p-3 text-lg text-[#999]">
@@ -188,19 +181,18 @@ export default function TripNameScreen({ navigation }) {
       </View>
 
       <View className="flex-1 text-lg items-center">
-        <View>
+        <View className="h-[400px]">
           <ExpenseList
             expenses={pinnedTrip.expenses}
             tripCurrencySymbol={tripCurrencySymbol}
           />
         </View>
       </View>
-
-      <View className="flex flex-row justify-end">
+      <View className="flex-1 flex-row justify-end">
         <TouchableOpacity onPress={handleAddPress}>
           <Image
             source={require('../../assets/images/plus.png')}
-            className="mr-6 w-28 h-28"
+            className="mt-[135px] mr-2 w-20 h-20"
           />
         </TouchableOpacity>
       </View>
