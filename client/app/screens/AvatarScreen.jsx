@@ -7,8 +7,9 @@ export default function Avatar({ navigation }) {
 
   const handleAvatarPress = avatarName => {
     if (user) {
-      navigation.navigate('MyAccount', { avatar: avatarName });
-    } else {
+      const selectedAvatar = avatars.find(selectedAvatar => selectedAvatar.name === avatarName);
+      navigation.navigate('MyAccount', { avatarImage: selectedAvatar.image });
+            } else {
       navigation.navigate('Register', { avatar: avatarName });
     }
   };

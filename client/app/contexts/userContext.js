@@ -5,6 +5,7 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLogged, setIsLogged] = useState(false);
+  const [selectedAvatarImage, setSelectedAvatarImage] = useState(null);
 
   return (
     <UserContext.Provider
@@ -13,6 +14,8 @@ export const UserProvider = ({ children }) => {
         setUser,
         isLogged,
         setIsLogged,
+        selectedAvatarImage,
+        setSelectedAvatarImage,
       }}
     >
       {children}

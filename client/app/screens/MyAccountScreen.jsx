@@ -6,12 +6,16 @@ import { useTripsContext } from '../contexts/tripsContext';
 import { deleteUser, updateUser } from '../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EditUsernameModal from '../modals/EditUsernameModal';
+import { Ionicons } from '@expo/vector-icons';
 
-export default function MyAccountScreen({ navigation }) {
+export default function MyAccountScreen({ navigation, route }) {
   const [isEditUserModalVisible, setIsEditUserModalVisible] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { user, setIsLogged, setUser } = useUserContext();
   const { trips, dispatch } = useTripsContext();
+
+  const { avatarImage } = route.params || {};
 
   const toggleModal = () => {
     setIsEditUserModalVisible(!isEditUserModalVisible);
@@ -91,45 +95,63 @@ export default function MyAccountScreen({ navigation }) {
     navigation.navigate('Auth');
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <>
-      <View className="mt-28">
+      <View className="mt-24">
         <View className="items-center">
-          <Image
-            source={require('./../../assets/images/beach.png')}
-            className="w-[100px] h-[100px] rounded-xl"
-          />
-          <TouchableOpacity className="bg-lightGray p-2 rounded-full mt-[-25px] ml-[100px]">
+          {avatarImage && (
+            <Image
+              source={avatarImage}
+              className="w-[100px] h-[100px] rounded-xl"
+            />
+          )}
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Avatar', { screen: 'AvatarScreen' });
+            }}
+            className="bg-lightGray p-2 rounded-full mt-[-25px] ml-[100px]"
+          >
             <MaterialIcons name="edit" size={24} color="black" />
           </TouchableOpacity>
-          {/* Display the email dynamically. Replace 'example@gmail.com' with the fetched email. */}
           <Text className="mt-2 text-[19px]">{user.email}</Text>
         </View>
         <View />
 
-        <View className="mt-5 ml-8">
-          <Text className="text-3xl font-semibold">My Account</Text>
+        <View className="mt-5">
+          <Text className="text-3xl ml-7 mb-7 text-[#00b0a3] font-bold items-start">
+            My Account
+          </Text>
         </View>
 
         <View className="items-center">
           <View className="mt-4 w-[380px]">
-            <Text className="text-left text-[19px]">{user.username}</Text>
+            <Text className="text-left text-[19px]">Username</Text>
             <TouchableOpacity
               onPress={toggleModal}
               className="bg-lightGray rounded-md"
             >
-              {/* Display the username dynamically. Replace 'dci' with the fetched username. */}
-              <Text className="p-3 text-[#999] text-[19px]">dci</Text>
+              <Text className="p-3 text-[19px]">{user.username}</Text>
             </TouchableOpacity>
 
             <View className="mt-2">
-              <Text className="text-left text-[19px]">password</Text>
-              <TouchableOpacity className=" bg-lightGray rounded-md">
-                {/* Display the password dynamically. Replace '1234!' with the fetched password. */}
-                <Text className="w-[300px] p-3 text-[#999] text-[19px]">
-                  1234!
+              <Text className="text-left text-[19px]">Password</Text>
+              <View className="flex flex-row justify-between items-center bg-lightGray rounded-md p-3">
+                <Text className="text-lg">
+                  {showPassword ? user.password : '***'}
                 </Text>
-              </TouchableOpacity>
+                <TouchableOpacity onPress={togglePasswordVisibility}>
+                  <Ionicons
+                    name={showPassword ? 'eye' : 'eye-off'}
+                    size={24}
+                    color="black"
+                    className="mr-2"
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
             <View className="mt-16">
               <TouchableOpacity
