@@ -57,19 +57,19 @@ export default function InitiateTripScreen() {
 
   const handleSavePress = async () => {
     await createTrip();
-    navigation.navigate('Main', {
-      screen: 'PinnedTripStack',
-      params: {
-        screen: 'TrackFirstExpenseScreen',
-      },
-    });
+    navigation.navigate('TrackFirstExpense');
   };
 
   const handleGoBack = () => {
     trips.length > 0
-      ? navigation.navigate('MyTrips', { screen: 'MyTripsScreen' })
-      : navigation.navigate('UnlockFirstTrip', {
-          screen: 'UnlockFirstTripScreen',
+      ? navigation.navigate('Main', {
+          screen: 'MyTripsStack',
+          params: {
+            screen: 'MyTrips',
+          },
+        })
+      : navigation.navigate('Shared', {
+          screen: 'UnlockFirstTrip',
         });
   };
 

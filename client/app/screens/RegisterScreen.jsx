@@ -31,8 +31,8 @@ export default function RegisterScreen({ navigation, route }) {
   return (
     <View className="flex-1 items-center">
       <Image
-        source={require('./../../assets/images/trip-vault-logo.png')}
-        className="w-[120px] h-[120px] mt-24"
+        source={require('./../../assets/images/TripVault-LogoBig.png')}
+        className="w-[180px] h-[180px] mt-24"
       />
       <Text className="mt-12 text-3xl font-semibold text-[#00B0A3]">Register</Text>
       <Text className="text-[19px]">Create your account</Text>

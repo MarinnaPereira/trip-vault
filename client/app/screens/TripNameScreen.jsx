@@ -27,7 +27,7 @@ export default function TripNameScreen({ navigation }) {
 
   const { getCurrencySymbol } = useCurrencyContext();
 
-  const { selectedTrip } = user;
+  // const { selectedTrip } = user;
 
   // const {
   //   calculateTotalExpenses,
@@ -65,7 +65,7 @@ export default function TripNameScreen({ navigation }) {
   };
 
   const handleAddPress = () => {
-    navigation.navigate('Category', { screen: 'CategoryScreen' });
+    navigation.navigate('Shared', { screen: 'Category' });
   };
 
   return (
