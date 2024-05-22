@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 
 export default function TrackFirstExpenseScreen({ navigation }) {
   const handleTackPress = () => {
-    navigation.navigate('Category', { screen: 'CategoryScreen' });
+    navigation.navigate('Category');
   };
 
   return (

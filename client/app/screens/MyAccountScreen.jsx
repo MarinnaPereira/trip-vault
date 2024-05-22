@@ -67,7 +67,7 @@ export default function MyAccountScreen({ navigation, route }) {
   //   setIsLogged(false);
   //   await AsyncStorage.removeItem('token');
 
-  //   navigation.navigate('Auth');
+  //   navigation.navigate('Auth', { screen: 'Welcome' });
   // };
 
   // const togglePasswordVisibility = () => {

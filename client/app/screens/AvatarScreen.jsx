@@ -8,17 +8,28 @@ export default function Avatar({ navigation }) {
   const handleAvatarPress = avatarName => {
     if (user) {
       const selectedAvatar = avatars.find(avatar => avatar.name === avatarName);
-      navigation.navigate('MyAccount', { newAvatar: selectedAvatar });
+      navigation.navigate('MyAccountStack', {
+        screen: 'MyAccount',
+        params: { newAvatar: selectedAvatar },
+      });
     } else {
-      navigation.navigate('Register', { avatar: avatarName });
+      navigation.navigate('Auth', {
+        screen: 'Register',
+        params: { avatar: avatarName },
+      });
+    }
     }
   };
 
   const handleGoBack = () => {
     if (user) {
-      navigation.navigate('MyAccount', { screen: 'MyAccountScreen' });
+      navigation.navigate('MyAccountStack', {
+        screen: 'MyAccount',
+      });
     } else {
-      navigation.navigate('Welcome', { screen: 'WelcomeScreen' });
+      navigation.navigate('Auth', {
+        screen: 'Welcome',
+      });
     }
   };
 
