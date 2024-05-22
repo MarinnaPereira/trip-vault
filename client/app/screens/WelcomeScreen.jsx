@@ -1,23 +1,23 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import React from "react";
-import { useNavigation } from "@react-navigation/native";
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 export default function WelcomeScreen() {
   const navigation = useNavigation();
 
   const handleLoginPress = () => {
-    navigation.navigate("Login", { screen: "LoginScreen" });
+    navigation.navigate('Login', { screen: 'LoginScreen' });
   };
 
   const handleRegisterPress = () => {
-    navigation.navigate("Avatar", { screen: "AvatarScreen" });
+    navigation.navigate('Avatar', { screen: 'AvatarScreen' });
   };
 
   return (
     <View className="flex-1 mt-[130px] items-center">
       <Image
-        source={require("./../../assets/images/trip-vault-logo.png")}
-        className="w-[250px] h-[250px]"
+        source={require('./../../assets/images/TripVault-LogoBig.png')}
+        className="w-[350px] h-[350px]"
       />
       <TouchableOpacity
         onPress={handleLoginPress}
