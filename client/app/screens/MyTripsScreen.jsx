@@ -19,15 +19,15 @@ export default function MyTripsScreen({ navigation }) {
   const { user, setUser } = useUserContext();
   const [filteredTrips, setFilteredTrips] = useState([]);
 
+  useEffect(() => {
+    setFilteredTrips(trips);
+  }, []);
+
   const handleTripPress = async item => {
     setPinnedTrip(item);
     const updatedUser = { ...user, selectedTrip: item };
     setUser(updatedUser);
   };
-
-  useEffect(() => {
-    setFilteredTrips(trips);
-  }, []);
 
   useEffect(() => {
     console.log('user my trips', user);
@@ -55,6 +55,10 @@ export default function MyTripsScreen({ navigation }) {
     navigation.navigate('Shared', { screen: 'InitiateTrip' });
   };
 
+  const capitalizeFirstLetter = str => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -67,9 +71,9 @@ export default function MyTripsScreen({ navigation }) {
         ListHeaderComponent={
           <>
             <View className="mt-24 justify-start items-left">
-               <Text className="text-3xl ml-4 mb-7 text-[#00b0a3] font-bold items-start">
-              My Trips
-            </Text>
+              <Text className="text-3xl ml-4 mb-7 text-[#00b0a3] font-bold items-start">
+                My Trips
+              </Text>
             </View>
             <View className=" flex-1 items-center">
               <View>
@@ -83,7 +87,7 @@ export default function MyTripsScreen({ navigation }) {
                   >
                     <View className="p-3 bg-lightGray rounded-md ">
                       <Text className="w-[360px] px-1 text-lg text-black font-bold relative">
-                        {item.name}
+                        {capitalizeFirstLetter(item.name)}
                       </Text>
                       <Text className="w-[360px] pl-1 text-lg text-black">
                         {new Date(item.start).toLocaleDateString()} –{' '}
@@ -101,7 +105,7 @@ export default function MyTripsScreen({ navigation }) {
             <TouchableOpacity onPress={handleAddTrip}>
               <Image
                 source={require('../../assets/images/plus.png')}
-                 className="mr-2 w-20 h-20"
+                className="mr-2 w-20 h-20"
               />
             </TouchableOpacity>
           </View>

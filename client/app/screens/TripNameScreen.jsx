@@ -42,6 +42,10 @@ export default function TripNameScreen({ navigation }) {
 
   const tripCurrencySymbol = getCurrencySymbol(pinnedTrip.currency);
 
+  const capitalizeFirstLetter = str => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
   };
@@ -140,7 +144,7 @@ export default function TripNameScreen({ navigation }) {
 
       <View className="mt-20 ml-4 justify-start items-left">
         <Text className="text-3xl mt-4 text-[#00b0a3] font-bold items-start">
-          {pinnedTrip ? pinnedTrip.name : 'Trip name'}
+          {capitalizeFirstLetter(pinnedTrip.name)}
         </Text>
         <Text className="text-lg mb-4 font-bold">
           {new Date(pinnedTrip.start).toLocaleDateString()} –{' '}

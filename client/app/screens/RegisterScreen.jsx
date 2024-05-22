@@ -11,9 +11,7 @@ export default function RegisterScreen({ navigation, route }) {
 
   const avatar = route.params.avatar;
 
-  // !handleRegisterPress function to save data
   const handleRegisterPress = () => {
-    // avatar is hardcoded, but it should be updated in the avatar page
     const newUser = { username, email, password, avatar };
     registerUser(newUser);
     console.log('user created');
@@ -34,7 +32,9 @@ export default function RegisterScreen({ navigation, route }) {
         source={require('./../../assets/images/TripVault-LogoBig.png')}
         className="w-[180px] h-[180px] mt-24"
       />
-      <Text className="mt-12 text-3xl font-semibold text-[#00B0A3]">Register</Text>
+      <Text className="mt-12 text-3xl font-semibold text-[#00B0A3]">
+        Register
+      </Text>
       <Text className="text-[19px]">Create your account</Text>
       <TextInput
         className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
