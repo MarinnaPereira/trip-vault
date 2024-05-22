@@ -34,7 +34,7 @@ export default function RegisterScreen({ navigation, route }) {
         source={require('./../../assets/images/trip-vault-logo.png')}
         className="w-[120px] h-[120px] mt-24"
       />
-      <Text className="mt-12 text-3xl font-semibold">Register</Text>
+      <Text className="mt-12 text-3xl font-semibold text-[#00B0A3]">Register</Text>
       <Text className="text-[19px]">Create your account</Text>
       <TextInput
         className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
