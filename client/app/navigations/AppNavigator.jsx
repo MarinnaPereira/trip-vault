@@ -42,17 +42,18 @@ function PinnedTripStack() {
 
 function MyAccountStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MyAccount" component={MyAccountScreen} />
       <Stack.Screen name="Category" component={CategoryScreen} />
       <Stack.Screen name="NewExpense" component={NewExpenseScreen} />
+      <Stack.Screen name="Avatar" component={AvatarScreen} />
     </Stack.Navigator>
   );
 }
 
 function UnlockFirstTripStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="UnlockFirstTrip" component={UnlockFirstTripScreen} />
       <Stack.Screen name="InitiateTrip" component={InitiateTripScreen} />
     </Stack.Navigator>
@@ -60,7 +61,7 @@ function UnlockFirstTripStack() {
 }
 function TrackFirstExpenseStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="TrackFirstExpense"
         component={TrackFirstExpenseScreen}
@@ -73,8 +74,16 @@ function TrackFirstExpenseStack() {
 
 function MainTabNavigator() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen
+    <Tab.Navigator
+    screenOptions={{
+      tabBarActiveTintColor: '#036884',
+      tabBarStyle: {
+        height: 56, 
+        backgroundColor: 'white',
+      },
+    }}
+  >
+        <Tab.Screen
         name="MyTrips"
         component={MyTripsScreen}
         options={{
@@ -86,12 +95,12 @@ function MainTabNavigator() {
                 size={32}
                 color={color}
               />
-              <Text style={{ color: color, fontSize: 12, marginBottom: 3 }}>
+              <Text style={{ color: color, fontSize: 12, marginBottom: 4 }}>
                 My Trips
               </Text>
             </View>
           ),
-          tabBarIcon: ({ focused, color, size }) => null,
+          tabBarIcon: () => null,
         }}
       />
       <Tab.Screen
@@ -101,13 +110,13 @@ function MainTabNavigator() {
           headerShown: false,
           tabBarLabel: ({ color }) => (
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-              <AntDesign name="pushpin" size={32} color={color} />
-              <Text style={{ color: color, fontSize: 12, marginBottom: 3 }}>
+              <AntDesign name="pushpin" size={30} color={color} />
+              <Text style={{ color: color, fontSize: 12, marginBottom: 4 }}>
                 Pinned Trip
               </Text>
             </View>
           ),
-          tabBarIcon: ({ focused, color, size }) => null,
+          tabBarIcon: () => null,
         }}
       />
       <Tab.Screen
@@ -117,11 +126,11 @@ function MainTabNavigator() {
           headerShown: false,
           tabBarLabel: ({ color }) => (
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-              <AntDesign name="piechart" size={32} color={color} />
-              <Text style={{ color: color, fontSize: 12 }}>Stats</Text>
+              <AntDesign name="piechart" size={30} color={color} />
+              <Text style={{ color: color, fontSize: 12, marginBottom: 4 }}>Stats</Text>
             </View>
           ),
-          tabBarIcon: ({ focused, color, size }) => null,
+          tabBarIcon: () => null,
         }}
       />
       <Tab.Screen
@@ -131,11 +140,11 @@ function MainTabNavigator() {
           headerShown: false,
           tabBarLabel: ({ color }) => (
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-              <Ionicons name="person" size={32} color={color} />
-              <Text style={{ color: color, fontSize: 12 }}>My Account</Text>
+              <Ionicons name="person" size={30} color={color} />
+              <Text style={{ color: color, fontSize: 12, marginBottom: 4 }}>My Account</Text>
             </View>
           ),
-          tabBarIcon: ({ focused, color, size }) => null,
+          tabBarIcon: () => null,
         }}
       />
     </Tab.Navigator>
