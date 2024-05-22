@@ -10,7 +10,9 @@ export default function WelcomeScreen() {
   };
 
   const handleRegisterPress = () => {
-    navigation.navigate('Avatar', { screen: 'AvatarScreen' });
+    navigation.navigate('Shared', {
+      screen: 'Avatar',
+    });
   };
 
   return (

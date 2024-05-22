@@ -48,12 +48,7 @@ export default function MyTripsScreen({ navigation }) {
   };
 
   const handleAddTrip = () => {
-    navigation.navigate('Main', {
-      screen: 'PinnedTripStack',
-      params: {
-        screen: 'InitiateTripScreen',
-      },
-    });
+    navigation.navigate('Shared', { screen: 'InitiateTrip' });
   };
 
   return (

@@ -68,12 +68,12 @@ export default function LoginScreen({ navigation }) {
 
   const handleNavigation = async () => {
     if (!allTrips) {
-      navigation.navigate('Unlock', {
-        screen: 'UnlockFirstTripScreen',
+      navigation.navigate('Shared', {
+        screen: 'UnlockFirstTrip',
       });
     } else if (pinnedTrip.expenses.length === 0) {
-      navigation.navigate('Track', {
-        screen: 'TrackFirstExpenseScreen',
+      navigation.navigate('Shared', {
+        screen: 'TrackFirstExpense',
       });
     } else {
       navigation.navigate('Main', {
@@ -94,7 +94,9 @@ export default function LoginScreen({ navigation }) {
   };
 
   const handleRegisterPress = () => {
-    navigation.navigate('Avatar', { screen: 'AvatarScreen' });
+    navigation.navigate('Shared', {
+      screen: 'Avatar',
+    });
   };
 
   const togglePasswordVisibility = () => {

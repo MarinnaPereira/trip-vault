@@ -24,15 +24,40 @@ import CategoryScreen from '../screens/CategoryScreen';
 import UnlockFirstTripScreen from '../screens/UnlockFirstTripScreen';
 import InitiateTripScreen from '../screens/InitiateTripScreen';
 import TrackFirstExpenseScreen from '../screens/TrackFirstExpenseScreen';
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
 function AuthStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Welcome" component={WelcomeScreen} />
-      <Stack.Screen name="Avatar" component={AvatarScreen} />
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function SharedStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="UnlockFirstTrip" component={UnlockFirstTripScreen} />
+      <Stack.Screen name="InitiateTrip" component={InitiateTripScreen} />
+      <Stack.Screen name="Avatar" component={AvatarScreen} />
+      <Stack.Screen
+        name="TrackFirstExpense"
+        component={TrackFirstExpenseScreen}
+      />
+      <Stack.Screen name="Category" component={CategoryScreen} />
+      <Stack.Screen name="NewExpense" component={NewExpenseScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function MyTripsStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="MyTrips" component={MyTripsScreen} />
     </Stack.Navigator>
   );
 }
@@ -41,8 +66,14 @@ function PinnedTripStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="PinnedTrip" component={TripNameScreen} />
-      <Stack.Screen name="Category" component={CategoryScreen} />
-      <Stack.Screen name="NewExpense" component={NewExpenseScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function StatsStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Stats" component={DonutPieChart} />
     </Stack.Navigator>
   );
 }
@@ -51,30 +82,6 @@ function MyAccountStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MyAccount" component={MyAccountScreen} />
-      <Stack.Screen name="Category" component={CategoryScreen} />
-      <Stack.Screen name="NewExpense" component={NewExpenseScreen} />
-      <Stack.Screen name="Avatar" component={AvatarScreen} />
-    </Stack.Navigator>
-  );
-}
-
-function UnlockFirstTripStack() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="UnlockFirstTrip" component={UnlockFirstTripScreen} />
-      <Stack.Screen name="InitiateTrip" component={InitiateTripScreen} />
-    </Stack.Navigator>
-  );
-}
-function TrackFirstExpenseStack() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen
-        name="TrackFirstExpense"
-        component={TrackFirstExpenseScreen}
-      />
-      <Stack.Screen name="Category" component={CategoryScreen} />
-      <Stack.Screen name="NewExpense" component={NewExpenseScreen} />
     </Stack.Navigator>
   );
 }
@@ -114,8 +121,8 @@ function MainTabNavigator() {
       }}
     >
       <Tab.Screen
-        name="MyTrips"
-        component={MyTripsScreen}
+        name="MyTripsStack"
+        component={MyTripsStack}
         options={{
           headerShown: false,
           tabBarLabel: ({ color }) => (
@@ -150,8 +157,8 @@ function MainTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Stats"
-        component={DonutPieChart}
+        name="StatsStack"
+        component={StatsStack}
         options={{
           headerShown: false,
           tabBarLabel: ({ color }) => (
@@ -193,11 +200,10 @@ export default function AppNavigator() {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
       >
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Auth" component={AuthStack} />
-          <Stack.Screen name="Unlock" component={UnlockFirstTripStack} />
-          <Stack.Screen name="Track" component={TrackFirstExpenseStack} />
-          <Stack.Screen name="Main" component={MainTabNavigator} />
-        </Stack.Navigator>
+        <Stack.Screen name="Auth" component={AuthStack} />
+        <Stack.Screen name="Shared" component={SharedStack} />
+        <Stack.Screen name="Main" component={MainTabNavigator} />
+      </Stack.Navigator>
       </KeyboardAvoidingView>
     </NavigationContainer>
   );
