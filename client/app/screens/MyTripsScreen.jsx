@@ -9,13 +9,17 @@ import SearchBar from './SearchBar';
 export default function MyTripsScreen({ navigation }) {
   const { trips, setPinnedTrip } = useTripsContext();
   const { user, setUser } = useUserContext();
-  const [filteredTrips, setFilteredTrips] = useState(trips);
+  const [filteredTrips, setFilteredTrips] = useState([]);
 
   const handleTripPress = async item => {
     setPinnedTrip(item);
     const updatedUser = { ...user, selectedTrip: item };
     setUser(updatedUser);
   };
+
+  useEffect(() => {
+    setFilteredTrips(trips);
+  }, []);
 
   useEffect(() => {
     console.log('user my trips', user);

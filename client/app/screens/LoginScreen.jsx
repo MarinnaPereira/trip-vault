@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
 import { loginUser, getAllTrips } from '../api/api';
+import { all } from 'axios';
 
 export default function LoginScreen({ navigation }) {
   const [credential, setCredential] = useState('');
@@ -12,7 +13,7 @@ export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
 
   const { user, setUser, setIsLogged } = useUserContext();
-  const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
+  const { trips, setTrips, pinnedTrip, setPinnedTrip } = useTripsContext();
 
   useEffect(() => {
     (async () => {
@@ -46,10 +47,11 @@ export default function LoginScreen({ navigation }) {
       allTrips = await getAllTrips();
       console.log(allTrips);
       if (allTrips) {
-        dispatch({
-          type: 'ADD_ALL_TRIPS',
-          payload: allTrips,
-        });
+        setTrips(allTrips);
+        // dispatch({
+        //   type: 'ADD_ALL_TRIPS',
+        //   payload: allTrips,
+        // });
       }
       handleNavigation();
     } catch (error) {
@@ -75,10 +77,6 @@ export default function LoginScreen({ navigation }) {
       });
     }
   };
-
-  // useEffect(() => {
-  //   console.log('Updated trips', trips); // Logging updated trips
-  // }, [trips]); // Logging trips when it changes
 
   const handleLoginPress = async () => {
     await fetchUser();
