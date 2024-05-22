@@ -6,7 +6,7 @@ export default function WelcomeScreen() {
   const navigation = useNavigation();
 
   const handleLoginPress = () => {
-    navigation.navigate('Login', { screen: 'LoginScreen' });
+    navigation.navigate('Login');
   };
 
   const handleRegisterPress = () => {
