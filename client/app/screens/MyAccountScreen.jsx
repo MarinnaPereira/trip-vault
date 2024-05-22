@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useUserContext } from '../contexts/userContext';
 import { deleteUser, updateUser } from '../api/api';
@@ -51,7 +51,7 @@ export default function MyAccountScreen({ navigation, route }) {
   const handleDeleteAccountPress = async () => {
     try {
       await deleteUser(user);
-      // handleLogoutPress()
+      handleLogoutPress();
     } catch (error) {
       console.error('Error deleting user:', error);
     }
@@ -75,6 +75,7 @@ export default function MyAccountScreen({ navigation, route }) {
     console.log('Token deleted');
     navigation.replace('Auth', { screen: 'Welcome' });
   };
+
   // const togglePasswordVisibility = () => {
   //   setShowPassword(!showPassword);
   // };
@@ -129,20 +130,19 @@ export default function MyAccountScreen({ navigation, route }) {
                   ********
                   {/* {showPassword ? user.password : ''} */}
                 </Text>
-                {/* <TouchableOpacity onPress={togglePasswordVisibility}> */}
-                {/* <Ionicons
+                {/* <TouchableOpacity onPress={togglePasswordVisibility}>
+                <Ionicons
                     name={showPassword ? 'eye' : 'eye-off'}
                     size={24}
                     color="black"
                     className="mr-2"
-                  /> */}
-                {/* </TouchableOpacity> */}
+                  />
+                </TouchableOpacity> */}
               </View>
             </View>
             <View className="mt-16">
               <TouchableOpacity
-                // Function handleLogoutPress needs to be implemented
-                // onPress={handleLogoutPress}
+                onPress={handleLogoutPress}
                 className="bg-lightGray rounded-lg"
               >
                 <Text className="text-left text-[19px] p-4">Logout</Text>
