@@ -116,7 +116,7 @@ function MainTabNavigator() {
         tabBarStyle: {
           height: 56,
           backgroundColor: 'white',
-          display: keyboardVisible ? 'none' : 'flex', // Hide tab bar when keyboard is visible
+          display: keyboardVisible ? 'none' : 'flex',
         },
       }}
     >

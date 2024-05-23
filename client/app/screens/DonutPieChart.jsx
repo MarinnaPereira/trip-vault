@@ -103,7 +103,7 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
       {/* Daily Average Amount */}
       <View style={styles.containerDailyAverage}>
         <Text style={styles.dailyAverage}>
-          Daily Average : {dailyAverage} {tripCurrencySymbol}
+          Daily Average : {tripCurrencySymbol} {dailyAverage}
         </Text>
       </View>
 
@@ -154,7 +154,7 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
                 <Text style={styles.categoryName}>{item.name}</Text>
               </View>
               <Text style={styles.valueCategory}>
-                {item.value ? item.value.toFixed(2) : 0}
+                {tripCurrencySymbol} {item.value ? item.value.toFixed(2) : 0}
               </Text>
             </View>
           </View>
