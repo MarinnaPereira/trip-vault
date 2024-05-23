@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   View,
   Text,
@@ -8,8 +9,8 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
+
 import { registerUser } from '../api/api';
 
 export default function RegisterScreen({ navigation, route }) {

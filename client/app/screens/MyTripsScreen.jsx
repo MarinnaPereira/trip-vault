@@ -31,15 +31,16 @@ export default function MyTripsScreen({ navigation }) {
 
   useEffect(() => {
     console.log('user my trips', user);
-    (async () => {
-      const newSelectedTripId = user.selectedTrip._id;
-      const res = await updateUser({
-        ...user,
-        selectedTrip: newSelectedTripId,
-      });
+    user &&
+      (async () => {
+        const newSelectedTripId = user.selectedTrip._id;
+        const res = await updateUser({
+          ...user,
+          selectedTrip: newSelectedTripId,
+        });
 
-      if (typeof res !== 'string') handleNavigation();
-    })();
+        if (typeof res !== 'string') handleNavigation();
+      })();
   }, [user]);
 
   const handleNavigation = () => {
