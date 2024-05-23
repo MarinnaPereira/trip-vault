@@ -12,9 +12,9 @@ export const validateUser = [
     .isAlphanumeric()
     .withMessage('Username should only contain letters and numbers')
     .escape()
-    .custom(async value => {
+    .custom(async (value, req) => {
       const user = await User.findOne({ username: value });
-      if (user) {
+      if (user && req.method === 'POST') {
         throw new Error('Username already in use');
       }
     }),
@@ -27,9 +27,9 @@ export const validateUser = [
     .withMessage('Invalid email address')
     .normalizeEmail({ all_lowercase: true, gmail_remove_dots: false })
     .escape()
-    .custom(async value => {
+    .custom(async (value, req) => {
       const user = await User.findOne({ email: value });
-      if (user) {
+      if (user && req.method === 'POST') {
         throw new Error('Email already in use');
       }
     }),

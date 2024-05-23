@@ -34,7 +34,8 @@ export const loginUser = async userData => {
     console.log(res.data);
     return res.data;
   } catch (err) {
-    console.error(err.message);
+    const errMessage = err.response.data.error;
+    return errMessage;
   }
 };
 
@@ -56,7 +57,8 @@ export const updateUser = async updatedUser => {
     console.log(res.data);
     return res.data; // return object with the updated user info
   } catch (err) {
-    console.error(err.message);
+    const errMessage = err.response.data.error;
+    return errMessage;
   }
 };
 

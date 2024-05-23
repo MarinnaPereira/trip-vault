@@ -30,7 +30,7 @@ export const updateUser = async (req, res, next) => {
     });
     delete updatedUser.password;
     console.log('updated user', updatedUser);
-    res.json(updatedUser);
+    res.status(200).json(updatedUser);
   } catch (error) {
     next(error);
   }

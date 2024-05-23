@@ -21,17 +21,13 @@ export default function MyTripsScreen({ navigation }) {
 
   useEffect(() => {
     setFilteredTrips(trips);
-  }, [trips.length]);
+  }, [trips, trips.length]);
 
   const handleTripPress = async item => {
     setPinnedTrip(item);
     const updatedUser = { ...user, selectedTrip: item };
     setUser(updatedUser);
   };
-
-  useEffect(() => {
-    setFilteredTrips(trips);
-  }, [trips]);
 
   useEffect(() => {
     console.log('user my trips', user);
@@ -42,7 +38,7 @@ export default function MyTripsScreen({ navigation }) {
         selectedTrip: newSelectedTripId,
       });
 
-      if (res.status === 'ok') handleNavigation();
+      if (typeof res !== 'string') handleNavigation();
     })();
   }, [user]);
 
