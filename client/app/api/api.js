@@ -54,8 +54,7 @@ export const updateUser = async updatedUser => {
         },
       },
     );
-    console.log(res.data);
-    return res.data; // return object with the updated user info
+    return res; // return object with the updated user info
   } catch (err) {
     const errMessage = err.response.data.error;
     return errMessage;
@@ -76,7 +75,8 @@ export const deleteUser = async user => {
     console.log(res.data);
     return res.data; // return just a message
   } catch (err) {
-    console.error(err.message);
+    const errMessage = err.response.data.error;
+    return errMessage;
   }
 };
 
@@ -94,14 +94,14 @@ export const getAllTrips = async () => {
     console.log(res.data);
     return res.data; // return an array with all trips
   } catch (err) {
-    console.log(err.message);
+    const errMessage = err.response.data.error;
+    return errMessage;
   }
 };
 
 export const addTrip = async newTrip => {
   try {
     const token = await getToken();
-    console.log(token);
     const res = await axios.post(`${baseUrl}/trips`, newTrip, {
       headers: {
         'Content-Type': 'application/json',
@@ -109,9 +109,10 @@ export const addTrip = async newTrip => {
       },
     });
     console.log(res.data);
-    return res.data; // return object with the new trip info
+    return res;
   } catch (err) {
-    console.error(err.message);
+    const errMessage = err.response.data.error;
+    return errMessage;
   }
 };
 

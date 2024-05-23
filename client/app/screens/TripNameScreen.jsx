@@ -88,9 +88,9 @@ export default function TripNameScreen({ navigation }) {
 
   return (
     <>
-      <View className="absolute top-6 right-0 z-50 mt-10 mr-10">
+      <View className="absolute top-6 right-0 z-50 mt-10 mr-7">
         <TouchableOpacity onPress={toggleMenu}>
-          <Entypo name="dots-three-vertical" size={24} color="darkgrey" />
+          <Entypo name="dots-three-vertical" size={24} color="black" />
         </TouchableOpacity>
       </View>
       <Modal
@@ -174,7 +174,7 @@ export default function TripNameScreen({ navigation }) {
               Total Spent{' '}
             </Text>
             <Text className="ml-auto mr-4 text-xl">
-              {tripCurrencySymbol} {totalSpent}
+              {totalSpent} {tripCurrencySymbol}
             </Text>
           </View>
         </View>
@@ -183,7 +183,7 @@ export default function TripNameScreen({ navigation }) {
           <View className="bg-lightGray rounded-md">
             <Text className="w-[182px] p-3 text-lg text-[#999]">Balance</Text>
             <Text className="ml-auto mr-4 text-xl">
-              {tripCurrencySymbol} {balance}
+              {balance} {tripCurrencySymbol}
             </Text>
           </View>
 
@@ -192,7 +192,7 @@ export default function TripNameScreen({ navigation }) {
               Daily Average
             </Text>
             <Text className="ml-auto mr-4 text-xl">
-              {tripCurrencySymbol} {dailyAverage}
+              {dailyAverage} {tripCurrencySymbol}
             </Text>
           </View>
         </View>

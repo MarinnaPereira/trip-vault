@@ -25,13 +25,13 @@ export default function WelcomeScreen() {
         onPress={handleLoginPress}
         className="bg-orange w-[300px] rounded-lg mt-36"
       >
-        <Text className="text-white text-center p-4">Login</Text>
+        <Text className="text-white text-center p-4 text-[17px]">Login</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={handleRegisterPress}
         className="bg-green w-[300px] rounded-lg m-6"
       >
-        <Text className="text-white text-center p-4">Register</Text>
+        <Text className="text-white text-center p-4 text-[17px]">Register</Text>
       </TouchableOpacity>
     </View>
   );

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
 import { loginUser, getAllTrips } from '../api/api';
@@ -19,9 +20,10 @@ export default function LoginScreen({ navigation }) {
   const [credential, setCredential] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
 
-  const { user, setUser, setIsLogged } = useUserContext();
-  const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
+  const { setUser, setIsLogged } = useUserContext();
+  const { dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
 
   useEffect(() => {
     (async () => {
@@ -30,22 +32,21 @@ export default function LoginScreen({ navigation }) {
   }, [pinnedTrip]);
 
   const fetchUser = async () => {
-    try {
-      const userData = {
-        credential,
-        password,
-      };
-      const data = await loginUser(userData);
-      console.log('data', data);
-      await AsyncStorage.setItem('token', data.token);
-      setUser(data.user);
-      console.log('user', user);
+    setError('');
+    const userData = {
+      credential,
+      password,
+    };
+    const res = await loginUser(userData);
+    if (res.user && res.token) {
+      await AsyncStorage.setItem('token', res.token);
+      setUser(res.user);
       setIsLogged(true);
-      data.user.selectedTrip
-        ? setPinnedTrip(data.user.selectedTrip)
+      res.user.selectedTrip
+        ? setPinnedTrip(res.user.selectedTrip)
         : handleNavigation();
-    } catch (err) {
-      console.error(err);
+    } else {
+      setError(res);
     }
   };
 
@@ -136,7 +137,16 @@ export default function LoginScreen({ navigation }) {
               onPress={togglePasswordVisibility}
             />
           </View>
-          <Text className="mt-36 text-[19px]">Don't have an account?</Text>
+          {error && (
+            <View className="text-red-600 mt-2 mx-6">
+              <Text className="text-red-600 text-center">{error}</Text>
+            </View>
+          )}
+          <Text
+            className={`${!error ? 'mt-36 text-[19px]' : 'mt-[117px] text-[19px] px-6'}`}
+          >
+            Don't have an account?
+          </Text>
           <TouchableOpacity onPress={handleRegisterPress}>
             <Text className="mt-2 text-orange text-[19px]">Register</Text>
           </TouchableOpacity>

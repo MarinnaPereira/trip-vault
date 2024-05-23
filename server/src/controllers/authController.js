@@ -25,6 +25,6 @@ export const loginUser = async (req, res, next) => {
     });
     res.json({ user, token });
   } catch (error) {
-    next({ status: 500, message: error.message });
+    next(error);
   }
 };

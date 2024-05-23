@@ -44,7 +44,7 @@ export const addTrip = async (req, res, next) => {
     await user.save();
     console.log('User updated with new trip');
 
-    res.json(savedTrip);
+    res.status(201).json(savedTrip);
   } catch (error) {
     next(error);
   }

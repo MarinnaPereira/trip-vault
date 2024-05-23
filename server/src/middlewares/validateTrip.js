@@ -1,12 +1,6 @@
 import { body, validationResult } from 'express-validator';
 
 export const validateTrip = [
-  // body('userId')
-  //   .notEmpty()
-  //   .withMessage('User ID is required')
-  //   .isMongoId()
-  //   .withMessage('User ID must be a valid MongoDB ObjectId'),
-
   body('name')
     .trim()
     .notEmpty()
@@ -16,6 +10,16 @@ export const validateTrip = [
     .matches(/^[a-zA-Z0-9\s]+$/)
     .withMessage('Trip name should only contain letters, numbers, and spaces')
     .escape(),
+
+  body('currency')
+    .notEmpty()
+    .withMessage('Currency is required')
+    .isString()
+    .withMessage('Currency must be a string')
+    .isLength({ min: 3, max: 3 })
+    .withMessage('Currency must be 3 characters long'),
+
+  body('budget').isNumeric().withMessage('Budget must be a number').optional(),
 
   body('start')
     .notEmpty()
@@ -28,16 +32,6 @@ export const validateTrip = [
     .withMessage('End date is required')
     .isISO8601()
     .withMessage('End date must be a valid ISO 8601 date format'),
-
-  body('currency')
-    .notEmpty()
-    .withMessage('Currency is required')
-    .isString()
-    .withMessage('Currency must be a string')
-    .isLength({ min: 3, max: 3 })
-    .withMessage('Currency must be 3 characters long'),
-
-  body('budget').optional().isNumeric().withMessage('Budget must be a number'),
 
   (req, res, next) => {
     const errors = validationResult(req);

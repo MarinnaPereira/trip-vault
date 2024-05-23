@@ -18,8 +18,8 @@ export default function UnlockFirstTripScreen({ navigation }) {
       </TouchableOpacity>
 
       <Image
-        source={require('./../../assets/images/LogoCroped.png')}
-        className="w-[530px] h-[365px] absolute bottom-0"
+        source={require('./../../assets/images/Logo-background.png')}
+        className="w-[530px] h-[530px] absolute bottom-0 -left-12 opacity-50"
       />
     </View>
   );

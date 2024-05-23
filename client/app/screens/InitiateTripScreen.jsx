@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   View,
   Text,
@@ -7,57 +7,62 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { DateTime } from 'luxon';
+
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
-import { addTrip } from '../api/api';
 import DropdownCurrency from './DropdownCurrency';
+import { addTrip } from '../api/api';
 
-export default function InitiateTripScreen() {
-  const navigation = useNavigation();
+export default function InitiateTripScreen({ navigation }) {
   const [tripName, setTripName] = useState('');
   const [budget, setBudget] = useState('');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [error, setError] = useState('');
   const [isStartDatePickerVisible, setStartDatePickerVisibility] =
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
+
   const { user, setUser } = useUserContext();
-  const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
-  const { baseCurrency, setBaseCurrency, availableCurrencies } =
-    useCurrencyContext();
+  const { trips, dispatch, setPinnedTrip } = useTripsContext();
+  const { baseCurrency, setBaseCurrency } = useCurrencyContext();
 
   const tripData = {
     name: tripName,
-    start: startDate,
-    end: endDate,
     currency: baseCurrency,
     budget: parseFloat(budget) || 0,
+    start: startDate,
+    end: endDate,
   };
 
-  console.log(tripData);
   let newTrip;
   const createTrip = async () => {
-    try {
-      newTrip = await addTrip(tripData);
+    const res = await addTrip(tripData);
+    if (res.status === 201) {
+      newTrip = res.data;
       dispatch({
         type: 'ADD_TRIP',
         payload: newTrip,
       });
       setUser({ ...user, selectedTrip: newTrip });
       setPinnedTrip(newTrip);
-    } catch (error) {
-      console.error('Error creating trip:', error);
+      navigation.navigate('TrackFirstExpense');
+    } else {
+      setError(res);
     }
   };
 
   const handleSavePress = async () => {
+    setError('');
+    if (!Number(budget)) {
+      setError('Budget must be a number');
+      return;
+    }
     await createTrip();
-    navigation.navigate('TrackFirstExpense');
   };
 
   const handleGoBack = () => {
@@ -104,14 +109,6 @@ export default function InitiateTripScreen() {
     setBaseCurrency(value);
   };
 
-  useEffect(() => {
-    console.log('Updated trips', trips);
-  }, [trips]);
-
-  useEffect(() => {
-    console.log('User', user);
-  }, [user]);
-
   const tripLength =
     endDate && startDate
       ? DateTime.fromJSDate(endDate)
@@ -143,13 +140,13 @@ export default function InitiateTripScreen() {
             className="w-[380px] text-lg p-3 bg-lightGray rounded-md"
           />
         </View>
-        <View className="mt-4">
+        <View className="mt-3">
           <DropdownCurrency
             selectedCurrency={baseCurrency}
             onChange={handleCurrencyChange}
           />
         </View>
-        <View className="mt-8 bg-lightGray rounded-md">
+        <View className="mt-7 bg-lightGray rounded-md">
           <TextInput
             onChangeText={text => setBudget(text)}
             placeholder="Enter budget (optional)"
@@ -159,7 +156,7 @@ export default function InitiateTripScreen() {
             className="w-[380px] text-lg p-3 bg-lightGray rounded-md"
           />
         </View>
-        <View className="mt-16">
+        <View className="mt-14">
           <TouchableOpacity
             onPress={() => setStartDatePickerVisibility(true)}
             className="bg-lightGray rounded-md"
@@ -207,14 +204,20 @@ export default function InitiateTripScreen() {
             size={20}
             color="#00B0A3"
           />
-          <Text className="ml-2 text-lg text-green">
-            The trip length is {tripLength} days
+          <Text className="ml-2 text-lg text-green font-medium">
+            The trip length is {tripLength} {tripLength > 1 ? 'days' : 'day'}
           </Text>
         </View>
+        {error && (
+          <View className="text-red-600 mt-2 mx-6">
+            <Text className="text-red-600 text-center">{error}</Text>
+          </View>
+        )}
+
         <View className="mt-8">
           <TouchableOpacity
             onPress={handleSavePress}
-            className="bg-green text-lg w-[180px] rounded-lg mt-4"
+            className={`${!error ? 'bg-green text-lg w-[180px] rounded-lg mt-4' : 'bg-green text-lg w-[180px] rounded-lg'}`}
           >
             <Text className="text-white text-lg text-center p-4">Save</Text>
           </TouchableOpacity>

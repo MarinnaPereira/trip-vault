@@ -48,9 +48,8 @@ const ExpenseList = ({ expenses, tripCurrencySymbol }) => {
               </Text>
               <Text className="text-[19px] font-semibold mr-3">
                 {item.convertedAmount
-                  ? `${tripCurrencySymbol}  ${item.convertedAmount}`
-                  : getCurrencySymbol(item.currency) +
-                    Number(item.value || 0).toFixed(2)}
+                  ? `${item.convertedAmount} ${tripCurrencySymbol}`
+                  : `${Number(item.value || 0).toFixed(2)} ${getCurrencySymbol(item.currency)}`}
               </Text>
             </View>
             <View className="flex flex-row justify-between">
@@ -63,8 +62,7 @@ const ExpenseList = ({ expenses, tripCurrencySymbol }) => {
               )}
               <Text className="text-[15px] mr-3">
                 {item.convertedAmount
-                  ? getCurrencySymbol(item.currency) +
-                    Number(item.value || 0).toFixed(2)
+                  ? `${Number(item.value || 0).toFixed(2)} ${getCurrencySymbol(item.currency)}`
                   : ''}
               </Text>
             </View>
@@ -97,7 +95,7 @@ const ExpenseList = ({ expenses, tripCurrencySymbol }) => {
     <View className="flex-row justify-between px-3">
       <Text className="text-left text-lg">{formatDate(title)}</Text>
       <Text className="text-right text-lg">
-        {tripCurrencySymbol + totalAmountOfSection(data)}
+        {totalAmountOfSection(data) + ' ' + tripCurrencySymbol}
       </Text>
     </View>
   );

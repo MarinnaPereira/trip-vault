@@ -15,31 +15,36 @@ import { updateUser } from '../api/api';
 import SearchBar from './SearchBar';
 
 export default function MyTripsScreen({ navigation }) {
+  const [filteredTrips, setFilteredTrips] = useState([]);
+  const [error, setError] = useState('');
   const { trips, setPinnedTrip } = useTripsContext();
   const { user, setUser } = useUserContext();
-  const [filteredTrips, setFilteredTrips] = useState([]);
 
   useEffect(() => {
     setFilteredTrips(trips);
   }, [trips, trips.length]);
 
-  const handleTripPress = async item => {
+  const handleTripPress = item => {
     setPinnedTrip(item);
     const updatedUser = { ...user, selectedTrip: item };
     setUser(updatedUser);
   };
 
   useEffect(() => {
-    console.log('user my trips', user);
     user &&
       (async () => {
+        setError('');
         const newSelectedTripId = user.selectedTrip._id;
         const res = await updateUser({
           ...user,
           selectedTrip: newSelectedTripId,
         });
 
-        if (typeof res !== 'string') handleNavigation();
+        if (res.status === 200) {
+          handleNavigation();
+        } else {
+          setError('Error selecting trip');
+        }
       })();
   }, [user]);
 
@@ -54,6 +59,10 @@ export default function MyTripsScreen({ navigation }) {
 
   const handleAddTrip = () => {
     navigation.navigate('Shared', { screen: 'InitiateTrip' });
+  };
+
+  const capitalizeFirstLetter = str => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
 
   return (
@@ -71,6 +80,11 @@ export default function MyTripsScreen({ navigation }) {
               <Text className="text-3xl ml-4 mb-7 text-[#00b0a3] font-bold items-start">
                 My Trips
               </Text>
+              {error && (
+                <View className="text-red-600 mt-2 mx-6">
+                  <Text className="text-red-600 text-center">{error}</Text>
+                </View>
+              )}
             </View>
             <View className=" flex-1 items-center">
               <View>
@@ -84,7 +98,7 @@ export default function MyTripsScreen({ navigation }) {
                   >
                     <View className="p-3 bg-lightGray rounded-md ">
                       <Text className="w-[360px] px-1 text-lg text-black font-bold relative">
-                        {item.name}
+                        {capitalizeFirstLetter(item.name)}
                       </Text>
                       <Text className="w-[360px] pl-1 text-lg text-black">
                         {new Date(item.start).toLocaleDateString()} –{' '}
