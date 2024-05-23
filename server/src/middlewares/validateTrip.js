@@ -46,6 +46,6 @@ export const validateTrip = [
       console.log('trip validated');
       return next();
     }
-    next({ status: 400, message: errors.array() });
+    next({ status: 400, message: errors.array()[0].msg });
   },
 ];

@@ -86,11 +86,20 @@ export default function RegisterScreen({ navigation, route }) {
               onPress={togglePasswordVisibility}
             />
           </View>
-          <Text className="mt-20 text-[19px]">Already have an account?</Text>
+          {error && (
+            <View className="text-red-600 mt-2 mx-6">
+              <Text className="text-red-600 text-center">{error}</Text>
+            </View>
+          )}
+
+          <Text
+            className={`${!error ? 'mt-20 text-[19px]' : 'mt-[42px] text-[19px] px-6'}`}
+          >
+            Already have an account?
+          </Text>
           <TouchableOpacity onPress={handleLoginPress}>
             <Text className="mt-2 text-orange text-[19px]">Login</Text>
           </TouchableOpacity>
-
           <TouchableOpacity
             onPress={handleRegisterPress}
             className="bg-green w-[300px] rounded-lg mt-4"

@@ -17,14 +17,11 @@ export const registerUser = async newUser => {
     const res = await axios.post(`${baseUrl}/auth/register`, newUser, {
       headers: { 'Content-Type': 'application/json' },
     });
-    console.log('res', res.data);
-
     if (res.status === 200) {
       return res.data;
     }
   } catch (err) {
     const errMessage = err.response.data.error;
-    console.log('err', err.response.data.error);
     return errMessage;
   }
 };

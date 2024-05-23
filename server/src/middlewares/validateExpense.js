@@ -71,6 +71,6 @@ export const validateExpense = [
       console.log('expense validated');
       return next();
     }
-    next({ status: 400, message: errors.array() });
+    next({ status: 400, message: errors.array()[0].msg });
   },
 ];

@@ -5,16 +5,6 @@ export const addUser = async (req, res, next) => {
   const { username, email, password, avatar } = req.body;
   const newUser = { username, email, password, avatar };
   try {
-    const usernameExists = await User.findOne({ username });
-    if (usernameExists) {
-      next({ status: 400, message: 'Username already in use' });
-      return;
-    }
-    const emailExists = await User.findOne({ email });
-    if (emailExists) {
-      next({ status: 400, message: 'Email already in use' });
-      return;
-    }
     const registeredUser = await User.register(newUser);
     res.json(registeredUser);
   } catch (error) {

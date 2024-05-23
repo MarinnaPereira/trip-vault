@@ -1,5 +1,7 @@
 import { body, validationResult } from 'express-validator';
 
+import User from '../models/User.js';
+
 export const validateUser = [
   body('username')
     .trim()
@@ -9,7 +11,13 @@ export const validateUser = [
     .withMessage('Username must be at least 2 characters long')
     .isAlphanumeric()
     .withMessage('Username should only contain letters and numbers')
-    .escape(),
+    .escape()
+    .custom(async value => {
+      const user = await User.findOne({ username: value });
+      if (user) {
+        throw new Error('Username already in use');
+      }
+    }),
 
   body('email')
     .trim()
@@ -18,7 +26,13 @@ export const validateUser = [
     .isEmail()
     .withMessage('Invalid email address')
     .normalizeEmail({ all_lowercase: true, gmail_remove_dots: false })
-    .escape(),
+    .escape()
+    .custom(async value => {
+      const user = await User.findOne({ email: value });
+      if (user) {
+        throw new Error('Email already in use');
+      }
+    }),
 
   body('password')
     .trim()
@@ -53,6 +67,6 @@ export const validateUser = [
       console.log('user validated');
       return next();
     }
-    next({ status: 400, message: errors.array() });
+    next({ status: 400, message: errors.array()[0].msg });
   },
 ];
