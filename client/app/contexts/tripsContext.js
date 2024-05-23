@@ -3,64 +3,66 @@ import { DateTime } from 'luxon';
 
 export const TripsContext = createContext();
 
-const tripsReducer = (state, action) => {
-  switch (action.type) {
-    case 'ADD_ALL_TRIPS':
-      if (!Array.isArray(action.payload)) {
-        console.log('Payload is not an array');
-        return state;
-      }
-      return [...action.payload];
-    case 'ADD_TRIP':
-      return [...state, action.payload];
-    case 'UPDATE_TRIP':
-      return state.map(trip =>
-        trip._id === action.payload._id ? action.payload : trip,
-      );
-    case 'DELETE_TRIP':
-      return state.filter(trip => trip._id !== action.payload);
-    case 'DELETE_ALL_TRIPS':
-      return [];
-    case 'ADD_EXPENSE':
-      console.log('action', action);
+// const tripsReducer = (state, action) => {
+//   switch (action.type) {
+//     case 'ADD_ALL_TRIPS':
+//       if (!Array.isArray(action.payload)) {
+//         console.log('Payload is not an array');
+//         return state;
+//       }
+//       return [...action.payload];
+//     case 'ADD_TRIP':
+//       const newTripsArray = [...state, action.payload];
+//       return [...newTripsArray];
+//     case 'UPDATE_TRIP':
+//       return state.map(trip =>
+//         trip._id === action.payload._id ? action.payload : trip,
+//       );
+//     case 'DELETE_TRIP':
+//       return state.filter(trip => trip._id !== action.payload);
+//     case 'DELETE_ALL_TRIPS':
+//       return [];
+//     case 'ADD_EXPENSE':
+//       console.log('action', action);
 
-      return state.map(trip => {
-        console.log('tripId', trip._id);
-        console.log(trip._id === action.trip._id);
-        return trip._id === action.trip._id
-          ? { ...trip, expenses: [...trip.expenses, action.payload] }
-          : trip;
-      });
-    case 'UPDATE_EXPENSE':
-      return state.map(trip =>
-        trip._id === action.tripId
-          ? {
-              ...trip,
-              expenses: trip.expenses.map(expense =>
-                expense._id === action.expenseId ? action.payload : expense,
-              ),
-            }
-          : trip,
-      );
-    case 'DELETE_EXPENSE':
-      return state.map(trip =>
-        trip._id === action.tripId
-          ? {
-              ...trip,
-              expenses: trip.expenses.filter(
-                expense => expense._id !== action.payload,
-              ),
-            }
-          : trip,
-      );
+//       return state.map(trip => {
+//         console.log('tripId', trip._id);
+//         console.log(trip._id === action.trip._id);
+//         return trip._id === action.trip._id
+//           ? { ...trip, expenses: [...trip.expenses, action.payload] }
+//           : trip;
+//       });
+//     case 'UPDATE_EXPENSE':
+//       return state.map(trip =>
+//         trip._id === action.tripId
+//           ? {
+//               ...trip,
+//               expenses: trip.expenses.map(expense =>
+//                 expense._id === action.expenseId ? action.payload : expense,
+//               ),
+//             }
+//           : trip,
+//       );
+//     case 'DELETE_EXPENSE':
+//       return state.map(trip =>
+//         trip._id === action.tripId
+//           ? {
+//               ...trip,
+//               expenses: trip.expenses.filter(
+//                 expense => expense._id !== action.payload,
+//               ),
+//             }
+//           : trip,
+//       );
 
-    default:
-      throw new Error('You action type does not exist!');
-  }
-};
+//     default:
+//       throw new Error('You action type does not exist!');
+//   }
+// };
 
 export const TripsProvider = ({ children }) => {
-  const [trips, dispatch] = useReducer(tripsReducer, []);
+  // const [trips, dispatch] = useReducer(tripsReducer, []);
+  const [trips, setTrips] = useState([]);
   const [pinnedTrip, setPinnedTrip] = useState(null);
 
   const calculateTripDuration = trip => {
@@ -100,7 +102,7 @@ export const TripsProvider = ({ children }) => {
     <TripsContext.Provider
       value={{
         trips,
-        dispatch,
+        setTrips,
         pinnedTrip,
         setPinnedTrip,
         calculateTripDuration,

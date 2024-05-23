@@ -1,4 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useUserContext } from '../contexts/userContext';
@@ -7,12 +8,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import EditUsernameModal from '../modals/EditUsernameModal';
 import { Ionicons } from '@expo/vector-icons';
 import avatars from '../../assets/avatars';
+import { useTripsContext } from '../contexts/tripsContext';
 
 export default function MyAccountScreen({ navigation, route }) {
   const [isEditUserModalVisible, setIsEditUserModalVisible] = useState(false);
   // const [showPassword, setShowPassword] = useState(false);
 
-  const { user, setIsLogged, setUser } = useUserContext();
+  const { user, setIsLogged, isLogged, setUser } = useUserContext();
+  const { setTrips, trips } = useTripsContext();
+
+  useEffect(() => {
+    if (!user) {
+      navigation.replace('Auth', { screen: 'Welcome' });
+    }
+  }, [user, navigation]);
+
+  if (!user) {
+    return null;
+  }
 
   const findAvatarImage = userAvatar => {
     const avatar = avatars.find(avatar => avatar.name === userAvatar);
@@ -59,30 +72,30 @@ export default function MyAccountScreen({ navigation, route }) {
 
   // *logout
 
-  useEffect(() => {
-    if (!user) {
-      navigation.replace('Auth', { screen: 'Welcome' });
-    }
-  }, [user, navigation]);
-
   const handleLogoutPress = async () => {
+    await AsyncStorage.clear().then(() => console.log('AsyncStorage cleared'));
     setUser(null);
-    dispatch({
-      type: 'DELETE_ALL_TRIPS',
-    });
+    setTrips([]);
     setIsLogged(false);
-    await AsyncStorage.removeItem('token');
-    console.log('Token deleted');
-    navigation.replace('Auth', { screen: 'Welcome' });
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'Auth' }],
+      }),
+    );
+    // dispatch({
+    //   type: 'DELETE_ALL_TRIPS',
+    // });
+    console.log('User: ', user);
+    console.log('Trips: ', trips);
+    console.log('isLogged: ', isLogged);
+    console.log('ALL CLEARED!');
   };
 
   // const togglePasswordVisibility = () => {
   //   setShowPassword(!showPassword);
   // };
 
-  if (!user) {
-    return null;
-  }
   return (
     <>
       <View className="mt-24">

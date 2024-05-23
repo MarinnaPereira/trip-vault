@@ -6,7 +6,7 @@ export default function WelcomeScreen() {
   const navigation = useNavigation();
 
   const handleLoginPress = () => {
-    navigation.navigate('Login', { screen: 'LoginScreen' });
+    navigation.navigate('Login');
   };
 
   const handleRegisterPress = () => {
@@ -16,10 +16,10 @@ export default function WelcomeScreen() {
   };
 
   return (
-    <View className="flex-1 mt-[130px] items-center">
+    <View className="flex-1 mt-[130px] items-center text-center">
       <Image
         source={require('./../../assets/images/TripVault-LogoBig.png')}
-        className="w-[350px] h-[350px] ml-5"
+        className=" w-[340px] h-[340px]"
       />
       <TouchableOpacity
         onPress={handleLoginPress}

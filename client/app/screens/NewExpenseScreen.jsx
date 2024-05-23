@@ -19,7 +19,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 export default function NewExpenseScreen({ navigation, route }) {
   const { user, setUser } = useUserContext();
-  const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
+  const { trips, setTrips, pinnedTrip, setPinnedTrip } = useTripsContext();
   const { convertCurrency } = useCurrencyContext();
 
   const { selectedTrip } = user;
@@ -85,11 +85,19 @@ export default function NewExpenseScreen({ navigation, route }) {
 
     const newExpense = await addExpense(formData);
     console.log('newExpense', newExpense);
-    dispatch({
-      type: 'ADD_EXPENSE',
-      trip: selectedTrip,
-      payload: newExpense,
+    const updatedTripsArray = [...trips];
+    updatedTripsArray.map(trip => {
+      return trip._id === pinnedTrip._id
+        ? { ...trip, expenses: [...trip.expenses, newExpense] }
+        : trip;
     });
+    setTrips(updatedTripsArray);
+
+    // dispatch({
+    //   type: 'ADD_EXPENSE',
+    //   trip: selectedTrip,
+    //   payload: newExpense,
+    // });
 
     setUser(user => {
       const newUser = { ...user };

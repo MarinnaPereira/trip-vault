@@ -20,9 +20,7 @@ export default function RegisterScreen({ navigation, route }) {
 
   const avatar = route.params.avatar;
 
-  // !handleRegisterPress function to save data
   const handleRegisterPress = () => {
-    // avatar is hardcoded, but it should be updated in the avatar page
     const newUser = { username, email, password, avatar };
     registerUser(newUser);
     console.log('user created');
@@ -83,7 +81,6 @@ export default function RegisterScreen({ navigation, route }) {
               onPress={togglePasswordVisibility}
             />
           </View>
-
           <Text className="mt-36 text-[19px]">Already have an account?</Text>
           <TouchableOpacity onPress={handleLoginPress}>
             <Text className="mt-2 text-orange text-[19px]">Login</Text>
