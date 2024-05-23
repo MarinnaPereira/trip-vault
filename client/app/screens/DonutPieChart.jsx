@@ -123,6 +123,7 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
                     fontSize="16"
                     stroke="#000"
                     strokeWidth={0.1}
+                    fontWeight="bold" // Set the font weight here
                   >
                     {`${((slice.data.value / data.reduce((acc, cur) => acc + cur.value, 0)) * 100).toFixed(1)}%`}
                   </SvgText>
@@ -134,7 +135,7 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
       </View>
 
       <View style={styles.categories}>
-        {categories.map(item => (
+        {data.map(item => (
           <View style={styles.categoryItem} key={item.id}>
             <View
               style={[styles.colorIndicator, { backgroundColor: item.color }]}
@@ -151,10 +152,7 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
                 <Text style={styles.categoryName}>{item.name}</Text>
               </View>
               <Text style={styles.valueCategory}>
-                {totalPerCategory[item.name]
-                  ? totalPerCategory[item.name].toFixed(2)
-                  : 0}{' '}
-                €
+                {item.value ? item.value.toFixed(2) : 0}
               </Text>
             </View>
           </View>
