@@ -22,7 +22,11 @@ export default function MyTripsScreen({ navigation }) {
 
   useEffect(() => {
     setFilteredTrips(trips);
-  }, [trips, trips.length]);
+  }, [trips.length]);
+
+  useEffect(() => {
+    setFilteredTrips(trips);
+  }, [trips]);
 
   const handleTripPress = item => {
     setPinnedTrip(item);

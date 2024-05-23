@@ -44,8 +44,8 @@ export default function MyAccountScreen({ navigation, route }) {
 
   const editUser = async editedUser => {
     try {
-      const updatedUser = await updateUser(editedUser);
-      setUser(updatedUser);
+      const res = await updateUser(editedUser);
+      setUser(res.data);
     } catch (error) {
       console.error('Error updating User:', error);
     }

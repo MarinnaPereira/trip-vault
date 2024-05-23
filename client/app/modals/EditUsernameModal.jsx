@@ -15,9 +15,8 @@ export default function EditUsernameModal({ modalVisible, closeModal }) {
   const editUser = async editedUser => {
     try {
       console.log(editedUser);
-      const updatedUser = await updateUser(editedUser);
-      console.log(updatedUser);
-      setUser(updatedUser);
+      const res = await updateUser(editedUser);
+      setUser(res.data);
       closeModal();
     } catch (error) {
       console.error('Error updating User:', error);
