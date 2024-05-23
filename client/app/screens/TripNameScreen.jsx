@@ -174,7 +174,7 @@ export default function TripNameScreen({ navigation }) {
               Total Spent{' '}
             </Text>
             <Text className="ml-auto mr-4 text-xl">
-              {totalSpent + tripCurrencySymbol}
+              {tripCurrencySymbol} {totalSpent}
             </Text>
           </View>
         </View>
@@ -183,7 +183,7 @@ export default function TripNameScreen({ navigation }) {
           <View className="bg-lightGray rounded-md">
             <Text className="w-[182px] p-3 text-lg text-[#999]">Balance</Text>
             <Text className="ml-auto mr-4 text-xl">
-              {balance + tripCurrencySymbol}
+              {tripCurrencySymbol} {balance}
             </Text>
           </View>
 
@@ -192,7 +192,7 @@ export default function TripNameScreen({ navigation }) {
               Daily Average
             </Text>
             <Text className="ml-auto mr-4 text-xl">
-              {dailyAverage + tripCurrencySymbol}
+              {tripCurrencySymbol} {dailyAverage}
             </Text>
           </View>
         </View>

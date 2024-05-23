@@ -16,13 +16,12 @@ const ExpenseList = ({ expenses, tripCurrencySymbol }) => {
 
   const prepareSections = expenses => {
     const grouped = expenses.reduce((acc, expense) => {
-      const date = expense.dates[0]; // Assuming dates[0] is the date to group by
+      const date = expense.dates[0];
       if (!acc[date]) acc[date] = { title: date, data: [] };
       acc[date].data.push(expense);
       return acc;
     }, {});
 
-    // Convert object to array and sort sections by date
     return Object.keys(grouped)
       .sort((a, b) => new Date(b) - new Date(a))
       .map(date => grouped[date]);
@@ -49,7 +48,7 @@ const ExpenseList = ({ expenses, tripCurrencySymbol }) => {
               </Text>
               <Text className="text-[19px] font-semibold mr-3">
                 {item.convertedAmount
-                  ? tripCurrencySymbol + item.convertedAmount
+                  ? `${tripCurrencySymbol}  ${item.convertedAmount}`
                   : getCurrencySymbol(item.currency) +
                     Number(item.value || 0).toFixed(2)}
               </Text>
