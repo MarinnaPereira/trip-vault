@@ -51,7 +51,7 @@ export default function NewExpenseScreen({ navigation, route }) {
 
   const [currencyDropdownVisible, setCurrencyDropdownVisible] = useState(false);
 
-  const tripCurrency = pinnedTrip.currency;
+  const tripCurrency = pinnedTrip ? pinnedTrip.currency : 'USD';
   const getConvertedAmount = () =>
     convertCurrency(value, selectedCurrency, tripCurrency);
 

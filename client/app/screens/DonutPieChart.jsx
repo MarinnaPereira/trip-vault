@@ -73,7 +73,9 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
   const totalSpent = calculateTotalSpent(pinnedTrip);
   const tripDuration = calculateTripDuration(pinnedTrip);
   const dailyAverage = calculateDailyAverage(totalSpent, tripDuration);
-  const tripCurrencySymbol = getCurrencySymbol(pinnedTrip.currency);
+  const tripCurrencySymbol = pinnedTrip
+    ? getCurrencySymbol(pinnedTrip.currency)
+    : '';
 
   // Here we will handle the download button
   const handleDownload = () => {

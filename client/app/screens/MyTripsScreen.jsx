@@ -30,6 +30,10 @@ export default function MyTripsScreen({ navigation }) {
   };
 
   useEffect(() => {
+    setFilteredTrips(trips);
+  }, [trips]);
+
+  useEffect(() => {
     console.log('user my trips', user);
     (async () => {
       const newSelectedTripId = user.selectedTrip._id;
@@ -53,10 +57,6 @@ export default function MyTripsScreen({ navigation }) {
 
   const handleAddTrip = () => {
     navigation.navigate('Shared', { screen: 'InitiateTrip' });
-  };
-
-  const capitalizeFirstLetter = str => {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
 
   return (
@@ -87,7 +87,7 @@ export default function MyTripsScreen({ navigation }) {
                   >
                     <View className="p-3 bg-lightGray rounded-md ">
                       <Text className="w-[360px] px-1 text-lg text-black font-bold relative">
-                        {capitalizeFirstLetter(item.name)}
+                        {item.name}
                       </Text>
                       <Text className="w-[360px] pl-1 text-lg text-black">
                         {new Date(item.start).toLocaleDateString()} –{' '}
@@ -100,17 +100,15 @@ export default function MyTripsScreen({ navigation }) {
             </View>
           </>
         }
-        ListFooterComponent={
-          <View className="flex flex-row justify-end">
-            <TouchableOpacity onPress={handleAddTrip}>
-              <Image
-                source={require('../../assets/images/plus.png')}
-                className="mr-2 w-20 h-20"
-              />
-            </TouchableOpacity>
-          </View>
-        }
       />
+      <View style={{ position: 'absolute', bottom: 0, right: 8 }}>
+        <TouchableOpacity onPress={handleAddTrip}>
+          <Image
+            source={require('../../assets/images/plus.png')}
+            style={{ width: 80, height: 80 }}
+          />
+        </TouchableOpacity>
+      </View>
     </KeyboardAvoidingView>
   );
 }

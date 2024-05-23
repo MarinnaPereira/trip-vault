@@ -15,7 +15,6 @@ export const CurrencyProvider = ({ children }) => {
     const lastFetched = storedData ? JSON.parse(storedData).lastFetched : null;
     const now = new Date();
 
-    // Retrieve exchange rates from storage if they were fetched today
     if (
       lastFetched &&
       new Date(lastFetched).toDateString() === now.toDateString()
@@ -62,14 +61,16 @@ export const CurrencyProvider = ({ children }) => {
   };
 
   const convertCurrency = (amount, fromCurrency, toCurrency) => {
-    if (fromCurrency === toCurrency) return amount;
+    if (!exchangeRates[fromCurrency] || !exchangeRates[toCurrency])
+      return amount;
     const rate = exchangeRates[toCurrency] / exchangeRates[fromCurrency];
     return (amount * rate).toFixed(2);
   };
 
   function getCurrencySymbol(code) {
+    if (!code) return '';
     const currency = availableCurrencies.find(curr => curr.code === code);
-    return currency ? currency.symbol : null;
+    return currency ? currency.symbol : '';
   }
 
   const calculateTotalExpenses = (expenses, baseCurrency) => {
