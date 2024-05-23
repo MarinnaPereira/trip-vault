@@ -286,14 +286,7 @@ export default function NewExpenseScreen({ navigation, route }) {
           </View>
           <View />
 
-          {/* !icon into placeholder */}
           <View style="relative">
-            {/* <MaterialIcons
-            name="edit"
-            size={24}
-            color="#999"
-            className="absolute"
-          /> */}
             {currencyDropdownVisible && (
               <DropdownCurrency
                 selectedCurrency={selectedCurrency}
@@ -302,11 +295,11 @@ export default function NewExpenseScreen({ navigation, route }) {
             )}
           </View>
 
-          <View>
-            <View className="mt-4 bg-lightGray rounded-md flex flex-row justify-start items-center pl-3">
+          <View className={`${!currencyDropdownVisible ? '' : 'mt-6'}`}>
+            <View className="w-[380px] mt-2 bg-lightGray rounded-md flex flex-row justify-start items-center pl-3">
               <MaterialIcons name="edit" size={24} color="black" />
               <TextInput
-                className={`w-[345px] py-3 pl-2 text-[19px] ${!currencyDropdownVisible ? '' : 'mt-8'}`}
+                className={`py-3 pl-2 text-[18px]`}
                 placeholder="Description"
                 placeholderTextColor="black"
                 onChangeText={text => setDescription(text)}
@@ -332,11 +325,11 @@ export default function NewExpenseScreen({ navigation, route }) {
                     color="black"
                   />
                   {singleDate ? (
-                    <Text className="py-3 pl-2 text-[19px]">
+                    <Text className="py-3 pl-2 text-[18px]">
                       {singleDate.toDateString()}
                     </Text>
                   ) : (
-                    <Text className="py-3 pl-2 text-[19px]">Date</Text>
+                    <Text className="py-3 pl-2 text-[18px]">Date</Text>
                   )}
                 </View>
                 <TouchableOpacity
@@ -374,12 +367,12 @@ export default function NewExpenseScreen({ navigation, route }) {
                   {startDate ? (
                     <>
                       <Text className="pl-1">Start</Text>
-                      <Text className="py-3 pl-2 text-[19px]">
+                      <Text className="py-3 pl-2 text-[18px]">
                         {startDate.toDateString()}
                       </Text>
                     </>
                   ) : (
-                    <Text className="py-3 pl-2 text-[19px]">
+                    <Text className="py-3 pl-2 text-[18px]">
                       Select start date
                     </Text>
                   )}
@@ -411,12 +404,12 @@ export default function NewExpenseScreen({ navigation, route }) {
                   {endDate ? (
                     <>
                       <Text className="pl-10">End</Text>
-                      <Text className="py-3 pl-2 text-[19px]">
+                      <Text className="py-3 pl-2 text-[18px]">
                         {endDate.toDateString()}
                       </Text>
                     </>
                   ) : (
-                    <Text className="py-3 pl-9 text-[19px]">
+                    <Text className="py-3 pl-9 text-[18px]">
                       Select end date
                     </Text>
                   )}
@@ -434,7 +427,7 @@ export default function NewExpenseScreen({ navigation, route }) {
                     size={28}
                     color="black"
                   />
-                  <Text className="py-3 pl-2 text-[19px]">
+                  <Text className="py-3 pl-2 text-[18px]">
                     {paymentMethod ? paymentMethod : 'Payment Method'}
                   </Text>
                 </View>
@@ -456,7 +449,7 @@ export default function NewExpenseScreen({ navigation, route }) {
               >
                 <View className="flex flex-row justify-start items-center pl-3">
                   <FontAwesome name="cloud-upload" size={24} color="black" />
-                  <Text className="py-3 pl-2 text-[19px]">Upload Picture</Text>
+                  <Text className="py-3 pl-2 text-[18px]">Upload Picture</Text>
                 </View>
               </TouchableOpacity>
             </View>
