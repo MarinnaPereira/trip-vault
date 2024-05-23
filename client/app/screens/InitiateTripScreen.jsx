@@ -141,6 +141,7 @@ export default function InitiateTripScreen() {
           <TextInput
             onChangeText={text => setTripName(text)}
             placeholder="Enter a name"
+            placeholderTextColor="#999"
             className="w-[380px] text-lg p-3 bg-lightGray rounded-md"
           />
         </View>
@@ -154,6 +155,7 @@ export default function InitiateTripScreen() {
           <TextInput
             onChangeText={text => setBudget(text)}
             placeholder="Enter budget (optional)"
+            placeholderTextColor="#999"
             keyboardType="numeric"
             value={budget}
             className="w-[380px] text-lg p-3 bg-lightGray rounded-md"
@@ -168,7 +170,7 @@ export default function InitiateTripScreen() {
               Select start date
             </Text>
             {startDate && (
-              <Text className="pl-3 pb-3 text-lg text-green font-extrabold">
+              <Text className="pl-3 pb-3 text-lg">
                 {startDate.toDateString()}
               </Text>
             )}
@@ -189,7 +191,7 @@ export default function InitiateTripScreen() {
               Select end date
             </Text>
             {endDate && (
-              <Text className="pl-3 pb-3 text-lg text-green font-extrabold">
+              <Text className="pl-3 pb-3 text-lg">
                 {endDate.toDateString()}
               </Text>
             )}
@@ -207,7 +209,7 @@ export default function InitiateTripScreen() {
             size={20}
             color="#00B0A3"
           />
-          <Text className="ml-2 text-lg text-green font-extrabold">
+          <Text className="ml-2 text-lg text-green">
             The trip length is {tripLength} days
           </Text>
         </View>

@@ -1,12 +1,12 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import React from 'react';
+import { React, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
+import { useTripsContext } from '../contexts/tripsContext';
 export default function WelcomeScreen() {
   const navigation = useNavigation();
 
   const handleLoginPress = () => {
-    navigation.navigate('Login', { screen: 'LoginScreen' });
+    navigation.navigate('Login');
   };
 
   const handleRegisterPress = () => {

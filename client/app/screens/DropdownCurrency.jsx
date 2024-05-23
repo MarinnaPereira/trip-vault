@@ -31,7 +31,7 @@ const DropdownCurrency = ({ selectedCurrency, onChange }) => {
         maxHeight={300}
         labelField="label"
         valueField="code"
-        placeholder={!isFocus ? 'Choose Currency' : '...'}
+        placeholder={!isFocus ? 'Choose currency' : '...'}
         searchPlaceholder="Search..."
         value={value}
         onFocus={() => setIsFocus(true)}
@@ -53,11 +53,11 @@ const styles = StyleSheet.create({
     marginBottom: -15,
   },
   placeholderStyle: {
-    fontSize: 14,
+    fontSize: 18,
     color: '#999',
   },
   selectedTextStyle: {
-    fontSize: 14,
+    fontSize: 18,
   },
   iconStyle: {
     width: 20,

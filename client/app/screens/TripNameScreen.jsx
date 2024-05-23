@@ -16,6 +16,7 @@ export default function TripNameScreen({ navigation }) {
   const { user, setUser } = useUserContext();
   const {
     trips,
+    dispatch,
     pinnedTrip,
     setPinnedTrip,
     calculateTripDuration,
@@ -27,14 +28,34 @@ export default function TripNameScreen({ navigation }) {
   const { getCurrencySymbol } = useCurrencyContext();
 
   // const { selectedTrip } = user;
+  // const {
+  //   calculateTotalExpenses,
+  //   calculateDailyAverage,
+  //   calculateRemainingBalance,
+  // } = useCurrencyContext();
+
+  if (!pinnedTrip)
+    return (
+      <View>
+        <Text>No trip selected</Text>
+      </View>
+    );
+
+  if (!pinnedTrip)
+    return (
+      <View>
+        <Text>No trip selected</Text>
+      </View>
+    );
 
   const totalSpent = calculateTotalSpent(pinnedTrip);
   const tripDuration = calculateTripDuration(pinnedTrip);
   const dailyAverage = calculateDailyAverage(totalSpent, tripDuration);
-  const balance =
-    pinnedTrip.budget && calculateBalance(pinnedTrip.budget, totalSpent);
+  const balance = pinnedTrip?.budget
+    ? calculateBalance(pinnedTrip.budget, totalSpent)
+    : '0.00';
 
-  const tripCurrencySymbol = getCurrencySymbol(pinnedTrip.currency);
+  const tripCurrencySymbol = getCurrencySymbol(pinnedTrip?.currency);
 
   const capitalizeFirstLetter = str => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -138,7 +159,7 @@ export default function TripNameScreen({ navigation }) {
 
       <View className="mt-20 ml-4 justify-start items-left">
         <Text className="text-3xl mt-4 text-[#00b0a3] font-bold items-start">
-          {capitalizeFirstLetter(pinnedTrip.name)}
+          {pinnedTrip ? pinnedTrip.name : 'Trip name'}
         </Text>
         <Text className="text-lg mb-4 font-bold">
           {new Date(pinnedTrip.start).toLocaleDateString()} –{' '}
@@ -185,11 +206,11 @@ export default function TripNameScreen({ navigation }) {
           />
         </View>
       </View>
-      <View className="flex-1 flex-row justify-end">
+      <View className="flex-1 flex-row justify-end items-end">
         <TouchableOpacity onPress={handleAddPress}>
           <Image
             source={require('../../assets/images/plus.png')}
-            className="mt-[135px] mr-2 w-20 h-20"
+            className="mr-2 w-20 h-20"
           />
         </TouchableOpacity>
       </View>
