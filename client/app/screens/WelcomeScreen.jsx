@@ -19,7 +19,7 @@ export default function WelcomeScreen() {
     <View className="flex-1 mt-[130px] items-center">
       <Image
         source={require('./../../assets/images/TripVault-LogoBig.png')}
-        className="w-[350px] h-[350px]"
+        className="w-[350px] h-[350px] ml-5"
       />
       <TouchableOpacity
         onPress={handleLoginPress}

@@ -110,36 +110,37 @@ export default function LoginScreen({ navigation }) {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this value as needed
     >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-
-    <View className="flex-1 items-center">
-       <Image
+        <View className="flex-1 items-center">
+          <Image
             source={require('./../../assets/images/TripVault-LogoBig.png')}
-            className="w-[180px] h-[180px] mt-24"
+            className="w-[180px] h-[180px] mt-24 ml-3"
           />
-      <Text className="mt-12 text-3xl font-semibold text-[#00B0A3]">Login</Text>
-      <Text className="text-[19px]">Login to your account</Text>
-      <TextInput
-        className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
-        placeholder="username / email"
-        placeholderTextColor="#999"
-        onChangeText={text => setCredential(text)}
-      ></TextInput>
-      <View className="flex flex-row justify-between w-[380px] mt-4 bg-lightGray rounded-md p-3">
-        <TextInput
-          className="text-[19px]"
-          placeholder="password"
-          placeholderTextColor="#999"
-          secureTextEntry={!showPassword}
-          value={password}
-          onChangeText={text => setPassword(text)}
-        />
-        <Ionicons
-          name={showPassword ? 'eye-off' : 'eye'}
-          size={24}
-          color="black"
-          onPress={togglePasswordVisibility}
-        />
-      </View>
+          <Text className="mt-12 text-3xl font-semibold text-[#00B0A3]">
+            Login
+          </Text>
+          <Text className="text-[19px]">Login to your account</Text>
+          <TextInput
+            className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
+            placeholder="username / email"
+            placeholderTextColor="#999"
+            onChangeText={text => setCredential(text)}
+          ></TextInput>
+          <View className="flex flex-row justify-between w-[380px] mt-4 bg-lightGray rounded-md p-3">
+            <TextInput
+              className="text-[19px]"
+              placeholder="password"
+              placeholderTextColor="#999"
+              secureTextEntry={!showPassword}
+              value={password}
+              onChangeText={text => setPassword(text)}
+            />
+            <Ionicons
+              name={showPassword ? 'eye-off' : 'eye'}
+              size={24}
+              color="black"
+              onPress={togglePasswordVisibility}
+            />
+          </View>
           <Text className="mt-36 text-[19px]">Don't have an account?</Text>
           <TouchableOpacity onPress={handleRegisterPress}>
             <Text className="mt-2 text-orange text-[19px]">Register</Text>
