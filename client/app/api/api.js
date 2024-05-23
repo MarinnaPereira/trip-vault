@@ -17,7 +17,7 @@ export const registerUser = async newUser => {
     const res = await axios.post(`${baseUrl}/auth/register`, newUser, {
       headers: { 'Content-Type': 'application/json' },
     });
-    console.log('res', res);
+    console.log('res', res.data);
 
     if (res.status === 200) {
       return res.data;
@@ -30,22 +30,20 @@ export const registerUser = async newUser => {
 };
 
 export const loginUser = async userData => {
-  // * userData {credential, password} as parameter
   try {
     const res = await axios.post(`${baseUrl}/auth/login`, userData, {
       headers: { 'Content-Type': 'application/json' },
     });
     console.log(res.data);
-    return res.data; // return object with 'token' and 'user' properties
+    return res.data;
   } catch (err) {
     console.error(err.message);
   }
 };
 
-// ? user requests (i think we won't need getUser)
+// * user requests (i think we won't need getUser)
 
 export const updateUser = async updatedUser => {
-  // * updatedUser (with complete information, not just the changed ones inside) as parameter
   try {
     const token = await getToken();
     const res = await axios.patch(
@@ -83,7 +81,7 @@ export const deleteUser = async user => {
   }
 };
 
-// ? trips requests (i think we won't need getTrip)
+// * trips requests (i think we won't need getTrip)
 
 export const getAllTrips = async () => {
   try {
@@ -102,7 +100,6 @@ export const getAllTrips = async () => {
 };
 
 export const addTrip = async newTrip => {
-  // * newTrip as parameter
   try {
     const token = await getToken();
     console.log(token);
@@ -120,7 +117,6 @@ export const addTrip = async newTrip => {
 };
 
 export const updateTrip = async updatedTrip => {
-  // * updatedTrip (with complete information, not just the changed ones inside) as parameter
   try {
     const token = await getToken();
     const res = await axios.patch(
@@ -141,7 +137,6 @@ export const updateTrip = async updatedTrip => {
 };
 
 export const deleteTrip = async trip => {
-  // * trip as parameter (should have _id inside)
   try {
     const token = await getToken();
 
@@ -158,25 +153,7 @@ export const deleteTrip = async trip => {
   }
 };
 
-// ? expenses requests (getAll and get????????????)
-
-// export const addExpense = async formData => {
-//   // *formData with expense info as parameter
-//   try {
-//     const token = await getToken();
-//     console.log(token);
-//     console.log(formData);
-//     const res = await axios.postForm(`${baseUrl}/expenses`, formData, {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-//     console.log(res.data);
-//     return res.data; // return object with the new expense info
-//   } catch (err) {
-//     console.error(err.message);
-//   }
-// };
+// * expenses requests
 
 export const addExpense = async formData => {
   try {

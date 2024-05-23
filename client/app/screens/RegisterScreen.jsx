@@ -22,10 +22,15 @@ export default function RegisterScreen({ navigation, route }) {
   const avatar = route.params.avatar;
 
   const handleRegisterPress = async () => {
+    setError('');
     const newUser = { username, email, password, avatar };
-    const addedUser = await registerUser(newUser);
-    console.log('addedUser', addedUser);
-    navigation.navigate('Login', { screen: 'LoginScreen' });
+    const res = await registerUser(newUser);
+    if (typeof res !== 'string') {
+      console.log('addedUser', res);
+      navigation.navigate('Login', { screen: 'LoginScreen' });
+    } else {
+      setError(res);
+    }
   };
 
   const handleLoginPress = () => {

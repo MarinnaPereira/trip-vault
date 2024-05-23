@@ -57,7 +57,7 @@ export default function Avatar({ navigation }) {
 
       <View className="items-center">
         <Text className="text-3xl font-semibold text-[#00B0A3]">
-          {user ? 'Change avatar' : 'Start by picking your avatar'}
+          {user ? 'Change avatar' : 'Pick your avatar'}
         </Text>
         <View className="mt-2">
           <FlatList

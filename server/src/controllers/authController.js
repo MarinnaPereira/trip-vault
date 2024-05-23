@@ -7,7 +7,7 @@ export const addUser = async (req, res, next) => {
   try {
     const usernameExists = await User.findOne({ username });
     if (usernameExists) {
-      next({ status: 400, message: 'Username must be unique' });
+      next({ status: 400, message: 'Username already in use' });
       return;
     }
     const emailExists = await User.findOne({ email });
