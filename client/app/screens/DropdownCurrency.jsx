@@ -17,7 +17,7 @@ const DropdownCurrency = ({ selectedCurrency, onChange }) => {
   return (
     <View className="mt-4">
       <Dropdown
-        className="bg-lightGray rounded-md w-[380px] text-lg p-3 text-[#999]"
+        className="bg-lightGray rounded-md w-[380px] text-xl p-3 text-[#999]"
         style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
@@ -65,6 +65,6 @@ const styles = StyleSheet.create({
   },
   inputSearchStyle: {
     height: 40,
-    fontSize: 16,
+    fontSize: 18,
   },
 });
