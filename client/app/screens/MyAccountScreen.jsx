@@ -15,7 +15,7 @@ export default function MyAccountScreen({ navigation, route }) {
   // const [showPassword, setShowPassword] = useState(false);
 
   const { user, setIsLogged, isLogged, setUser } = useUserContext();
-  const { setTrips, trips } = useTripsContext();
+  const { setTrips, trips, setPinnedTrip } = useTripsContext();
 
   useEffect(() => {
     if (!user) {
@@ -76,6 +76,7 @@ export default function MyAccountScreen({ navigation, route }) {
     await AsyncStorage.clear().then(() => console.log('AsyncStorage cleared'));
     setUser(null);
     setTrips([]);
+    setPinnedTrip(null);
     setIsLogged(false);
     navigation.dispatch(
       CommonActions.reset({

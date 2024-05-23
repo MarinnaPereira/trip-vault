@@ -35,13 +35,21 @@ export default function TripNameScreen({ navigation }) {
   //   calculateRemainingBalance,
   // } = useCurrencyContext();
 
+  if (!pinnedTrip)
+    return (
+      <View>
+        <Text>No trip selected</Text>
+      </View>
+    );
+
   const totalSpent = calculateTotalSpent(pinnedTrip);
   const tripDuration = calculateTripDuration(pinnedTrip);
   const dailyAverage = calculateDailyAverage(totalSpent, tripDuration);
-  const balance =
-    pinnedTrip.budget && calculateBalance(pinnedTrip.budget, totalSpent);
+  const balance = pinnedTrip?.budget
+    ? calculateBalance(pinnedTrip.budget, totalSpent)
+    : '0.00';
 
-  const tripCurrencySymbol = getCurrencySymbol(pinnedTrip.currency);
+  const tripCurrencySymbol = getCurrencySymbol(pinnedTrip?.currency);
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);

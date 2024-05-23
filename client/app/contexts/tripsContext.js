@@ -1,8 +1,6 @@
 import { createContext, useReducer, useContext, useState } from 'react';
 import { DateTime } from 'luxon';
-
 export const TripsContext = createContext();
-
 // const tripsReducer = (state, action) => {
 //   switch (action.type) {
 //     case 'ADD_ALL_TRIPS':
@@ -24,7 +22,6 @@ export const TripsContext = createContext();
 //       return [];
 //     case 'ADD_EXPENSE':
 //       console.log('action', action);
-
 //       return state.map(trip => {
 //         console.log('tripId', trip._id);
 //         console.log(trip._id === action.trip._id);
@@ -54,27 +51,21 @@ export const TripsContext = createContext();
 //             }
 //           : trip,
 //       );
-
 //     default:
 //       throw new Error('You action type does not exist!');
 //   }
 // };
-
 export const TripsProvider = ({ children }) => {
   // const [trips, dispatch] = useReducer(tripsReducer, []);
   const [trips, setTrips] = useState([]);
   const [pinnedTrip, setPinnedTrip] = useState(null);
-
   const calculateTripDuration = trip => {
     const { start, end } = trip;
     const tripDuration = Math.ceil(
-      // Using Math.ceil to round up the number of days
-      DateTime.fromISO(end) // Parse end date string to Luxon DateTime object
-        .diff(DateTime.fromISO(start), 'days').days + 1, // Calculate difference in days // Add 1 to include both start and end days
+      DateTime.fromISO(end).diff(DateTime.fromISO(start), 'days').days + 1,
     );
     return parseInt(tripDuration);
   };
-
   const calculateTotalSpent = trip => {
     const tripExpenses = trip.expenses;
     let totalSpent = 0;
@@ -87,17 +78,14 @@ export const TripsProvider = ({ children }) => {
     }
     return Number(totalSpent).toFixed(2);
   };
-
   const calculateDailyAverage = (totalSpent, tripDuration) => {
     const dailyAverage = (totalSpent / tripDuration).toFixed(2);
     return dailyAverage;
   };
-
   const calculateBalance = (budget, totalSpent) => {
     const balance = budget - totalSpent;
     return balance.toFixed(2);
   };
-
   return (
     <TripsContext.Provider
       value={{
@@ -115,7 +103,6 @@ export const TripsProvider = ({ children }) => {
     </TripsContext.Provider>
   );
 };
-
 export const useTripsContext = () => {
   return useContext(TripsContext);
 };
