@@ -8,7 +8,7 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { registerUser } from '../api/api';
 
@@ -17,13 +17,14 @@ export default function RegisterScreen({ navigation, route }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
 
   const avatar = route.params.avatar;
 
-  const handleRegisterPress = () => {
+  const handleRegisterPress = async () => {
     const newUser = { username, email, password, avatar };
-    registerUser(newUser);
-    console.log('user created');
+    const addedUser = await registerUser(newUser);
+    console.log('addedUser', addedUser);
     navigation.navigate('Login', { screen: 'LoginScreen' });
   };
 

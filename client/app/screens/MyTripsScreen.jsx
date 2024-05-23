@@ -21,7 +21,7 @@ export default function MyTripsScreen({ navigation }) {
 
   useEffect(() => {
     setFilteredTrips(trips);
-  }, []);
+  }, [trips.length]);
 
   const handleTripPress = async item => {
     setPinnedTrip(item);

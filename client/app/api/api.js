@@ -1,5 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { BASE_URL } from '@env';
 
 const baseUrl = `${BASE_URL}`;
@@ -9,20 +10,22 @@ const getToken = async () => {
   return token;
 };
 
-// * all the requests should be called after 'await' keyword
-
-// ? auth requests
+// * auth requests
 
 export const registerUser = async newUser => {
-  // * newUser as parameter
   try {
     const res = await axios.post(`${baseUrl}/auth/register`, newUser, {
       headers: { 'Content-Type': 'application/json' },
     });
-    console.log(res.data);
-    return res.data; // return object with the registered user info
+    console.log('res', res);
+
+    if (res.status === 200) {
+      return res.data;
+    }
   } catch (err) {
-    console.error(err.message);
+    const errMessage = err.response.data.error;
+    console.log('err', err.response.data.error);
+    return errMessage;
   }
 };
 

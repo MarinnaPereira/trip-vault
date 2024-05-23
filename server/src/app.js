@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   res
     .status(err.status || 500)
-    .send({ error: err.message || 'Something went wrong!' });
+    .json({ error: err.message || 'Something went wrong!' });
 });
 
 export default app;

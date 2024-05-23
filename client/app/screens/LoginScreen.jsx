@@ -21,7 +21,7 @@ export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
 
   const { user, setUser, setIsLogged } = useUserContext();
-  const { trips, setTrips, pinnedTrip, setPinnedTrip } = useTripsContext();
+  const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
 
   useEffect(() => {
     (async () => {
@@ -55,11 +55,10 @@ export default function LoginScreen({ navigation }) {
       allTrips = await getAllTrips();
       console.log(allTrips);
       if (allTrips) {
-        setTrips(allTrips);
-        // dispatch({
-        //   type: 'ADD_ALL_TRIPS',
-        //   payload: allTrips,
-        // });
+        dispatch({
+          type: 'ADD_ALL_TRIPS',
+          payload: allTrips,
+        });
       }
       handleNavigation();
     } catch (error) {

@@ -15,7 +15,7 @@ export default function MyAccountScreen({ navigation, route }) {
   // const [showPassword, setShowPassword] = useState(false);
 
   const { user, setIsLogged, isLogged, setUser } = useUserContext();
-  const { setTrips, trips, setPinnedTrip } = useTripsContext();
+  const { trips, dispatch, setPinnedTrip } = useTripsContext();
 
   useEffect(() => {
     if (!user) {
@@ -75,7 +75,9 @@ export default function MyAccountScreen({ navigation, route }) {
   const handleLogoutPress = async () => {
     await AsyncStorage.clear().then(() => console.log('AsyncStorage cleared'));
     setUser(null);
-    setTrips([]);
+    dispatch({
+      type: 'DELETE_ALL_TRIPS',
+    });
     setPinnedTrip(null);
     setIsLogged(false);
     navigation.dispatch(
@@ -84,9 +86,6 @@ export default function MyAccountScreen({ navigation, route }) {
         routes: [{ name: 'Auth' }],
       }),
     );
-    // dispatch({
-    //   type: 'DELETE_ALL_TRIPS',
-    // });
     console.log('User: ', user);
     console.log('Trips: ', trips);
     console.log('isLogged: ', isLogged);
