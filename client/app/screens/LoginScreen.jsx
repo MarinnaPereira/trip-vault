@@ -1,5 +1,14 @@
 import { useState, useEffect } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUserContext } from '../contexts/userContext';
@@ -101,14 +110,13 @@ export default function LoginScreen({ navigation }) {
         <View className="flex-1 items-center">
           <Image
             source={require('./../../assets/images/TripVault-LogoBig.png')}
-            className="w-[180px] h-[180px] mt-24 ml-3"
+            className="w-[220px] h-[220px] mt-[70px] ml-3"
           />
           <Text className="mt-12 text-3xl font-semibold text-[#00B0A3]">
             Login
           </Text>
-          <Text className="text-[19px]">Login to your account</Text>
           <TextInput
-            className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
+            className="w-[380px] mt-6 bg-lightGray rounded-md p-3 text-[19px]"
             placeholder="username / email"
             placeholderTextColor="#999"
             onChangeText={text => setCredential(text)}
@@ -134,12 +142,16 @@ export default function LoginScreen({ navigation }) {
             <Text className="mt-2 text-orange text-[19px]">Register</Text>
           </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={handleLoginPress}
-        className="bg-green w-[300px] rounded-lg mt-4"
-      >
-        <Text className="text-white text-center p-4 text-[19px]">Login</Text>
-      </TouchableOpacity>
-    </View>
+          <TouchableOpacity
+            onPress={handleLoginPress}
+            className="bg-green w-[300px] rounded-lg mt-4"
+          >
+            <Text className="text-white text-center p-4 text-[19px]">
+              Login
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

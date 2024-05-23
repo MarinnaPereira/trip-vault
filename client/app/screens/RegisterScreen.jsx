@@ -45,14 +45,13 @@ export default function RegisterScreen({ navigation, route }) {
         <View className="flex-1 items-center">
           <Image
             source={require('./../../assets/images/TripVault-LogoBig.png')}
-            className="w-[180px] h-[180px] mt-24 ml-3"
+            className="w-[220px] h-[220px] mt-[70px] ml-3"
           />
-          <Text className="mt-12 text-3xl font-semibold text-[#00B0A3]">
+          <Text className="mt-10 text-3xl font-semibold text-[#00B0A3]">
             Register
           </Text>
-          <Text className="text-[19px]">Create your account</Text>
           <TextInput
-            className="w-[380px] mt-8 bg-lightGray rounded-md p-3 text-[19px]"
+            className="w-[380px] mt-6 bg-lightGray rounded-md p-3 text-[19px]"
             placeholder="username"
             placeholderTextColor="#999"
             value={username}
@@ -81,7 +80,7 @@ export default function RegisterScreen({ navigation, route }) {
               onPress={togglePasswordVisibility}
             />
           </View>
-          <Text className="mt-36 text-[19px]">Already have an account?</Text>
+          <Text className="mt-20 text-[19px]">Already have an account?</Text>
           <TouchableOpacity onPress={handleLoginPress}>
             <Text className="mt-2 text-orange text-[19px]">Login</Text>
           </TouchableOpacity>
