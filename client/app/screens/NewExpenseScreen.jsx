@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -21,8 +20,6 @@ export default function NewExpenseScreen({ navigation, route }) {
   const { user, setUser } = useUserContext();
   const { trips, setTrips, pinnedTrip, setPinnedTrip } = useTripsContext();
   const { convertCurrency } = useCurrencyContext();
-
-  const { selectedTrip } = user;
 
   const categoryName = route.params.categoryName;
   const categoryImage = route.params.categoryImage;
@@ -249,13 +246,15 @@ export default function NewExpenseScreen({ navigation, route }) {
           <Image
             source={require('../../assets/images/singleArrow.png')}
             className="ml-1 mt-6 w-20 h-20"
-                      />
+          />
         </TouchableOpacity>
       </View>
 
       <View className="flex-1">
         <View className="flex flex-row justify-between mx-4 mt-5">
-          <Text className=" text-3xl font-semibold text-[#00B0A3]">{categoryName}</Text>
+          <Text className=" text-3xl font-semibold text-[#00B0A3]">
+            {categoryName}
+          </Text>
           <TouchableOpacity>
             <FontAwesome6 name="trash-can" size={32} color="red" />
           </TouchableOpacity>
@@ -304,13 +303,15 @@ export default function NewExpenseScreen({ navigation, route }) {
           </View>
 
           <View>
-            <TextInput
-              className={`w-[380px] bg-lightGray rounded-md p-3 text-[19px] ${!currencyDropdownVisible ? '' : 'mt-8'}`}
-              placeholder="Description"
-              placeholderTextColor="black"
-              onChangeText={text => setDescription(text)}
-            ></TextInput>
-            <View />
+            <View className="mt-4 bg-lightGray rounded-md flex flex-row justify-start items-center pl-3">
+              <MaterialIcons name="edit" size={24} color="black" />
+              <TextInput
+                className={`w-[345px] py-3 pl-2 text-[19px] ${!currencyDropdownVisible ? '' : 'mt-8'}`}
+                placeholder="Description"
+                placeholderTextColor="black"
+                onChangeText={text => setDescription(text)}
+              />
+            </View>
 
             {/* Calendar Single Date */}
             <View className={`mt-4 ${isSpreadByDays ? 'hidden' : 'flex'}`}>

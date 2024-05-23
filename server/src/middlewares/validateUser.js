@@ -50,6 +50,7 @@ export const validateUser = [
     const errors = validationResult(req);
     console.log(errors);
     if (errors.isEmpty()) {
+      console.log('user validated');
       return next();
     }
     next({ status: 400, message: errors.array() });

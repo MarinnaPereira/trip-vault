@@ -200,10 +200,10 @@ export default function AppNavigator() {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
       >
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Auth" component={AuthStack} />
-        <Stack.Screen name="Shared" component={SharedStack} />
-        <Stack.Screen name="Main" component={MainTabNavigator} />
-      </Stack.Navigator>
+          <Stack.Screen name="Auth" component={AuthStack} />
+          <Stack.Screen name="Shared" component={SharedStack} />
+          <Stack.Screen name="Main" component={MainTabNavigator} />
+        </Stack.Navigator>
       </KeyboardAvoidingView>
     </NavigationContainer>
   );

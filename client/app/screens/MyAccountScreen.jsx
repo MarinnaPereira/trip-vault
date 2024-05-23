@@ -14,7 +14,7 @@ export default function MyAccountScreen({ navigation, route }) {
   // const [showPassword, setShowPassword] = useState(false);
 
   const { user, setIsLogged, setUser } = useUserContext();
-  const { setTrips } = useTripsContext;
+  const { setTrips, setPinnedTrip } = useTripsContext;
 
   const findAvatarImage = userAvatar => {
     const avatar = avatars.find(avatar => avatar.name === userAvatar);
@@ -70,10 +70,12 @@ export default function MyAccountScreen({ navigation, route }) {
   const handleLogoutPress = async () => {
     setUser(null);
     setTrips([]);
+    setPinnedTrip(null);
     // dispatch({
     //   type: 'DELETE_ALL_TRIPS',
     // });
     setIsLogged(false);
+
     await AsyncStorage.removeItem('token');
     console.log('Token deleted');
     navigation.replace('Auth', { screen: 'Welcome' });

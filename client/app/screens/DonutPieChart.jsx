@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
     width: 24,
     height: 24,
-    borderRadius: 1,
+    borderRadius: 3,
   },
   categoryName: {
     color: '#7d7b7b',

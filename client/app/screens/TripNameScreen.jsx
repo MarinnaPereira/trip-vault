@@ -28,12 +28,6 @@ export default function TripNameScreen({ navigation }) {
 
   // const { selectedTrip } = user;
 
-  // const {
-  //   calculateTotalExpenses,
-  //   calculateDailyAverage,
-  //   calculateRemainingBalance,
-  // } = useCurrencyContext();
-
   const totalSpent = calculateTotalSpent(pinnedTrip);
   const tripDuration = calculateTripDuration(pinnedTrip);
   const dailyAverage = calculateDailyAverage(totalSpent, tripDuration);
