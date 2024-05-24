@@ -22,8 +22,11 @@ export default function Avatar({ navigation }) {
 
   const handleGoBack = () => {
     if (user) {
-      navigation.navigate('MyAccountStack', {
-        screen: 'MyAccount',
+      navigation.navigate('Main', {
+        screen: 'MyAccountStack',
+        params: {
+          screen: 'MyAccount',
+        },
       });
     } else {
       navigation.navigate('Auth', {

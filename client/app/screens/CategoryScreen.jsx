@@ -16,11 +16,14 @@ export default function Category({ navigation }) {
 
   const handleGoBack = () => {
     if (pinnedTrip.expenses.length !== 0) {
-      navigation.navigate('PinnedTrip', { screen: 'TripNameScreen' });
-    } else {
-      navigation.navigate('TrackFirstExpenseScreen', {
-        screen: 'TrackFirstExpenseScreen',
+      navigation.navigate('Main', {
+        screen: 'PinnedTripStack',
+        params: {
+          screen: 'TripNameScreen',
+        },
       });
+    } else {
+      navigation.navigate('TrackFirstExpense');
     }
   };
 
@@ -45,7 +48,9 @@ export default function Category({ navigation }) {
       </View>
 
       <View className="items-center">
-        <Text className="text-3xl font-semibold text-[#00B0A3]">Pick a category</Text>
+        <Text className="text-3xl font-semibold text-[#00B0A3]">
+          Pick a category
+        </Text>
         <View className="mt-3">
           <FlatList
             data={categories}

@@ -13,6 +13,7 @@ import { useTripsContext } from '../contexts/tripsContext';
 export default function MyAccountScreen({ navigation, route }) {
   const [isEditUserModalVisible, setIsEditUserModalVisible] = useState(false);
   // const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
 
   const { user, setIsLogged, isLogged, setUser } = useUserContext();
   const { trips, dispatch, setPinnedTrip } = useTripsContext();
@@ -22,10 +23,6 @@ export default function MyAccountScreen({ navigation, route }) {
       navigation.replace('Auth', { screen: 'Welcome' });
     }
   }, [user, navigation]);
-
-  if (!user) {
-    return null;
-  }
 
   const findAvatarImage = userAvatar => {
     const avatar = avatars.find(avatar => avatar.name === userAvatar);
@@ -40,21 +37,22 @@ export default function MyAccountScreen({ navigation, route }) {
   const userAvatar = newAvatar ? newAvatar.image : findAvatarImage(user.avatar);
 
   // *updateUser
-  let editedUser;
-
   const editUser = async editedUser => {
-    try {
-      const res = await updateUser(editedUser);
+    setError('');
+    const res = await updateUser(editedUser);
+    if (res.status === 200) {
       setUser(res.data);
-    } catch (error) {
-      console.error('Error updating User:', error);
+    } else {
+      setError(res);
     }
   };
 
-  if (newAvatar && newAvatar.name !== user.avatar) {
-    editedUser = { ...user, avatar: newAvatar.name };
-    editUser(editedUser);
-  }
+  useEffect(() => {
+    if (newAvatar && newAvatar.name !== user.avatar) {
+      const editedUser = { ...user, avatar: newAvatar.name };
+      editUser(editedUser);
+    }
+  }, [newAvatar]);
 
   const toggleModal = () => {
     setIsEditUserModalVisible(!isEditUserModalVisible);
@@ -92,6 +90,9 @@ export default function MyAccountScreen({ navigation, route }) {
     console.log('ALL CLEARED!');
   };
 
+  if (!user) {
+    return null;
+  }
   // const togglePasswordVisibility = () => {
   //   setShowPassword(!showPassword);
   // };
@@ -152,6 +153,11 @@ export default function MyAccountScreen({ navigation, route }) {
                   />
                 </TouchableOpacity> */}
               </View>
+              {error && (
+                <View className="text-red-600 mt-2 mx-6">
+                  <Text className="text-red-600 text-center">{error}</Text>
+                </View>
+              )}
             </View>
             <View className="mt-16">
               <TouchableOpacity

@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { View, Text, Image, TouchableOpacity, Modal } from 'react-native';
 import { DateTime } from 'luxon';
 import { Entypo, FontAwesome6 } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
+
 import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
@@ -13,7 +15,12 @@ export default function TripNameScreen({ navigation }) {
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
 
-  const { user, setUser } = useUserContext();
+  const [totalSpent, setTotalSpent] = useState(0);
+  const [tripDuration, setTripDuration] = useState(0);
+  const [dailyAverage, setDailyAverage] = useState(0);
+  const [balance, setBalance] = useState('0.00');
+  const [tripCurrencySymbol, setTripCurrencySymbol] = useState('');
+
   const {
     trips,
     dispatch,
@@ -27,39 +34,36 @@ export default function TripNameScreen({ navigation }) {
 
   const { getCurrencySymbol } = useCurrencyContext();
 
-  // const { selectedTrip } = user;
-  // const {
-  //   calculateTotalExpenses,
-  //   calculateDailyAverage,
-  //   calculateRemainingBalance,
-  // } = useCurrencyContext();
+  useFocusEffect(
+    useCallback(() => {
+      if (pinnedTrip) {
+        const totalSpent = calculateTotalSpent(pinnedTrip);
+        const tripDuration = calculateTripDuration(pinnedTrip);
+        const dailyAverage = calculateDailyAverage(totalSpent, tripDuration);
+        const balance = pinnedTrip?.budget
+          ? calculateBalance(pinnedTrip.budget, totalSpent)
+          : '0.00';
+        const tripCurrencySymbol = getCurrencySymbol(pinnedTrip?.currency);
 
-  if (!pinnedTrip)
-    return (
-      <View>
-        <Text>No trip selected</Text>
-      </View>
-    );
-
-  if (!pinnedTrip)
-    return (
-      <View>
-        <Text>No trip selected</Text>
-      </View>
-    );
-
-  const totalSpent = calculateTotalSpent(pinnedTrip);
-  const tripDuration = calculateTripDuration(pinnedTrip);
-  const dailyAverage = calculateDailyAverage(totalSpent, tripDuration);
-  const balance = pinnedTrip?.budget
-    ? calculateBalance(pinnedTrip.budget, totalSpent)
-    : '0.00';
-
-  const tripCurrencySymbol = getCurrencySymbol(pinnedTrip?.currency);
+        setTotalSpent(totalSpent);
+        setTripDuration(tripDuration);
+        setDailyAverage(dailyAverage);
+        setBalance(balance);
+        setTripCurrencySymbol(tripCurrencySymbol);
+      }
+    }, [pinnedTrip]),
+  );
 
   const capitalizeFirstLetter = str => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
+
+  if (!pinnedTrip)
+    return (
+      <View>
+        <Text>No trip selected</Text>
+      </View>
+    );
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);

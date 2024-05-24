@@ -58,7 +58,7 @@ export default function InitiateTripScreen({ navigation }) {
 
   const handleSavePress = async () => {
     setError('');
-    if (!Number(budget)) {
+    if (budget && !Number(budget)) {
       setError('Budget must be a number');
       return;
     }

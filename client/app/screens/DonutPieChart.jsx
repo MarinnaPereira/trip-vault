@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import { pie, arc } from 'd3-shape';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { useTripsContext } from '../contexts/tripsContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
 
 const DonutPieChart = ({ width = 300, height = 300 }) => {
   const [totalPerCategory, setTotalPerCategory] = useState({});
+
   const {
     pinnedTrip,
     calculateTotalSpent,
@@ -17,6 +19,16 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
     calculateDailyAverage,
   } = useTripsContext();
   const { getCurrencySymbol } = useCurrencyContext();
+
+  useFocusEffect(
+    useCallback(() => {
+      if (pinnedTrip && pinnedTrip.expenses) {
+        setTotalPerCategory(
+          calculateTotalSpentPerCategory(pinnedTrip.expenses),
+        );
+      }
+    }, [pinnedTrip]),
+  );
 
   const categories = [
     { id: 1, name: 'Accommodation', color: '#d9ab7a' },

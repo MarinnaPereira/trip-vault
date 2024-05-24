@@ -9,17 +9,19 @@ export default function EditUsernameModal({ modalVisible, closeModal }) {
   const currentUsername = user.username;
   console.log(typeof currentUsername);
   const [newUsername, setNewUsername] = useState('');
+  const [modalError, setModalError] = useState('');
 
   let editedUser;
 
   const editUser = async editedUser => {
-    try {
-      console.log(editedUser);
-      const res = await updateUser(editedUser);
+    setModalError('');
+    const res = await updateUser(editedUser);
+    if (res.status === 200) {
       setUser(res.data);
+      setModalError('');
       closeModal();
-    } catch (error) {
-      console.error('Error updating User:', error);
+    } else {
+      setModalError(res);
     }
   };
 
@@ -27,7 +29,14 @@ export default function EditUsernameModal({ modalVisible, closeModal }) {
     if (newUsername && newUsername !== currentUsername) {
       editedUser = { ...user, username: newUsername };
       editUser(editedUser);
+    } else {
+      closeModal();
     }
+  };
+
+  const handleCancel = () => {
+    setModalError('');
+    closeModal();
   };
 
   return (
@@ -47,7 +56,7 @@ export default function EditUsernameModal({ modalVisible, closeModal }) {
       >
         <View className="bg-white rounded-md w-[380px]">
           <View className="flex flex-row justify-between">
-            <TouchableOpacity onPress={closeModal}>
+            <TouchableOpacity onPress={handleCancel}>
               <View className="m-4">
                 <Text className="px-2 py-1 text-[19px] text-red-500">
                   Cancel
@@ -73,6 +82,11 @@ export default function EditUsernameModal({ modalVisible, closeModal }) {
                 onChangeText={text => setNewUsername(text)}
               />
             </View>
+            {modalError && (
+              <View className="text-red-600 mt-2 mb-6 mx-6">
+                <Text className="text-red-600 text-center">{modalError}</Text>
+              </View>
+            )}
           </View>
         </View>
       </View>

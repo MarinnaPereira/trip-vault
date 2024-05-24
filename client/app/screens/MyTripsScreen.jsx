@@ -17,40 +17,47 @@ import SearchBar from './SearchBar';
 export default function MyTripsScreen({ navigation }) {
   const [filteredTrips, setFilteredTrips] = useState([]);
   const [error, setError] = useState('');
+
   const { trips, setPinnedTrip } = useTripsContext();
   const { user, setUser } = useUserContext();
 
   useEffect(() => {
     setFilteredTrips(trips);
-  }, [trips.length]);
-
-  useEffect(() => {
-    setFilteredTrips(trips);
   }, [trips]);
 
-  const handleTripPress = item => {
-    setPinnedTrip(item);
-    const updatedUser = { ...user, selectedTrip: item };
-    setUser(updatedUser);
+  // useEffect(() => {
+  //   if (user && user.selectedTrip) {
+  //     setPinnedTrip(user.selectedTrip);
+  //     if (
+  //       navigation.getState().routes[navigation.getState().index].name !==
+  //       'MyTrips'
+  //     ) {
+  //       handleNavigation();
+  //     }
+  //   }
+  // }, [user]);
+
+  const handleTripPress = async item => {
+    setError('');
+    if (user) {
+      const res = await updateUser({
+        ...user,
+        selectedTrip: item._id,
+      });
+
+      if (res.status === 200) {
+        const updatedUser = { ...user, selectedTrip: item };
+        setUser(updatedUser);
+        setPinnedTrip(item);
+        handleNavigation();
+      } else {
+        setError('Error selecting trip');
+      }
+    } else {
+      setError('No user logged in');
+      return;
+    }
   };
-
-  useEffect(() => {
-    user &&
-      (async () => {
-        setError('');
-        const newSelectedTripId = user.selectedTrip._id;
-        const res = await updateUser({
-          ...user,
-          selectedTrip: newSelectedTripId,
-        });
-
-        if (res.status === 200) {
-          handleNavigation();
-        } else {
-          setError('Error selecting trip');
-        }
-      })();
-  }, [user]);
 
   const handleNavigation = () => {
     navigation.navigate('Main', {
@@ -85,7 +92,7 @@ export default function MyTripsScreen({ navigation }) {
                 My Trips
               </Text>
               {error && (
-                <View className="text-red-600 mt-2 mx-6">
+                <View className="text-red-600 mx-6">
                   <Text className="text-red-600 text-center">{error}</Text>
                 </View>
               )}

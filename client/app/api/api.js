@@ -54,7 +54,7 @@ export const updateUser = async updatedUser => {
         },
       },
     );
-    return res; // return object with the updated user info
+    return res;
   } catch (err) {
     const errMessage = err.response.data.error;
     return errMessage;
