@@ -24,6 +24,7 @@ import CategoryScreen from '../screens/CategoryScreen';
 import UnlockFirstTripScreen from '../screens/UnlockFirstTripScreen';
 import InitiateTripScreen from '../screens/InitiateTripScreen';
 import TrackFirstExpenseScreen from '../screens/TrackFirstExpenseScreen';
+import ExistentExpenseScreen from '../screens/ExistentExpense';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -66,6 +67,7 @@ function PinnedTripStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="PinnedTrip" component={TripNameScreen} />
+      <Stack.Screen name="ExistentExpense" component={ExistentExpenseScreen} />
     </Stack.Navigator>
   );
 }

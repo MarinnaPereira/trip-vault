@@ -39,7 +39,7 @@ export const loginUser = async userData => {
   }
 };
 
-// * user requests (i think we won't need getUser)
+// * user requests
 
 export const updateUser = async updatedUser => {
   try {
@@ -80,7 +80,7 @@ export const deleteUser = async user => {
   }
 };
 
-// * trips requests (i think we won't need getTrip)
+// * trips requests
 
 export const getAllTrips = async () => {
   try {

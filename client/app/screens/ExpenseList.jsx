@@ -1,4 +1,5 @@
-import { SectionList, Text, View, Image } from 'react-native';
+import { SectionList, Text, View, Image, TouchableOpacity } from 'react-native';
+// import { useNavigation } from '@react-navigation/native';
 import { DateTime } from 'luxon';
 
 import { useCurrencyContext } from '../contexts/currencyContext';
@@ -11,7 +12,8 @@ const findCategoryImage = categoryName => {
     : categories.find(cat => cat.name === 'Others').image;
 };
 
-const ExpenseList = ({ expenses, tripCurrencySymbol }) => {
+const ExpenseList = ({ navigation, expenses, tripCurrencySymbol }) => {
+  // const navigation = useNavigation();
   const { getCurrencySymbol } = useCurrencyContext();
 
   const prepareSections = expenses => {
@@ -33,9 +35,16 @@ const ExpenseList = ({ expenses, tripCurrencySymbol }) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
 
+  const handleExpensePress = item => {
+    navigation.navigate('ExistentExpense', { item });
+  };
+
   const renderItem = ({ item }) => {
     return (
-      <View className="mt-3 mb-2 bg-lightGray rounded-md">
+      <TouchableOpacity
+        onPress={() => handleExpensePress(item)}
+        className="mt-3 mb-2 bg-lightGray rounded-md"
+      >
         <View className="flex-row justify-between w-[380px] p-1 items-center">
           <Image
             source={findCategoryImage(item.categoryName)}
@@ -68,7 +77,7 @@ const ExpenseList = ({ expenses, tripCurrencySymbol }) => {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 

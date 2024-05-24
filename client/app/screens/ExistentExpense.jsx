@@ -1,46 +1,59 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import { ScrollView } from 'react-native-gesture-handler';
 
 import PaymentMethodModal from '../modals/PaymentMethodModal';
 import UploadPictureModal from '../modals/UploadPictureModal';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
-import { addExpense } from '../api/api';
-import { ScrollView } from 'react-native-gesture-handler';
+import { addExpense, updateExpense } from '../api/api';
 import DropdownCurrency from './DropdownCurrency';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import categories from '../../assets/categories';
 
-export default function NewExpenseScreen({ navigation, route }) {
+export default function ExistentExpenseScreen({ navigation, route }) {
   const { user, setUser } = useUserContext();
-  const { dispatch, pinnedTrip } = useTripsContext();
+  const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
   const { convertCurrency } = useCurrencyContext();
+  // const [expense, setExpense] = useState(item);
 
-  const categoryName = route.params.categoryName;
-  const categoryImage = route.params.categoryImage;
+  const { item } = route.params || null;
 
-  const [value, setValue] = useState(null);
-  const [selectedCurrency, setSelectedCurrency] = useState(
-    pinnedTrip ? pinnedTrip.currency : 'EUR',
+  if (!item)
+    return (
+      <View>
+        <Text>Expense not found</Text>
+      </View>
+    );
+
+  console.log(item);
+
+  const [categoryName, setCategoryName] = useState(item?.categoryName);
+  const [value, setValue] = useState(item?.value);
+  const [selectedCurrency, setSelectedCurrency] = useState(item?.currency);
+  const [description, setDescription] = useState(
+    item?.description != 'null' ? item?.description : 'Description',
   );
-  const [description, setDescription] = useState(null);
-  const [paymentMethod, setPaymentMethod] = useState(null);
-  const [image, setImage] = useState(null);
-  const [singleDate, setSingleDate] = useState(null);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [singleDate, setSingleDate] = useState(new Date(item?.dates[0])); //! nan
+  const [startDate, setStartDate] = useState(new Date(item?.dates[0]));
+  const [endDate, setEndDate] = useState(new Date(item?.dates[1]));
+  const [paymentMethod, setPaymentMethod] = useState(
+    item?.paymentMethod != 'null' ? item?.paymentMethod : 'Payment Method',
+  );
+  const [image, setImage] = useState(item?.receipt);
 
   const [isSingleDatePickerVisible, setSingleDatePickerVisibility] =
     useState(false);
   const [isStartDatePickerVisible, setStartDatePickerVisibility] =
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
-  const [isSpreadByDays, setIsSpreadByDays] = useState(false);
+  const [isSpreadByDays, setIsSpreadByDays] = useState(item.dates.length > 1);
 
   const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] =
     useState(false);
@@ -49,68 +62,96 @@ export default function NewExpenseScreen({ navigation, route }) {
 
   const [currencyDropdownVisible, setCurrencyDropdownVisible] = useState(false);
 
-  const tripCurrency = pinnedTrip ? pinnedTrip.currency : 'USD';
-  const getConvertedAmount = () =>
-    convertCurrency(value, selectedCurrency, tripCurrency);
+  // * category image
+  const findCategoryImage = categoryName => {
+    const category = categories.find(cat => cat.name === categoryName);
+    return category
+      ? category.image
+      : categories.find(cat => cat.name === 'Others').image;
+  };
 
-  let convertedAmount;
-  if (tripCurrency !== selectedCurrency) {
-    convertedAmount = getConvertedAmount();
-  }
+  const categoryImage = findCategoryImage(categoryName);
+
+  //   const tripCurrency = pinnedTrip ? pinnedTrip.currency : 'USD';
+  //   const getConvertedAmount = () =>
+  //     convertCurrency(value, selectedCurrency, tripCurrency);
+
+  //   let convertedAmount;
+  //   if (tripCurrency !== selectedCurrency) {
+  //     convertedAmount = getConvertedAmount();
+  //   }
 
   //* addExpense
-  const saveExpense = async () => {
-    const formData = new FormData();
+  //   const saveExpense = async () => {
+  //     const formData = new FormData();
 
-    formData.append('categoryName', categoryName);
-    formData.append('value', value);
-    formData.append('currency', selectedCurrency);
-    convertedAmount && formData.append('convertedAmount', convertedAmount);
-    formData.append('description', description);
-    singleDate && formData.append('dates[]', singleDate.toISOString());
-    startDate && formData.append('dates[]', startDate.toISOString());
-    endDate && formData.append('dates[]', endDate.toISOString());
-    formData.append('paymentMethod', paymentMethod);
-    image &&
-      formData.append('file', {
-        uri: image.uri,
-        type: image.mimeType,
-        name: new Date() + '_receipt' + '.jpeg',
-      });
+  //     formData.append('categoryName', categoryName);
+  //     formData.append('value', value);
+  //     formData.append('currency', selectedCurrency);
+  //     convertedAmount && formData.append('convertedAmount', convertedAmount);
+  //     formData.append('description', description);
+  //     singleDate && formData.append('dates[]', singleDate.toISOString());
+  //     startDate && formData.append('dates[]', startDate.toISOString());
+  //     endDate && formData.append('dates[]', endDate.toISOString());
+  //     formData.append('paymentMethod', paymentMethod);
+  //     image &&
+  //       formData.append('file', {
+  //         uri: image.uri,
+  //         type: image.mimeType,
+  //         name: new Date() + '_receipt' + '.jpeg',
+  //       });
 
-    const newExpense = await addExpense(formData);
-    console.log('newExpense', newExpense);
-    dispatch({
-      type: 'ADD_EXPENSE',
-      trip: user.selectedTrip,
-      payload: newExpense,
-    });
+  //     const newExpense = await addExpense(formData);
+  //     console.log('newExpense', newExpense);
+  //     dispatch({
+  //       type: 'ADD_EXPENSE',
+  //       trip: user.selectedTrip,
+  //       payload: newExpense,
+  //     });
 
-    setUser(user => {
-      const newUser = { ...user };
-      newUser.selectedTrip.expenses.push(newExpense);
-      return newUser;
-    });
-  };
+  //     setUser(user => {
+  //       const newUser = { ...user };
+  //       newUser.selectedTrip.expenses.push(newExpense);
+  //       return newUser;
+  //     });
+
+  //     // *update expense
+  //     // const expenseId = '663a857170c7112af6015994'; //hardcoded for now
+  //     // const updatedExpense = await updateExpense(formData, expenseId);
+  //     //   const {selectedTrip} = user;
+  //     //   dispatch({
+  //     //     type: 'UPDATE_EXPENSE',
+  //     //     tripId: selectedTrip,
+  //     //     expenseId: expenseId,
+  //     //     payload: updatedExpense,
+  //     //   });
+  //   };
 
   // *add expense
-  const handleSavePress = async () => {
-    await saveExpense();
+  //   const handleSavePress = async () => {
+  //     await saveExpense();
 
-    navigation.navigate('Main', {
-      screen: 'PinnedTripStack',
-      params: {
-        screen: 'PinnedTrip',
-      },
-    });
-  };
+  //     navigation.navigate('Main', {
+  //       screen: 'PinnedTripStack',
+  //       params: {
+  //         screen: 'PinnedTrip',
+  //       },
+  //     });
+  //   };
+
+  //* update expense
+  // const handleSavePress2 = async () => {
+  //   const updatedExpense = await saveExpense();
+  //   // remember to update current trip
+  // };
+
+  // useEffect(() => {
+  //   console.log('Updated trip expenses', trips); // Logging updated trips
+  // }, [trips]);
 
   const handleGoBack = () => {
-    if (pinnedTrip.expenses.length !== 0) {
-      navigation.navigate('Category');
-    } else {
-      navigation.navigate('Category');
-    }
+    navigation.navigate('PinnedTrip');
+    //  navigation.navigate('Trips', { screen: 'TripName' });
   };
 
   const handleCurrencyChange = currency => {
@@ -181,30 +222,32 @@ export default function NewExpenseScreen({ navigation, route }) {
     setPaymentMethod(selectedMethod);
   };
 
-  const handleImagePickerPress = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
+  const handleImagePickerPress = async source => {
+    if (source === 'gallery') {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
 
-    if (!result.canceled) {
-      setImage(result.assets[0]);
-    }
-  };
+      if (!result.canceled) {
+        setImage(result.assets[0]);
+      }
+    } else if (source === camera) {
+      let result = await ImagePicker.launchCameraAsync({
+        cameraType: ImagePicker.CameraType.back,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
 
-  const handleCamera = async () => {
-    let result = await ImagePicker.launchCameraAsync({
-      cameraType: ImagePicker.CameraType.back,
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0]);
+      if (!result.canceled) {
+        setImage(result.assets[0]);
+      }
+    } else {
+      return;
     }
   };
 
@@ -240,7 +283,7 @@ export default function NewExpenseScreen({ navigation, route }) {
                 className="text-3xl"
                 placeholder="0.00"
                 placeholderTextColor="#999"
-                value={value}
+                value={value.toString()}
                 keyboardType="numeric"
                 onChangeText={text => setValue(text)}
               />
@@ -271,6 +314,7 @@ export default function NewExpenseScreen({ navigation, route }) {
                 className={`py-3 pl-2 text-[18px]`}
                 placeholder="Description"
                 placeholderTextColor="black"
+                value={description}
                 onChangeText={text => setDescription(text)}
               />
             </View>
@@ -429,20 +473,21 @@ export default function NewExpenseScreen({ navigation, route }) {
               handleGallery={() => handleImagePickerPress('gallery')}
               handleCamera={() => handleImagePickerPress('camera')}
             />
+
             {image && (
               <Image
-                source={{ uri: image.uri }}
+                source={{ uri: image }}
                 className="h-[150px] w-[150px] self-center mt-5"
               />
             )}
 
             <View className="items-center mt-6">
               <TouchableOpacity
-                onPress={handleSavePress}
+                // onPress={handleSavePress}
                 className="bg-green w-[180px] rounded-lg"
               >
                 <Text className="text-white text-center p-4 text-[19px]">
-                  Save
+                  Update
                 </Text>
               </TouchableOpacity>
             </View>

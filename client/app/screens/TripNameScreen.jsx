@@ -205,6 +205,7 @@ export default function TripNameScreen({ navigation }) {
       <View className="flex-1 text-lg items-center">
         <View className="h-[400px]">
           <ExpenseList
+            navigation={navigation}
             expenses={pinnedTrip.expenses}
             tripCurrencySymbol={tripCurrencySymbol}
           />

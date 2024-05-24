@@ -34,7 +34,9 @@ export default function MyAccountScreen({ navigation, route }) {
   let newAvatar;
   newAvatar = route.params ? route.params.newAvatar : null;
 
-  const userAvatar = newAvatar ? newAvatar.image : findAvatarImage(user.avatar);
+  const userAvatar = newAvatar
+    ? newAvatar.image
+    : user && findAvatarImage(user.avatar);
 
   // *updateUser
   const editUser = async editedUser => {
@@ -73,6 +75,7 @@ export default function MyAccountScreen({ navigation, route }) {
   const handleLogoutPress = async () => {
     await AsyncStorage.clear().then(() => console.log('AsyncStorage cleared'));
     setUser(null);
+    setError('');
     dispatch({
       type: 'DELETE_ALL_TRIPS',
     });

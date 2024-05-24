@@ -23,12 +23,14 @@ export const updateUser = async (req, res, next) => {
 
   delete body.email; // so the runValidators does not check unique email again
   try {
-    // const user = await User.findById(id);
-    // const usernameInUse = await User.findOne({ username: body.username });
-    // if (usernameInUse && user._id !== usernameInUse._id) {
-    //   next({ status: 400, message: 'Username already in use' });
-    //   return;
-    // }
+    const usernameInUse = await User.findOne({
+      username: body.username,
+      _id: { $ne: id },
+    });
+    if (usernameInUse) {
+      next({ status: 400, message: 'Username already in use' });
+      return;
+    }
     const updatedUser = await User.findByIdAndUpdate(id, body, {
       new: true,
       runValidators: true,
