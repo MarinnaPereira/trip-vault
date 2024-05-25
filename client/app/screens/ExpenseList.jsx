@@ -18,7 +18,8 @@ const ExpenseList = ({ navigation, expenses, tripCurrencySymbol }) => {
 
   const prepareSections = expenses => {
     const grouped = expenses.reduce((acc, expense) => {
-      const date = expense.dates[0];
+      // const date = expense.dates[0];
+      const date = DateTime.fromISO(expense.dates[0]).toISODate(); // Normalize date to ISO string
       if (!acc[date]) acc[date] = { title: date, data: [] };
       acc[date].data.push(expense);
       return acc;
@@ -43,7 +44,7 @@ const ExpenseList = ({ navigation, expenses, tripCurrencySymbol }) => {
     return (
       <TouchableOpacity
         onPress={() => handleExpensePress(item)}
-        className="mt-3 mb-2 bg-lightGray rounded-md"
+        className="mt-3 mb-1 bg-lightGray rounded-md"
       >
         <View className="flex-row justify-between w-[380px] p-1 items-center">
           <Image
@@ -88,7 +89,8 @@ const ExpenseList = ({ navigation, expenses, tripCurrencySymbol }) => {
   };
 
   const formatDate = title => {
-    const date = new Date(title).toLocaleDateString();
+    //   const date = new Date(title).toLocaleDateString();
+    const date = DateTime.fromISO(title).toLocaleString(DateTime.DATE_SHORT); // Format date using Luxon
     return isDateToday(title) ? 'Today' : date;
   };
 
@@ -115,6 +117,7 @@ const ExpenseList = ({ navigation, expenses, tripCurrencySymbol }) => {
       keyExtractor={item => item._id}
       renderItem={renderItem}
       renderSectionHeader={renderSectionHeader}
+      automaticallyAdjustContentInsets={false}
     />
   );
 };

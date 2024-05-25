@@ -1,9 +1,16 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { View, TextInput, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 
 const SearchBar = ({ trips, setFilteredTrips }) => {
   const [searchQuery, setSearchQuery] = useState('');
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => setSearchQuery('');
+    }, []),
+  );
 
   const handleSearch = text => {
     setSearchQuery(text);
@@ -21,7 +28,7 @@ const SearchBar = ({ trips, setFilteredTrips }) => {
 
   return (
     <View className="flex-1 items-center">
-      <View className="flex-row w-[380px] mt-2 bg-lightGray rounded-md p-2 ">
+      <View className="flex-row w-[380px] mt-2 bg-lightGray rounded-md p-2 items-center">
         <Feather name="search" size={32} color="gray" className="mr-2" />
         <TextInput
           placeholder="Search trip by name..."

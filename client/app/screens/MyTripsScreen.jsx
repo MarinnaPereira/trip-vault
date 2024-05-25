@@ -8,34 +8,35 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
 import { updateUser } from '../api/api';
 import SearchBar from './SearchBar';
+import avatars from '../../assets/avatars';
+import { SafeAreaView } from 'react-native';
 
 export default function MyTripsScreen({ navigation }) {
   const [filteredTrips, setFilteredTrips] = useState([]);
   const [error, setError] = useState('');
 
-  const { trips, setPinnedTrip } = useTripsContext();
+  const { trips, pinnedTrip, setPinnedTrip } = useTripsContext();
   const { user, setUser } = useUserContext();
 
-  useEffect(() => {
-    setFilteredTrips(trips);
-  }, [trips]);
+  const avatarName = user.avatar;
+  const findAvatarImage = userAvatar => {
+    const avatar = avatars.find(avatar => avatar.name === userAvatar);
+    return avatar
+      ? avatar.image
+      : avatars.find(avatar => avatar.name === 'Mountain').image;
+  };
+  const avatarImage = findAvatarImage(avatarName);
 
-  // useEffect(() => {
-  //   if (user && user.selectedTrip) {
-  //     setPinnedTrip(user.selectedTrip);
-  //     if (
-  //       navigation.getState().routes[navigation.getState().index].name !==
-  //       'MyTrips'
-  //     ) {
-  //       handleNavigation();
-  //     }
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    const reversedTrips = [...trips].reverse();
+    setFilteredTrips(reversedTrips);
+  }, [trips]);
 
   const handleTripPress = async item => {
     setError('');
@@ -107,11 +108,24 @@ export default function MyTripsScreen({ navigation }) {
                     key={item._id}
                     style={{ marginTop: 10 }}
                   >
-                    <View className="p-3 bg-lightGray rounded-md ">
-                      <Text className="w-[360px] px-1 text-lg text-black font-bold relative">
+                    <View className={`p-3 rounded-md bg-lightGray relative`}>
+                      {pinnedTrip._id === item._id && (
+                        <View className="transform scale-x-[-1] absolute -top-2 -right-2">
+                          <AntDesign
+                            name="pushpin"
+                            size={27}
+                            color={'#00b0a3'}
+                          />
+                        </View>
+                      )}
+                      <Text
+                        className={`w-[360px] px-1 text-lg font-bold relative ${pinnedTrip._id === item._id ? 'text-[#00b0a3]' : 'text-black'}`}
+                      >
                         {capitalizeFirstLetter(item.name)}
                       </Text>
-                      <Text className="w-[360px] pl-1 text-lg text-black">
+                      <Text
+                        className={`w-[360px] pl-1 text-lg ${pinnedTrip._id === item._id ? 'text-black font-bold' : 'text-black'}`}
+                      >
                         {new Date(item.start).toLocaleDateString()} –{' '}
                         {new Date(item.end).toLocaleDateString()}
                       </Text>

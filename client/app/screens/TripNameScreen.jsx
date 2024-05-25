@@ -20,6 +20,7 @@ export default function TripNameScreen({ navigation }) {
   const [dailyAverage, setDailyAverage] = useState(0);
   const [balance, setBalance] = useState('0.00');
   const [tripCurrencySymbol, setTripCurrencySymbol] = useState('');
+  const [isTripOver, setIsTripOver] = useState(false);
 
   const {
     trips,
@@ -50,6 +51,11 @@ export default function TripNameScreen({ navigation }) {
         setDailyAverage(dailyAverage);
         setBalance(balance);
         setTripCurrencySymbol(tripCurrencySymbol);
+
+        // Check if trip is over
+        const endDate = DateTime.fromISO(pinnedTrip.end);
+        const currentDate = DateTime.now();
+        setIsTripOver(currentDate >= endDate);
       }
     }, [pinnedTrip]),
   );
@@ -171,10 +177,18 @@ export default function TripNameScreen({ navigation }) {
         </Text>
       </View>
 
+      {isTripOver && (
+        <View className="bg-[#f24f13] mx-4 rounded-md mb-4 ">
+          <Text className="p-3 text-[#fdfdfd] text-center font-bold">
+            This trip is already over
+          </Text>
+        </View>
+      )}
+
       <View className="flex-1 items-center">
         <View>
-          <View className="bg-lightGray rounded-md mb-4">
-            <Text className="w-[380px] p-3 text-lg text-[#999]">
+          <View className="bg-lightGray rounded-md mb-4 pb-2">
+            <Text className="w-[380px] p-3 pt-2 text-lg text-[#999]">
               Total Spent{' '}
             </Text>
             <Text className="ml-auto mr-4 text-xl">
@@ -184,10 +198,15 @@ export default function TripNameScreen({ navigation }) {
         </View>
 
         <View className="flex-row justify-between items-center">
-          <View className="bg-lightGray rounded-md">
-            <Text className="w-[182px] p-3 text-lg text-[#999]">Balance</Text>
-            <Text className="ml-auto mr-4 text-xl">
-              {balance} {tripCurrencySymbol}
+          <View className="bg-lightGray rounded-md ">
+            <Text className="w-[182px] p-3 text-lg text-[#999] ">
+              {' '}
+              {pinnedTrip.budget == 0 ? 'Trip Duration' : 'Balance'}
+            </Text>
+            <Text className="ml-auto mr-4 text-xl pb-2">
+              {pinnedTrip.budget == 0
+                ? tripDuration + (tripDuration > 1 ? ' days' : ' day')
+                : balance + tripCurrencySymbol}
             </Text>
           </View>
 
@@ -195,7 +214,7 @@ export default function TripNameScreen({ navigation }) {
             <Text className="w-[182px] p-3 text-lg text-[#999]">
               Daily Average
             </Text>
-            <Text className="ml-auto mr-4 text-xl">
+            <Text className="ml-auto mr-4 text-xl pb-2">
               {dailyAverage} {tripCurrencySymbol}
             </Text>
           </View>
@@ -211,6 +230,7 @@ export default function TripNameScreen({ navigation }) {
           />
         </View>
       </View>
+
       <View className="flex-1 flex-row justify-end items-end">
         <TouchableOpacity onPress={handleAddPress}>
           <Image
