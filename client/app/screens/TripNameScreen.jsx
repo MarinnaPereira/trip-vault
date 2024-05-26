@@ -178,7 +178,7 @@ export default function TripNameScreen({ navigation }) {
       </View>
 
       {isTripOver && (
-        <View className="bg-[#f24f13] mx-4 rounded-md mb-4 ">
+        <View className="bg-[#f24f13] mx-4 rounded-md mb-4">
           <Text className="p-3 text-[#fdfdfd] text-center font-bold">
             This trip is already over
           </Text>

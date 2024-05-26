@@ -3,8 +3,12 @@ import { View, TextInput, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 
+import { useTripsContext } from '../contexts/tripsContext';
+
 const SearchBar = ({ trips, setFilteredTrips }) => {
   const [searchQuery, setSearchQuery] = useState('');
+
+  const { pinnedTrip } = useTripsContext();
 
   useFocusEffect(
     useCallback(() => {
@@ -12,13 +16,19 @@ const SearchBar = ({ trips, setFilteredTrips }) => {
     }, []),
   );
 
+  const reversedTrips = [...trips].reverse();
+  const notPinnedTrips = reversedTrips.filter(
+    trip => trip._id !== pinnedTrip._id,
+  );
+  const orderedTrips = [pinnedTrip, ...notPinnedTrips];
+
   const handleSearch = text => {
-    setSearchQuery(text);
-    const filteredTrips = trips.filter(trip =>
-      trip.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    const filteredTrips = orderedTrips.filter(trip =>
+      trip.name.toLowerCase().includes(text.toLowerCase()),
     );
     setFilteredTrips(filteredTrips);
-    if (text === '') setFilteredTrips(trips);
+    setSearchQuery(text);
+    if (text === '') setFilteredTrips(orderedTrips);
   };
 
   const handleClearSearch = () => {

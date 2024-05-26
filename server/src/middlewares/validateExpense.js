@@ -20,9 +20,9 @@ export const validateExpense = [
 
   body('value')
     .notEmpty()
-    .withMessage('Value is required')
+    .withMessage('Expense value is required')
     .isNumeric()
-    .withMessage('Value must be a number')
+    .withMessage('Expense value must be a number')
     .escape(),
 
   body('currency')

@@ -79,31 +79,35 @@ export default function NewExpenseScreen({ navigation, route }) {
         name: new Date() + '_receipt' + '.jpeg',
       });
 
-    const newExpense = await addExpense(formData);
-    console.log('newExpense', newExpense);
-    dispatch({
-      type: 'ADD_EXPENSE',
-      trip: user.selectedTrip,
-      payload: newExpense,
-    });
+    const data = await addExpense(formData);
+    console.log('new expense', data);
+    if (data.status === 201) {
+      dispatch({
+        type: 'ADD_EXPENSE',
+        trip: user.selectedTrip,
+        payload: data,
+      });
 
-    setUser(user => {
-      const newUser = { ...user };
-      newUser.selectedTrip.expenses.push(newExpense);
-      return newUser;
-    });
+      setUser(user => {
+        const newUser = { ...user };
+        newUser.selectedTrip.expenses.push(data);
+        return newUser;
+      });
+      navigation.navigate('Main', {
+        screen: 'PinnedTripStack',
+        params: {
+          screen: 'PinnedTrip',
+        },
+      });
+    } else {
+      setError(data);
+    }
   };
 
   // *add expense
   const handleSavePress = async () => {
+    setError('');
     await saveExpense();
-
-    navigation.navigate('Main', {
-      screen: 'PinnedTripStack',
-      params: {
-        screen: 'PinnedTrip',
-      },
-    });
   };
 
   const handleGoBack = () => {
@@ -427,11 +431,18 @@ export default function NewExpenseScreen({ navigation, route }) {
               handleGallery={handleImagePickerPress}
               handleCamera={handleCamera}
             />
+
             {image && (
               <Image
                 source={{ uri: image.uri }}
                 className="h-[150px] w-[150px] self-center mt-5"
               />
+            )}
+
+            {error && (
+              <View className="text-red-600 mt-2 mx-6">
+                <Text className="text-red-600 text-center">{error}</Text>
+              </View>
             )}
 
             <View className="items-center mt-6">

@@ -170,16 +170,14 @@ export const addExpense = async formData => {
       body: formData,
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
     const data = await response.json();
-    console.log('data', data);
+    if (response.status !== 201) {
+      throw new Error(`${data.error}`);
+    }
+    data.status = 201;
     return data; // return object with the new expense info
   } catch (err) {
-    const errMessage = err.message;
-    return errMessage;
+    return err.message;
   }
 };
 

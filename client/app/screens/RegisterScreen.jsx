@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { registerUser } from '../api/api';
@@ -42,6 +43,20 @@ export default function RegisterScreen({ navigation, route }) {
     setShowPassword(!showPassword);
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      // This will run when the screen is focused
+      return () => {
+        // This will run when the screen is unfocused
+        setUsername('');
+        setEmail('');
+        setPassword('');
+        setShowPassword(false);
+        setError('');
+      };
+    }, []),
+  );
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -70,7 +85,7 @@ export default function RegisterScreen({ navigation, route }) {
             placeholderTextColor="#999"
             value={email}
             onChangeText={text => setEmail(text)}
-          ></TextInput>
+          />
           <View className="flex flex-row justify-between w-[380px] mt-4 bg-lightGray rounded-md p-3">
             <TextInput
               className="text-[19px]"

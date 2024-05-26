@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
@@ -100,6 +101,19 @@ export default function LoginScreen({ navigation }) {
     setShowPassword(!showPassword);
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      // This will run when the screen is focused
+      return () => {
+        // This will run when the screen is unfocused
+        setCredential('');
+        setPassword('');
+        setShowPassword(false);
+        setError('');
+      };
+    }, []),
+  );
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -119,8 +133,9 @@ export default function LoginScreen({ navigation }) {
             className="w-[380px] mt-6 bg-lightGray rounded-md p-3 text-[19px]"
             placeholder="username / email"
             placeholderTextColor="#999"
+            value={credential}
             onChangeText={text => setCredential(text)}
-          ></TextInput>
+          />
           <View className="flex flex-row justify-between w-[380px] mt-4 bg-lightGray rounded-md p-3">
             <TextInput
               className="text-[19px]"
