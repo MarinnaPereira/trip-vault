@@ -103,7 +103,7 @@ export default function MyTripsScreen({ navigation }) {
                 </View>
               )}
             </View>
-            <View className=" flex-1 items-center">
+            <View className="flex-1 items-center">
               <View>
                 <SearchBar trips={trips} setFilteredTrips={setFilteredTrips} />
 

@@ -38,7 +38,7 @@ const SearchBar = ({ trips, setFilteredTrips }) => {
 
   return (
     <View className="flex-1 items-center">
-      <View className="flex-row w-[385px] mt-2 bg-lightGray rounded-md p-2 items-center">
+      <View className="flex-row w-[385px] mb-2 bg-lightGray rounded-md p-2 items-center">
         <Feather name="search" size={20} color="gray" />
         <TextInput
           placeholder="Search trip by name..."

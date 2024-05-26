@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
+import { Octicons } from '@expo/vector-icons';
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import { pie, arc } from 'd3-shape';
 import { useFocusEffect } from '@react-navigation/native';
@@ -104,18 +105,27 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
           style={styles.downloadButton}
           onPress={handleDownload}
         >
-          <AntDesign
-            name="download"
-            size={28}
-            color="black"
-            style={{ fontSize: 32 }}
-          />
+          <Octicons name="download" size={30} color="black" />
+          {/* <AntDesign name="download" size={30} color="black" /> */}
         </TouchableOpacity>
       </View>
+
+      {/* Title */}
+      <Text className="text-3xl ml-4 mt-[6px] mb-2 text-[#00b0a3] font-bold items-start">
+        Statistics
+      </Text>
+
       {/* Daily Average Amount */}
       <View style={styles.containerDailyAverage}>
-        <Text style={styles.dailyAverage}>
-          Daily Average: {dailyAverage} {tripCurrencySymbol}
+        <Text className="text-lg mb-2 ml-4 font-bold text-[#00b0a3]">
+          Daily Average:{' '}
+          <Text className="text-black">
+            {dailyAverage} {tripCurrencySymbol}
+          </Text>
+        </Text>
+        <Text className="text-lg  ml-4 font-bold text-[#00b0a3]">
+          Chart Metrics:{' '}
+          <Text className="text-black">Expenses by Category</Text>
         </Text>
       </View>
 
@@ -186,20 +196,21 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   downloadButton: {
-    marginTop: 45,
-    marginEnd: 25,
+    marginTop: 61,
+    marginEnd: 20,
+    fontWeight: 'bold',
   },
   containerDailyAverage: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
   },
-  dailyAverage: {
-    color: '#00b0a3',
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 10,
-    marginLeft: 30,
-  },
+  // dailyAverage: {
+  //   color: '#00b0a3',
+  //   fontSize: 20,
+  //   fontWeight: 'bold',
+  //   marginTop: 10,
+  //   marginLeft: 16,
+  // },
   containerChart: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -210,7 +221,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    marginLeft: 30,
+    marginLeft: 16,
   },
   categoryItem: {
     flexDirection: 'row',
@@ -218,7 +229,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgray',
     borderRadius: 8,
     padding: 10,
-    width: 350,
+    width: 380,
   },
   colorIndicator: {
     marginTop: 6,

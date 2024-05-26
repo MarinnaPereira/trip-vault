@@ -98,9 +98,9 @@ export default function TripNameScreen({ navigation }) {
 
   return (
     <>
-      <View className="absolute top-6 right-0 z-50 mt-10 mr-7">
+      <View className="absolute top-6 right-0 z-50 mt-10 mr-3">
         <TouchableOpacity onPress={toggleMenu}>
-          <Entypo name="dots-three-vertical" size={24} color="black" />
+          <Entypo name="dots-three-vertical" size={26} color="black" />
         </TouchableOpacity>
       </View>
       <Modal
@@ -168,7 +168,7 @@ export default function TripNameScreen({ navigation }) {
       </Modal>
 
       <View className="mt-20 ml-4 justify-start items-left">
-        <Text className="text-3xl mt-4 text-[#00b0a3] font-bold items-start">
+        <Text className="text-3xl mt-4 mb-2 text-[#00b0a3] font-bold items-start">
           {capitalizeFirstLetter(pinnedTrip.name)}
         </Text>
         <Text className="text-lg mb-4 font-bold">

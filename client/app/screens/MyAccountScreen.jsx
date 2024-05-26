@@ -124,14 +124,14 @@ export default function MyAccountScreen({ navigation, route }) {
         </View>
         <View />
 
-        <View className="mt-5">
-          <Text className="text-3xl ml-4 mb-7 text-[#00b0a3] font-bold items-start">
+        <View className="mt-7">
+          <Text className="text-3xl ml-4 mb-5 text-[#00b0a3] font-bold items-start">
             My Account
           </Text>
         </View>
 
         <View className="items-center">
-          <View className="mt-4 w-[380px]">
+          <View className="mt-2 w-[380px]">
             <Text className="text-left text-[19px]">Username</Text>
             <TouchableOpacity
               onPress={toggleModal}
