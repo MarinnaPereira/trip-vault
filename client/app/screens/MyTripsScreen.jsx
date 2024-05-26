@@ -35,7 +35,10 @@ export default function MyTripsScreen({ navigation }) {
 
   useEffect(() => {
     const reversedTrips = [...trips].reverse();
-    setFilteredTrips(reversedTrips);
+    const otherTrips = reversedTrips.filter(
+      trip => trip._id !== pinnedTrip._id,
+    );
+    setFilteredTrips(otherTrips);
   }, [trips]);
 
   const handleTripPress = async item => {
@@ -89,7 +92,7 @@ export default function MyTripsScreen({ navigation }) {
         ListHeaderComponent={
           <>
             <View className="mt-24 justify-start items-left">
-              <Text className="text-3xl ml-4 mb-7 text-[#00b0a3] font-bold items-start">
+              <Text className="text-3xl ml-4 mb-4 text-[#00b0a3] font-bold items-start">
                 My Trips
               </Text>
               {error && (
@@ -101,6 +104,29 @@ export default function MyTripsScreen({ navigation }) {
             <View className=" flex-1 items-center">
               <View>
                 <SearchBar trips={trips} setFilteredTrips={setFilteredTrips} />
+                <TouchableOpacity
+                  onPress={() => handleTripPress(pinnedTrip)}
+                  key={pinnedTrip._id}
+                  style={{ marginTop: 10 }}
+                >
+                  <View className={`p-3 rounded-md bg-lightGray relative`}>
+                    <View className="transform scale-x-[-1] absolute -top-2 -right-2">
+                      <AntDesign name="pushpin" size={27} color={'#00b0a3'} />
+                    </View>
+
+                    <Text
+                      className={`w-[360px] px-1 text-lg relative font-bold text-[#00b0a3]`}
+                    >
+                      {capitalizeFirstLetter(pinnedTrip.name)}
+                    </Text>
+                    <Text
+                      className={`w-[360px] pl-1 text-lg $text-black font-medium`}
+                    >
+                      {new Date(pinnedTrip.start).toLocaleDateString()} –{' '}
+                      {new Date(pinnedTrip.end).toLocaleDateString()}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
 
                 {filteredTrips.map(item => (
                   <TouchableOpacity
@@ -119,12 +145,12 @@ export default function MyTripsScreen({ navigation }) {
                         </View>
                       )}
                       <Text
-                        className={`w-[360px] px-1 text-lg font-bold relative ${pinnedTrip._id === item._id ? 'text-[#00b0a3]' : 'text-black'}`}
+                        className={`w-[360px] px-1 text-lg relative ${pinnedTrip._id === item._id ? 'font-bold text-[#00b0a3]' : 'font-semibold text-black '}`}
                       >
                         {capitalizeFirstLetter(item.name)}
                       </Text>
                       <Text
-                        className={`w-[360px] pl-1 text-lg ${pinnedTrip._id === item._id ? 'text-black font-bold' : 'text-black'}`}
+                        className={`w-[360px] pl-1 text-lg ${pinnedTrip._id === item._id ? 'text-black font-medium' : 'text-neutral-700'}`}
                       >
                         {new Date(item.start).toLocaleDateString()} –{' '}
                         {new Date(item.end).toLocaleDateString()}

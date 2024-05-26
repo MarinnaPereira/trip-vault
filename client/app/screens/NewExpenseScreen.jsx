@@ -34,6 +34,7 @@ export default function NewExpenseScreen({ navigation, route }) {
   const [singleDate, setSingleDate] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [error, setError] = useState(null);
 
   const [isSingleDatePickerVisible, setSingleDatePickerVisibility] =
     useState(false);
@@ -188,12 +189,10 @@ export default function NewExpenseScreen({ navigation, route }) {
       aspect: [1, 1],
       quality: 1,
     });
-
     if (!result.canceled) {
       setImage(result.assets[0]);
     }
   };
-
   const handleCamera = async () => {
     let result = await ImagePicker.launchCameraAsync({
       cameraType: ImagePicker.CameraType.back,
@@ -202,7 +201,6 @@ export default function NewExpenseScreen({ navigation, route }) {
       aspect: [1, 1],
       quality: 1,
     });
-
     if (!result.canceled) {
       setImage(result.assets[0]);
     }
@@ -225,7 +223,7 @@ export default function NewExpenseScreen({ navigation, route }) {
             {categoryName}
           </Text>
           <TouchableOpacity>
-            <FontAwesome6 name="trash-can" size={32} color="red" />
+            <FontAwesome6 name="trash-can" size={29} color="red" />
           </TouchableOpacity>
         </View>
 
@@ -426,8 +424,8 @@ export default function NewExpenseScreen({ navigation, route }) {
             <UploadPictureModal
               modalVisible={isUploadPictureModalVisible}
               closeModal={toggleUploadPictureModal}
-              handleGallery={() => handleImagePickerPress('gallery')}
-              handleCamera={() => handleImagePickerPress('camera')}
+              handleGallery={handleImagePickerPress}
+              handleCamera={handleCamera}
             />
             {image && (
               <Image

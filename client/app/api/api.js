@@ -62,7 +62,6 @@ export const updateUser = async updatedUser => {
 };
 
 export const deleteUser = async user => {
-  // * user as parameter (should have _id inside)
   try {
     const token = await getToken();
 
@@ -179,7 +178,8 @@ export const addExpense = async formData => {
     console.log('data', data);
     return data; // return object with the new expense info
   } catch (err) {
-    console.error(err.message);
+    const errMessage = err.message;
+    return errMessage;
   }
 };
 

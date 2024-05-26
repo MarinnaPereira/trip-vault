@@ -222,32 +222,27 @@ export default function ExistentExpenseScreen({ navigation, route }) {
     setPaymentMethod(selectedMethod);
   };
 
-  const handleImagePickerPress = async source => {
-    if (source === 'gallery') {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        setImage(result.assets[0]);
-      }
-    } else if (source === camera) {
-      let result = await ImagePicker.launchCameraAsync({
-        cameraType: ImagePicker.CameraType.back,
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        setImage(result.assets[0]);
-      }
-    } else {
-      return;
+  const handleImagePickerPress = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setImage(result.assets[0]);
+    }
+  };
+  const handleCamera = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      cameraType: ImagePicker.CameraType.back,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setImage(result.assets[0]);
     }
   };
 
@@ -268,7 +263,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
             {categoryName}
           </Text>
           <TouchableOpacity>
-            <FontAwesome6 name="trash-can" size={32} color="red" />
+            <FontAwesome6 name="trash-can" size={29} color="red" />
           </TouchableOpacity>
         </View>
 
@@ -276,7 +271,11 @@ export default function ExistentExpenseScreen({ navigation, route }) {
           <View className="mt-4 mb-4 bg-lightGray rounded-md">
             <View className="w-[380px] flex flex-row justify-between items-center">
               <Image
-                source={categoryImage}
+                source={
+                  typeof categoryImage === 'string'
+                    ? { uri: categoryImage }
+                    : categoryImage
+                }
                 className="w-[60px] h-[60px] m-2 rounded-xl"
               />
               <TextInput
@@ -470,13 +469,13 @@ export default function ExistentExpenseScreen({ navigation, route }) {
             <UploadPictureModal
               modalVisible={isUploadPictureModalVisible}
               closeModal={toggleUploadPictureModal}
-              handleGallery={() => handleImagePickerPress('gallery')}
-              handleCamera={() => handleImagePickerPress('camera')}
+              handleGallery={handleImagePickerPress}
+              handleCamera={handleCamera}
             />
 
             {image && (
               <Image
-                source={{ uri: image }}
+                source={{ uri: image.uri }}
                 className="h-[150px] w-[150px] self-center mt-5"
               />
             )}
