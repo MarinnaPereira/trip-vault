@@ -11,13 +11,13 @@ export const validateUser = [
     .withMessage('Username must be at least 2 characters long')
     .isAlphanumeric()
     .withMessage('Username should only contain letters and numbers')
-    .escape()
-    .custom(async (value, req) => {
+    .custom(async (value, { req }) => {
       const user = await User.findOne({ username: value });
       if (user && req.method === 'POST') {
         throw new Error('Username already in use');
       }
-    }),
+    })
+    .escape(),
 
   body('email')
     .trim()
@@ -26,13 +26,13 @@ export const validateUser = [
     .isEmail()
     .withMessage('Invalid email address')
     .normalizeEmail({ all_lowercase: true, gmail_remove_dots: false })
-    .escape()
-    .custom(async (value, req) => {
+    .custom(async (value, { req }) => {
       const user = await User.findOne({ email: value });
       if (user && req.method === 'POST') {
         throw new Error('Email already in use');
       }
-    }),
+    })
+    .escape(),
 
   body('password')
     .trim()

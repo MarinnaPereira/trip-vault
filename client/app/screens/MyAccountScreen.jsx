@@ -1,4 +1,10 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -17,6 +23,7 @@ export default function MyAccountScreen({ navigation, route }) {
   const [isEditUserModalVisible, setIsEditUserModalVisible] = useState(false);
   // const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const { user, setIsLogged, isLogged, setUser } = useUserContext();
   const { trips, dispatch, setPinnedTrip } = useTripsContext();
@@ -44,7 +51,9 @@ export default function MyAccountScreen({ navigation, route }) {
   // *updateUser
   const editUser = async editedUser => {
     setError('');
+    setLoading(true);
     const res = await updateUser(editedUser);
+    setLoading(false);
     if (res.status === 200) {
       setUser(res.data);
     } else {
@@ -76,7 +85,9 @@ export default function MyAccountScreen({ navigation, route }) {
   // *logout
 
   const handleLogoutPress = async () => {
+    setLoading(true);
     await AsyncStorage.clear().then(() => console.log('AsyncStorage cleared'));
+    setLoading(false);
     setUser(null);
     setError('');
     dispatch({
@@ -174,29 +185,41 @@ export default function MyAccountScreen({ navigation, route }) {
               )}
             </View>
 
-            <View className="mt-14">
-              <TouchableOpacity
-                onPress={handleLogoutPress}
-                className="bg-lightGray rounded-lg flex flex-row justify-between items-center pr-2"
-              >
-                <Text className="text-left text-[19px] p-4">Logout</Text>
-                <MaterialCommunityIcons name="logout" size={24} color="black" />
-              </TouchableOpacity>
+            {loading ? (
+              <ActivityIndicator
+                size="large"
+                color="#04D9B2"
+                className=" p-4 mt-14"
+              />
+            ) : (
+              <View className="mt-14">
+                <TouchableOpacity
+                  onPress={handleLogoutPress}
+                  className="bg-lightGray rounded-lg flex flex-row justify-between items-center pr-2"
+                >
+                  <Text className="text-left text-[19px] p-4">Logout</Text>
+                  <MaterialCommunityIcons
+                    name="logout"
+                    size={24}
+                    color="black"
+                  />
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={handleDeleteAccountPress}
-                className="bg-lightGray rounded-lg mt-4 flex flex-row justify-between items-center pr-2"
-              >
-                <Text className="text-red-500 text-left text-[19px] p-4">
-                  Delete account
-                </Text>
-                <AntDesign
-                  name="deleteuser"
-                  size={24}
-                  color={'rgb(239,68,68)'}
-                />
-              </TouchableOpacity>
-            </View>
+                <TouchableOpacity
+                  onPress={handleDeleteAccountPress}
+                  className="bg-lightGray rounded-lg mt-4 flex flex-row justify-between items-center pr-2"
+                >
+                  <Text className="text-red-500 text-left text-[19px] p-4">
+                    Delete account
+                  </Text>
+                  <AntDesign
+                    name="deleteuser"
+                    size={24}
+                    color={'rgb(239,68,68)'}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
 
           <EditUsernameModal

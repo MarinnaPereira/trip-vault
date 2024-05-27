@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -20,13 +21,16 @@ export default function RegisterScreen({ navigation, route }) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const avatar = route.params.avatar;
 
   const handleRegisterPress = async () => {
     setError('');
+    setLoading(true);
     const newUser = { username, email, password, avatar };
     const res = await registerUser(newUser);
+    setLoading(false);
     if (typeof res !== 'string') {
       console.log('addedUser', res);
       navigation.navigate('Login', { screen: 'LoginScreen' });
@@ -113,14 +117,23 @@ export default function RegisterScreen({ navigation, route }) {
           <TouchableOpacity onPress={handleLoginPress}>
             <Text className="mt-2 text-orange text-[19px]">Login</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleRegisterPress}
-            className="bg-green w-[300px] rounded-lg mt-4"
-          >
-            <Text className="text-white text-center p-4 text-[19px]">
-              Register
-            </Text>
-          </TouchableOpacity>
+
+          {loading ? (
+            <ActivityIndicator
+              size="large"
+              color="#04D9B2"
+              className="p-4 mt-4"
+            />
+          ) : (
+            <TouchableOpacity
+              onPress={handleRegisterPress}
+              className="bg-green w-[300px] rounded-lg mt-4"
+            >
+              <Text className="text-white text-center p-4 text-[19px]">
+                Register
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

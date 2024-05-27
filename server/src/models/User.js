@@ -12,15 +12,9 @@ const userSchema = new Schema({
 });
 
 userSchema.statics.register = async data => {
-  try {
-    const hashed = await hash(data.password, 10);
-    data.password = hashed;
-    const registeredUser = await User.create(data);
-    return registeredUser;
-  } catch (error) {
-    error.message = 'Error hashing password';
-    next(error);
-  }
+  const hashed = await hash(data.password, 10);
+  data.password = hashed;
+  return User.create(data);
 };
 
 userSchema.statics.login = async data => {

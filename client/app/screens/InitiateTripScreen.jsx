@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -26,6 +27,7 @@ export default function InitiateTripScreen({ navigation }) {
   const [isStartDatePickerVisible, setStartDatePickerVisibility] =
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { user, setUser } = useUserContext();
   const { trips, dispatch, setPinnedTrip } = useTripsContext();
@@ -41,7 +43,9 @@ export default function InitiateTripScreen({ navigation }) {
 
   let newTrip;
   const createTrip = async () => {
+    setLoading(true);
     const res = await addTrip(tripData);
+    setLoading(false);
     if (res.status === 201) {
       newTrip = res.data;
       dispatch({
@@ -215,12 +219,16 @@ export default function InitiateTripScreen({ navigation }) {
         )}
 
         <View className="mt-8">
-          <TouchableOpacity
-            onPress={handleSavePress}
-            className={`${!error ? 'bg-green text-lg w-[180px] rounded-lg mt-4' : 'bg-green text-lg w-[180px] rounded-lg'}`}
-          >
-            <Text className="text-white text-lg text-center p-4">Save</Text>
-          </TouchableOpacity>
+          {loading ? (
+            <ActivityIndicator size="large" color="#04D9B2" className=" p-4 " />
+          ) : (
+            <TouchableOpacity
+              onPress={handleSavePress}
+              className={`${!error ? 'bg-green text-lg w-[180px] rounded-lg mt-4' : 'bg-green text-lg w-[180px] rounded-lg'}`}
+            >
+              <Text className="text-white text-lg text-center p-4">Save</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </ScrollView>

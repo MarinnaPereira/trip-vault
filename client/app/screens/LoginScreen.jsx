@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -22,6 +23,7 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const { setUser, setIsLogged } = useUserContext();
   const { dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
@@ -34,11 +36,13 @@ export default function LoginScreen({ navigation }) {
 
   const fetchUser = async () => {
     setError('');
+    setLoading(true);
     const userData = {
       credential,
       password,
     };
     const res = await loginUser(userData);
+    setLoading(false);
     if (res.user && res.token) {
       await AsyncStorage.setItem('token', res.token);
       setUser(res.user);
@@ -54,7 +58,9 @@ export default function LoginScreen({ navigation }) {
   let allTrips;
   const fetchUserTrips = async () => {
     try {
+      // setLoading(true);
       allTrips = await getAllTrips();
+      // setLoading(false);
       console.log(allTrips);
       if (allTrips) {
         dispatch({
@@ -162,15 +168,22 @@ export default function LoginScreen({ navigation }) {
           <TouchableOpacity onPress={handleRegisterPress}>
             <Text className="mt-2 text-orange text-[19px]">Register</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={handleLoginPress}
-            className="bg-green w-[300px] rounded-lg mt-4"
-          >
-            <Text className="text-white text-center p-4 text-[19px]">
-              Login
-            </Text>
-          </TouchableOpacity>
+          {loading ? (
+            <ActivityIndicator
+              size="large"
+              color="#04D9B2"
+              className=" p-4 mt-4"
+            />
+          ) : (
+            <TouchableOpacity
+              onPress={handleLoginPress}
+              className="bg-green w-[300px] rounded-lg mt-4"
+            >
+              <Text className="text-white text-center p-4 text-[19px]">
+                Login
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

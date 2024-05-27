@@ -26,7 +26,12 @@ export default function UploadPictureModal({
         }}
       >
         <View className="bg-white rounded-md">
-          <TouchableOpacity onPress={handleCamera}>
+          <TouchableOpacity
+            onPress={() => {
+              handleCamera();
+              closeModal();
+            }}
+          >
             <View className="w-[380px] flex flex-row justify-start items-center pl-3">
               <Entypo name="camera" size={24} color="black" />
               <Text className="py-3 pl-2 text-[19px]">Take Picture</Text>
@@ -34,7 +39,12 @@ export default function UploadPictureModal({
           </TouchableOpacity>
           <View className="h-px bg-gray" />
 
-          <TouchableOpacity onPress={handleGallery}>
+          <TouchableOpacity
+            onPress={() => {
+              handleGallery();
+              closeModal();
+            }}
+          >
             <View className="w-[380px] flex flex-row justify-start items-center pl-3">
               <FontAwesome name="picture-o" size={24} color="black" />
               <Text className="py-3 pl-2 text-[19px]">Choose From Gallery</Text>

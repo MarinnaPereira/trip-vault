@@ -14,6 +14,13 @@ export const addUser = async (req, res, next) => {
 
 export const loginUser = async (req, res, next) => {
   const { credential, password } = req.body;
+
+  if (credential === '') {
+    next({ status: 400, message: 'Username or email is required' });
+  }
+  if (password === '') {
+    next({ status: 400, message: 'Password is required' });
+  }
   try {
     const user = await User.login({ credential, password });
     if (!user) {

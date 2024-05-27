@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -46,6 +53,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
   );
   const [image, setImage] = useState(item?.receipt);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const [isSingleDatePickerVisible, setSingleDatePickerVisibility] =
     useState(false);
@@ -222,18 +230,21 @@ export default function ExistentExpenseScreen({ navigation, route }) {
   };
 
   const handleImagePickerPress = async () => {
+    setLoading(true);
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
     });
+    setLoading(false);
     if (!result.canceled) {
       setImage(result.assets[0]);
     }
   };
 
   const handleCamera = async () => {
+    setLoading(true);
     let result = await ImagePicker.launchCameraAsync({
       cameraType: ImagePicker.CameraType.back,
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -241,6 +252,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
       aspect: [1, 1],
       quality: 1,
     });
+    setLoading(false);
     if (!result.canceled) {
       setImage(result.assets[0]);
     }
@@ -248,7 +260,9 @@ export default function ExistentExpenseScreen({ navigation, route }) {
 
   const handleDelete = async () => {
     const previousLength = pinnedTrip.expenses.length;
+    setLoading(true);
     const res = await deleteExpense(item);
+    setLoading(false);
     if (!res.status) {
       setError(res);
       return;
@@ -520,14 +534,22 @@ export default function ExistentExpenseScreen({ navigation, route }) {
             )}
 
             <View className="items-center mt-6">
-              <TouchableOpacity
-                // onPress={handleSavePress}
-                className="bg-green w-[180px] rounded-lg"
-              >
-                <Text className="text-white text-center p-4 text-[19px]">
-                  Update
-                </Text>
-              </TouchableOpacity>
+              {loading ? (
+                <ActivityIndicator
+                  size="large"
+                  color="#04D9B2"
+                  className=" p-4 "
+                />
+              ) : (
+                <TouchableOpacity
+                  // onPress={handleSavePress}
+                  className="bg-green w-[180px] rounded-lg"
+                >
+                  <Text className="text-white text-center p-4 text-[19px]">
+                    Update
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>

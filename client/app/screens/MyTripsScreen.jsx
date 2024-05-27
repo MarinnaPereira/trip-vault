@@ -7,6 +7,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native';
@@ -22,6 +23,7 @@ export default function MyTripsScreen({ navigation }) {
   const [filteredTrips, setFilteredTrips] = useState([]);
   const [error, setError] = useState('');
   const flatListRef = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   const { trips, pinnedTrip, setPinnedTrip } = useTripsContext();
   const { user, setUser } = useUserContext();
@@ -71,11 +73,12 @@ export default function MyTripsScreen({ navigation }) {
   const handleTripPress = async item => {
     setError('');
     if (user) {
+      setLoading(true);
       const res = await updateUser({
         ...user,
         selectedTrip: item._id,
       });
-
+      setLoading(false);
       if (res.status === 200) {
         const updatedUser = { ...user, selectedTrip: item };
         setUser(updatedUser);
@@ -133,50 +136,61 @@ export default function MyTripsScreen({ navigation }) {
               )}
             </View>
             <View className="flex-1 items-center">
-              <View>
-                <SearchBar trips={trips} setFilteredTrips={setFilteredTrips} />
+              {loading ? (
+                <ActivityIndicator
+                  size="large"
+                  color="#04D9B2"
+                  className="p-4 mt-60"
+                />
+              ) : (
+                <View>
+                  <SearchBar
+                    trips={trips}
+                    setFilteredTrips={setFilteredTrips}
+                  />
 
-                {filteredTrips.map(item => (
-                  <TouchableOpacity
-                    onPress={() => handleTripPress(item)}
-                    key={item._id}
-                    style={{ marginTop: 10 }}
-                  >
-                    <View className={`p-3 rounded-md bg-lightGray relative`}>
-                      {pinnedTrip && pinnedTrip._id === item._id && (
-                        <View className="transform scale-x-[-1] absolute top-4 -top-2  right-4 -right-2 ">
-                          <AntDesign
-                            name="pushpin"
-                            size={27}
-                            color={'#00b0a3'}
-                          />
-                          {/* <Image
+                  {filteredTrips.map(item => (
+                    <TouchableOpacity
+                      onPress={() => handleTripPress(item)}
+                      key={item._id}
+                      style={{ marginTop: 10 }}
+                    >
+                      <View className={`p-3 rounded-md bg-lightGray relative`}>
+                        {pinnedTrip && pinnedTrip._id === item._id && (
+                          <View className="transform scale-x-[-1] absolute top-4 -top-2  right-4 -right-2 ">
+                            <AntDesign
+                              name="pushpin"
+                              size={27}
+                              color={'#00b0a3'}
+                            />
+                            {/* <Image
                             source={require('../../assets/images/pinned-map.png')}
                             style={{ width: 40, height: 40 }}
                           /> */}
-                        </View>
-                      )}
-                      <Text
-                        className={`w-[360px] px-1 text-lg font-bold relative ${pinnedTrip && pinnedTrip._id === item._id ? 'text-[#00b0a3]' : 'text-black'}`}
-                      >
-                        {capitalizeFirstLetter(item.name)}
-                      </Text>
-                      <Text
-                        className={`w-[360px] pl-1 text-lg ${pinnedTrip && pinnedTrip._id === item._id ? 'text-black font-bold' : 'text-black'}`}
-                      >
-                        {new Date(item.start).toLocaleDateString()} –{' '}
-                        {new Date(item.end).toLocaleDateString()}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                ))}
+                          </View>
+                        )}
+                        <Text
+                          className={`w-[360px] px-1 text-lg font-bold relative ${pinnedTrip && pinnedTrip._id === item._id ? 'text-[#00b0a3]' : 'text-black'}`}
+                        >
+                          {capitalizeFirstLetter(item.name)}
+                        </Text>
+                        <Text
+                          className={`w-[360px] pl-1 text-lg ${pinnedTrip && pinnedTrip._id === item._id ? 'text-black font-bold' : 'text-black'}`}
+                        >
+                          {new Date(item.start).toLocaleDateString()} –{' '}
+                          {new Date(item.end).toLocaleDateString()}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
 
-                {filteredTrips.length === 0 && (
-                  <Text className="font-semibold mt-4 text-center">
-                    No results found
-                  </Text>
-                )}
-              </View>
+                  {filteredTrips.length === 0 && (
+                    <Text className="font-semibold mt-4 text-center">
+                      No results found
+                    </Text>
+                  )}
+                </View>
+              )}
             </View>
           </>
         }

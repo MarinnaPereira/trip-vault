@@ -225,4 +225,3 @@ export const deleteExpense = async expense => {
     return errMessage;
   }
 };
-// !update trip
