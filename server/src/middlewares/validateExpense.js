@@ -22,7 +22,9 @@ export const validateExpense = [
     .notEmpty()
     .withMessage('Expense value is required')
     .isNumeric()
-    .withMessage('Expense value must be a number')
+    .withMessage(
+      'Expense value must be a number (use "." as the decimal separator)',
+    )
     .escape(),
 
   body('currency')

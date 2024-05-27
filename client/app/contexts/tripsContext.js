@@ -19,7 +19,7 @@ const tripsReducer = (state, action) => {
         trip._id === action.payload._id ? action.payload : trip,
       );
     case 'DELETE_TRIP':
-      return state.filter(trip => trip._id !== action.payload);
+      return state.filter(trip => trip._id !== action.payload._id);
     case 'DELETE_ALL_TRIPS':
       return [];
     case 'ADD_EXPENSE':

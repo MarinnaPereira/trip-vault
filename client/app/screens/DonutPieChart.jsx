@@ -9,12 +9,14 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import { useTripsContext } from '../contexts/tripsContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
+import { useUserContext } from '../contexts/userContext';
 
 const DonutPieChart = ({ width = 300, height = 300 }) => {
   const [totalPerCategory, setTotalPerCategory] = useState({});
   const scrollViewRef = useRef(null);
 
   const {
+    trips,
     pinnedTrip,
     calculateTotalSpent,
     calculateTripDuration,
@@ -22,8 +24,14 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
   } = useTripsContext();
   const { getCurrencySymbol } = useCurrencyContext();
 
+  const { user } = useUserContext();
+
   useFocusEffect(
     useCallback(() => {
+      console.log('trips', trips);
+      console.log('select', user.selectedTrip);
+      console.log('pinned', pinnedTrip);
+
       if (pinnedTrip && pinnedTrip.expenses) {
         setTotalPerCategory(
           calculateTotalSpentPerCategory(pinnedTrip.expenses),

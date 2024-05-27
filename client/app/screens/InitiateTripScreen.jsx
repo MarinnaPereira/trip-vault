@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { DateTime } from 'luxon';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
@@ -63,7 +64,7 @@ export default function InitiateTripScreen({ navigation }) {
   const handleSavePress = async () => {
     setError('');
     if (budget && !Number(budget)) {
-      setError('Budget must be a number');
+      setError('Budget must be a number (use "." as the decimal separator)');
       return;
     }
     await createTrip();
@@ -120,6 +121,19 @@ export default function InitiateTripScreen({ navigation }) {
           .toObject().days + 1
       : '__';
 
+  useFocusEffect(
+    useCallback(() => {
+      // Reset state when screen is focused
+      setTripName('');
+      setBudget('');
+      setStartDate(null);
+      setEndDate(null);
+      setError('');
+      setStartDatePickerVisibility(false);
+      setEndDatePickerVisibility(false);
+    }, []),
+  );
+
   return (
     <ScrollView>
       <View className="mt-10">
@@ -142,12 +156,14 @@ export default function InitiateTripScreen({ navigation }) {
             placeholder="Enter a name"
             placeholderTextColor="#999"
             className="w-[380px] text-lg p-3 bg-lightGray rounded-md"
+            value={tripName}
           />
         </View>
         <View className="mt-3">
           <DropdownCurrency
             selectedCurrency={baseCurrency}
             onChange={handleCurrencyChange}
+            value={baseCurrency}
           />
         </View>
         <View className="mt-7 bg-lightGray rounded-md">

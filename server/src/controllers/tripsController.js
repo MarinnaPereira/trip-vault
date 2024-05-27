@@ -86,6 +86,7 @@ export const updateTrip = async (req, res, next) => {
 
 export const deleteTrip = async (req, res, next) => {
   const { id } = req.params;
+  const userId = req.userInfo._id;
   try {
     // Find the trip by its ID
     const trip = await Trip.findById(id);
@@ -109,7 +110,17 @@ export const deleteTrip = async (req, res, next) => {
     // Delete the trip
     await Trip.findByIdAndDelete(id);
 
-    res.json({ message: 'Trip deleted successfully' });
+    // Update User selected trip
+    const user = await User.findById(userId);
+    const trips = await Trip.find({ userId });
+    if (!trips) {
+      user.selectedTrip = null;
+    } else {
+      user.selectedTrip = trips[trips.length - 1];
+    }
+    await user.save();
+
+    res.status(204).json({ message: 'Trip deleted successfully' });
   } catch (error) {
     next(error);
   }

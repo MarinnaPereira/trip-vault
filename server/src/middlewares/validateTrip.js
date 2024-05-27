@@ -19,7 +19,10 @@ export const validateTrip = [
     .isLength({ min: 3, max: 3 })
     .withMessage('Currency must be 3 characters long'),
 
-  body('budget').isNumeric().withMessage('Budget must be a number').optional(),
+  body('budget')
+    .isNumeric()
+    .withMessage('Budget must be a number (use "." as the decimal separator)')
+    .optional(),
 
   body('start')
     .notEmpty()

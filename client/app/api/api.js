@@ -138,17 +138,18 @@ export const updateTrip = async updatedTrip => {
 export const deleteTrip = async trip => {
   try {
     const token = await getToken();
-
     const res = await axios.delete(`${baseUrl}/trips/${trip._id}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res.data);
-    return res.data; // return just a message
+    return res;
   } catch (err) {
-    console.error(err.message);
+    console.log('err', err);
+    const errMessage = err.response.data.message;
+    console.log('errMessage', errMessage);
+    return errMessage;
   }
 };
 
@@ -219,9 +220,9 @@ export const deleteExpense = async expense => {
     });
     return res;
   } catch (err) {
-    console.log('err', err);
+    // console.log('err', err);
     const errMessage = err.response.data.message;
-    console.log('errMessage', errMessage);
+    // console.log('errMessage', errMessage);
     return errMessage;
   }
 };

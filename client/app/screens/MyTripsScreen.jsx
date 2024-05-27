@@ -50,23 +50,25 @@ export default function MyTripsScreen({ navigation }) {
 
   let orderedTrips;
 
-  const resetFilteredTrips = () => {
+  const resetFilteredTrips = trips => {
     const reversedTrips = [...trips].reverse();
     const notPinnedTrips = reversedTrips.filter(
-      trip => trip._id !== pinnedTrip._id,
+      trip => trip._id !== (pinnedTrip?._id || ''),
     );
-    orderedTrips = [pinnedTrip, ...notPinnedTrips];
+    orderedTrips = pinnedTrip
+      ? [pinnedTrip, ...notPinnedTrips]
+      : notPinnedTrips;
     setFilteredTrips(orderedTrips);
   };
 
   useEffect(() => {
-    resetFilteredTrips();
-  }, [trips]);
+    resetFilteredTrips(trips);
+  }, [trips, trips.length, pinnedTrip]);
 
   useFocusEffect(
     useCallback(() => {
       flatListRef.current?.scrollToOffset({ animated: false, offset: 0 }); // Scroll to top when screen gains focus
-      return () => resetFilteredTrips();
+      // return () => resetFilteredTrips(trips);
     }, []),
   );
 
@@ -118,7 +120,7 @@ export default function MyTripsScreen({ navigation }) {
     >
       <FlatList
         ref={flatListRef}
-        data={orderedTrips}
+        data={filteredTrips}
         keyExtractor={item => item._id}
         ListHeaderComponent={
           <>
