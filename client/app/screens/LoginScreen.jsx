@@ -104,13 +104,10 @@ export default function LoginScreen({ navigation }) {
   useFocusEffect(
     useCallback(() => {
       // This will run when the screen is focused
-      return () => {
-        // This will run when the screen is unfocused
-        setCredential('');
-        setPassword('');
-        setShowPassword(false);
-        setError('');
-      };
+      setCredential('');
+      setPassword('');
+      setShowPassword(false);
+      setError('');
     }, []),
   );
 

@@ -12,7 +12,7 @@ const SearchBar = ({ trips, setFilteredTrips }) => {
 
   useFocusEffect(
     useCallback(() => {
-      return () => setSearchQuery('');
+      setSearchQuery('');
     }, []),
   );
 

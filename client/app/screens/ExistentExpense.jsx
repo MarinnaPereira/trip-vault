@@ -12,7 +12,7 @@ import UploadPictureModal from '../modals/UploadPictureModal';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
-import { addExpense, updateExpense } from '../api/api';
+import { updateExpense, deleteExpense } from '../api/api';
 import DropdownCurrency from './DropdownCurrency';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import categories from '../../assets/categories';
@@ -21,8 +21,6 @@ export default function ExistentExpenseScreen({ navigation, route }) {
   const { user, setUser } = useUserContext();
   const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
   const { convertCurrency } = useCurrencyContext();
-  // const [expense, setExpense] = useState(item);
-
   const { item } = route.params || null;
 
   if (!item)
@@ -47,6 +45,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
     item?.paymentMethod != 'null' ? item?.paymentMethod : 'Payment Method',
   );
   const [image, setImage] = useState(item?.receipt);
+  const [error, setError] = useState('');
 
   const [isSingleDatePickerVisible, setSingleDatePickerVisibility] =
     useState(false);
@@ -233,6 +232,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
       setImage(result.assets[0]);
     }
   };
+
   const handleCamera = async () => {
     let result = await ImagePicker.launchCameraAsync({
       cameraType: ImagePicker.CameraType.back,
@@ -243,6 +243,39 @@ export default function ExistentExpenseScreen({ navigation, route }) {
     });
     if (!result.canceled) {
       setImage(result.assets[0]);
+    }
+  };
+
+  const handleDelete = async () => {
+    const previousLength = pinnedTrip.expenses.length;
+    const res = await deleteExpense(item);
+    if (!res.status) {
+      setError(res);
+      return;
+    }
+    dispatch({
+      type: 'DELETE_EXPENSE',
+      trip: user.selectedTrip,
+      payload: item,
+    });
+    setUser(user => {
+      const newUser = { ...user };
+      newUser.selectedTrip.expenses = newUser.selectedTrip.expenses.filter(
+        expense => expense._id !== item._id,
+      );
+      setPinnedTrip({ ...newUser.selectedTrip });
+      return newUser;
+    });
+    handleNavigation(previousLength);
+  };
+
+  const handleNavigation = previousLength => {
+    if (previousLength > 1) {
+      navigation.navigate('PinnedTrip');
+    } else {
+      navigation.navigate('Shared', {
+        screen: 'TrackFirstExpense',
+      });
     }
   };
 
@@ -262,7 +295,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
           <Text className=" text-3xl font-semibold text-[#00B0A3]">
             {categoryName}
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handleDelete()}>
             <FontAwesome6 name="trash-can" size={29} color="red" />
           </TouchableOpacity>
         </View>
@@ -478,6 +511,12 @@ export default function ExistentExpenseScreen({ navigation, route }) {
                 source={{ uri: image.uri }}
                 className="h-[150px] w-[150px] self-center mt-5"
               />
+            )}
+
+            {error && (
+              <View className="text-red-600 mt-2 mx-6">
+                <Text className="text-red-600 text-center">{error}</Text>
+              </View>
             )}
 
             <View className="items-center mt-6">

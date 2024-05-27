@@ -23,11 +23,7 @@ const tripsReducer = (state, action) => {
     case 'DELETE_ALL_TRIPS':
       return [];
     case 'ADD_EXPENSE':
-      console.log('action', action);
-
       return state.map(trip => {
-        console.log('tripId', trip._id);
-        console.log(trip._id === action.trip._id);
         return trip._id === action.trip._id
           ? { ...trip, expenses: [...trip.expenses, action.payload] }
           : trip;
@@ -44,16 +40,18 @@ const tripsReducer = (state, action) => {
           : trip,
       );
     case 'DELETE_EXPENSE':
-      return state.map(trip =>
-        trip._id === action.tripId
+      return state.map(trip => {
+        console.log('tripId', action.trip._id);
+        console.log(trip._id === action.trip._id);
+        return trip._id === action.trip._id
           ? {
               ...trip,
               expenses: trip.expenses.filter(
-                expense => expense._id !== action.payload,
+                expense => expense._id !== action.payload._id,
               ),
             }
-          : trip,
-      );
+          : trip;
+      });
 
     default:
       throw new Error('You action type does not exist!');

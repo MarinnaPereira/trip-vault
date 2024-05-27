@@ -46,14 +46,11 @@ export default function RegisterScreen({ navigation, route }) {
   useFocusEffect(
     useCallback(() => {
       // This will run when the screen is focused
-      return () => {
-        // This will run when the screen is unfocused
-        setUsername('');
-        setEmail('');
-        setPassword('');
-        setShowPassword(false);
-        setError('');
-      };
+      setUsername('');
+      setEmail('');
+      setPassword('');
+      setShowPassword(false);
+      setError('');
     }, []),
   );
 

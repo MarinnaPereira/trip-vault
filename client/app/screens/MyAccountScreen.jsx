@@ -7,6 +7,9 @@ import { deleteUser, updateUser } from '../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EditUsernameModal from '../modals/EditUsernameModal';
 import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
+
 import avatars from '../../assets/avatars';
 import { useTripsContext } from '../contexts/tripsContext';
 
@@ -102,7 +105,7 @@ export default function MyAccountScreen({ navigation, route }) {
 
   return (
     <>
-      <View className="mt-24">
+      <View className="mt-[104px]">
         <View className="items-center">
           {userAvatar && (
             <Image
@@ -120,33 +123,41 @@ export default function MyAccountScreen({ navigation, route }) {
           >
             <MaterialIcons name="edit" size={24} color="black" />
           </TouchableOpacity>
-          <Text className="mt-2 text-[19px]">{user.email}</Text>
+          <Text className="mt-2 text-[19px] font-medium">{user.email}</Text>
         </View>
         <View />
 
-        <View className="mt-7">
-          <Text className="text-3xl ml-4 mb-5 text-[#00b0a3] font-bold items-start">
+        <View className="mt-8">
+          <Text className="text-3xl ml-4 mt-3 mb-2 text-[#00b0a3] font-bold items-start">
             My Account
           </Text>
         </View>
 
         <View className="items-center">
           <View className="mt-2 w-[380px]">
-            <Text className="text-left text-[19px]">Username</Text>
+            <Text className="text-left text-[19px] font-medium mb-1">
+              Username
+            </Text>
             <TouchableOpacity
               onPress={toggleModal}
-              className="bg-lightGray rounded-md"
+              className="bg-lightGray rounded-md mb-1 flex flex-row justify-between items-center pr-2"
             >
-              <Text className="p-3 text-[19px]">{user.username}</Text>
+              <Text className="p-3 text-[19px] text-neutral-700">
+                {user.username}
+              </Text>
+              <MaterialIcons name="edit" size={22} color="black" />
             </TouchableOpacity>
 
             <View className="mt-2">
-              <Text className="text-left text-[19px]">Password</Text>
+              <Text className="text-left text-[19px] font-medium mb-1">
+                Password
+              </Text>
               <View className="flex flex-row justify-between items-center bg-lightGray rounded-md p-3">
-                <Text className="text-lg font-bold">
+                <Text className="text-lg font-bold text-neutral-700">
                   ********
                   {/* {showPassword ? user.password : ''} */}
                 </Text>
+                <MaterialIcons name="edit" size={22} color="black" />
                 {/* <TouchableOpacity onPress={togglePasswordVisibility}>
                 <Ionicons
                     name={showPassword ? 'eye' : 'eye-off'}
@@ -162,22 +173,28 @@ export default function MyAccountScreen({ navigation, route }) {
                 </View>
               )}
             </View>
-            <View className="mt-16">
+
+            <View className="mt-14">
               <TouchableOpacity
                 onPress={handleLogoutPress}
-                className="bg-lightGray rounded-lg"
+                className="bg-lightGray rounded-lg flex flex-row justify-between items-center pr-2"
               >
                 <Text className="text-left text-[19px] p-4">Logout</Text>
+                <MaterialCommunityIcons name="logout" size={24} color="black" />
               </TouchableOpacity>
 
               <TouchableOpacity
-                // Function handleDeleteAccountPress needs to be implemented
                 onPress={handleDeleteAccountPress}
-                className="bg-lightGray rounded-lg mt-4"
+                className="bg-lightGray rounded-lg mt-4 flex flex-row justify-between items-center pr-2"
               >
                 <Text className="text-red-500 text-left text-[19px] p-4">
                   Delete account
                 </Text>
+                <AntDesign
+                  name="deleteuser"
+                  size={24}
+                  color={'rgb(239,68,68)'}
+                />
               </TouchableOpacity>
             </View>
           </View>

@@ -148,18 +148,18 @@ export const deleteExpense = async (req, res, next) => {
       return res.status(404).json({ message: 'Trip not found' });
     }
     const expenseId = req.params.id;
-    // const expense = trip.expenses.filter(expense =>
-    //   expense._id.equals(expenseId),
-    // )[0];
-    // if (!expense) {
-    //   return res.status(404).json({ message: 'Expense not found' });
-    // }
+    const expense = trip.expenses.filter(expense =>
+      expense._id.equals(expenseId),
+    )[0];
+    if (!expense) {
+      return res.status(404).json({ message: 'Expense not found' });
+    }
     trip.expenses = trip.expenses.filter(
       expense => !expense._id.equals(expenseId),
     );
     await trip.save();
     //! remember to delete the file of the uploads folder as well
-    res.json({ message: 'Expense deleted successfully' });
+    res.status(204).json({ message: 'Expense deleted successfully' });
   } catch (error) {
     next(error);
   }

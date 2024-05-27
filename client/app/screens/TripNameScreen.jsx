@@ -32,8 +32,14 @@ export default function TripNameScreen({ navigation }) {
     calculateDailyAverage,
     calculateBalance,
   } = useTripsContext();
+  const { user } = useUserContext();
 
   const { getCurrencySymbol } = useCurrencyContext();
+
+  useEffect(() => {
+    console.log('pinned', pinnedTrip);
+    console.log('selected', user.selectedTrip);
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -204,6 +210,7 @@ export default function TripNameScreen({ navigation }) {
               {pinnedTrip.budget == 0 ? 'Trip Duration' : 'Balance'}
             </Text>
             <Text className="ml-auto mr-4 text-xl pb-2">
+              {/* className=`ml-auto mr-4 text-xl pb-2 ${pinnedTrip && pinnedTrip.budget < 0 ? 'text-red': 'text-black'}` */}
               {pinnedTrip.budget == 0
                 ? tripDuration + (tripDuration > 1 ? ' days' : ' day')
                 : balance + tripCurrencySymbol}

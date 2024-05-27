@@ -1,5 +1,4 @@
 import { SectionList, Text, View, Image, TouchableOpacity } from 'react-native';
-// import { useNavigation } from '@react-navigation/native';
 import { DateTime } from 'luxon';
 
 import { useCurrencyContext } from '../contexts/currencyContext';
@@ -13,7 +12,6 @@ const findCategoryImage = categoryName => {
 };
 
 const ExpenseList = ({ navigation, expenses, tripCurrencySymbol }) => {
-  // const navigation = useNavigation();
   const { getCurrencySymbol } = useCurrencyContext();
 
   const prepareSections = expenses => {
@@ -44,7 +42,7 @@ const ExpenseList = ({ navigation, expenses, tripCurrencySymbol }) => {
     return (
       <TouchableOpacity
         onPress={() => handleExpensePress(item)}
-        className="mt-3 mb-1 bg-lightGray rounded-md"
+        className="mt-2 mb-1 bg-lightGray rounded-md"
       >
         <View className="flex-row justify-between w-[380px] p-1 items-center">
           <Image
@@ -103,7 +101,7 @@ const ExpenseList = ({ navigation, expenses, tripCurrencySymbol }) => {
   };
 
   const renderSectionHeader = ({ section: { title, data } }) => (
-    <View className="flex-row justify-between px-3">
+    <View className="flex-row justify-between px-3 mt-2 mb-1">
       <Text className="text-left text-lg">{formatDate(title)}</Text>
       <Text className="text-right text-lg">
         {totalAmountOfSection(data) + ' ' + tripCurrencySymbol}

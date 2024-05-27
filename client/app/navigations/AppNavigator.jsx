@@ -134,7 +134,14 @@ function MainTabNavigator() {
                 size={32}
                 color={color}
               />
-              <Text style={{ color: color, fontSize: 12, marginBottom: 4 }}>
+              <Text
+                style={{
+                  color: color,
+                  fontSize: 12,
+                  marginBottom: 4,
+                  fontWeight: '500',
+                }}
+              >
                 My Trips
               </Text>
             </View>
@@ -150,7 +157,14 @@ function MainTabNavigator() {
           tabBarLabel: ({ color }) => (
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
               <AntDesign name="pushpin" size={30} color={color} />
-              <Text style={{ color: color, fontSize: 12, marginBottom: 4 }}>
+              <Text
+                style={{
+                  color: color,
+                  fontSize: 12,
+                  marginBottom: 4,
+                  fontWeight: '500',
+                }}
+              >
                 Pinned Trip
               </Text>
             </View>
@@ -166,7 +180,14 @@ function MainTabNavigator() {
           tabBarLabel: ({ color }) => (
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
               <AntDesign name="piechart" size={30} color={color} />
-              <Text style={{ color: color, fontSize: 12, marginBottom: 4 }}>
+              <Text
+                style={{
+                  color: color,
+                  fontSize: 12,
+                  marginBottom: 4,
+                  fontWeight: '500',
+                }}
+              >
                 Stats
               </Text>
             </View>
@@ -182,7 +203,14 @@ function MainTabNavigator() {
           tabBarLabel: ({ color }) => (
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
               <Ionicons name="person" size={30} color={color} />
-              <Text style={{ color: color, fontSize: 12, marginBottom: 4 }}>
+              <Text
+                style={{
+                  color: color,
+                  fontSize: 12,
+                  marginBottom: 4,
+                  fontWeight: '500',
+                }}
+              >
                 My Account
               </Text>
             </View>

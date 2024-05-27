@@ -208,5 +208,21 @@ export const updateExpense = async (formData, expenseId) => {
 };
 // !update trip
 
-export const deleteExpense = async expense => {};
+export const deleteExpense = async expense => {
+  try {
+    const token = await getToken();
+    const res = await axios.delete(`${baseUrl}/expenses/${expense._id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res;
+  } catch (err) {
+    console.log('err', err);
+    const errMessage = err.response.data.message;
+    console.log('errMessage', errMessage);
+    return errMessage;
+  }
+};
 // !update trip

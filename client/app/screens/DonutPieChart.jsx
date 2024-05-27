@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
@@ -12,6 +12,7 @@ import { useCurrencyContext } from '../contexts/currencyContext';
 
 const DonutPieChart = ({ width = 300, height = 300 }) => {
   const [totalPerCategory, setTotalPerCategory] = useState({});
+  const scrollViewRef = useRef(null);
 
   const {
     pinnedTrip,
@@ -28,6 +29,7 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
           calculateTotalSpentPerCategory(pinnedTrip.expenses),
         );
       }
+      return () => scrollViewRef.current?.scrollTo({ y: 0, animated: true }); // Scroll to top when screen gains focus
     }, [pinnedTrip]),
   );
 
@@ -98,7 +100,7 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} ref={scrollViewRef}>
       {/* Download Button */}
       <View style={styles.containerDownloadButton}>
         <TouchableOpacity
@@ -117,15 +119,15 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
 
       {/* Daily Average Amount */}
       <View style={styles.containerDailyAverage}>
-        <Text className="text-lg mb-2 ml-4 font-bold text-[#00b0a3]">
+        <Text className="text-lg mb-2 ml-4 font-semibold text-[#00b0a3]">
           Daily Average:{' '}
-          <Text className="text-black">
+          <Text className="text-black font-bold">
             {dailyAverage} {tripCurrencySymbol}
           </Text>
         </Text>
-        <Text className="text-lg  ml-4 font-bold text-[#00b0a3]">
+        <Text className="text-lg  ml-4 font-semibold text-[#00b0a3]">
           Chart Metrics:{' '}
-          <Text className="text-black">Expenses by Category</Text>
+          <Text className="text-black font-bold">Expenses by Category</Text>
         </Text>
       </View>
 

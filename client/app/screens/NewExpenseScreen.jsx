@@ -93,6 +93,7 @@ export default function NewExpenseScreen({ navigation, route }) {
         newUser.selectedTrip.expenses.push(data);
         return newUser;
       });
+
       navigation.navigate('Main', {
         screen: 'PinnedTripStack',
         params: {
@@ -226,9 +227,9 @@ export default function NewExpenseScreen({ navigation, route }) {
           <Text className=" text-3xl font-semibold text-[#00B0A3]">
             {categoryName}
           </Text>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <FontAwesome6 name="trash-can" size={29} color="red" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         <View className="items-center">

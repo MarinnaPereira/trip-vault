@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import {
   View,
   Text,
@@ -9,39 +9,64 @@ import {
   Platform,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
 import { updateUser } from '../api/api';
 import SearchBar from './SearchBar';
 import avatars from '../../assets/avatars';
-import { SafeAreaView } from 'react-native';
 
 export default function MyTripsScreen({ navigation }) {
   const [filteredTrips, setFilteredTrips] = useState([]);
   const [error, setError] = useState('');
+  const flatListRef = useRef(null);
 
   const { trips, pinnedTrip, setPinnedTrip } = useTripsContext();
   const { user, setUser } = useUserContext();
 
-  // const avatarName = user.avatar;
-  // const findAvatarImage = userAvatar => {
-  //   const avatar = avatars.find(avatar => avatar.name === userAvatar);
-  //   return avatar
-  //     ? avatar.image
-  //     : avatars.find(avatar => avatar.name === 'Mountain').image;
-  // };
-  // const avatarImage = findAvatarImage(avatarName);
+  let avatarName;
+  if (user) {
+    avatarName = user.avatar;
+  }
+
+  const findAvatarImage = userAvatar => {
+    if (!userAvatar) {
+      return avatars.find(avatar => avatar.name === 'Mountain').image;
+    }
+    const avatar = avatars.find(avatar => avatar.name === userAvatar);
+    return avatar
+      ? avatar.image
+      : avatars.find(avatar => avatar.name === 'Mountain').image;
+  };
+
+  let avatarImage;
+  if (avatarName) {
+    avatarImage = findAvatarImage(avatarName);
+  }
 
   let orderedTrips;
-  useEffect(() => {
+
+  const resetFilteredTrips = () => {
     const reversedTrips = [...trips].reverse();
     const notPinnedTrips = reversedTrips.filter(
       trip => trip._id !== pinnedTrip._id,
     );
     orderedTrips = [pinnedTrip, ...notPinnedTrips];
     setFilteredTrips(orderedTrips);
+  };
+
+  useEffect(() => {
+    resetFilteredTrips();
   }, [trips]);
+
+  useFocusEffect(
+    useCallback(() => {
+      flatListRef.current?.scrollToOffset({ animated: false, offset: 0 }); // Scroll to top when screen gains focus
+      return () => resetFilteredTrips();
+    }, []),
+  );
 
   const handleTripPress = async item => {
     setError('');
@@ -89,11 +114,15 @@ export default function MyTripsScreen({ navigation }) {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust offset as needed
     >
       <FlatList
+        ref={flatListRef}
         data={orderedTrips}
         keyExtractor={item => item._id}
         ListHeaderComponent={
           <>
-            <View className="mt-24 justify-start items-left">
+            <View className="flex-1 items-end mt-[61px] mr-[20px]">
+              <Image source={avatarImage} className="w-10 h-10 rounded-xl" />
+            </View>
+            <View className="justify-start items-left">
               <Text className="text-3xl ml-4 mb-4 text-[#00b0a3] font-bold items-start">
                 My Trips
               </Text>
@@ -115,12 +144,16 @@ export default function MyTripsScreen({ navigation }) {
                   >
                     <View className={`p-3 rounded-md bg-lightGray relative`}>
                       {pinnedTrip && pinnedTrip._id === item._id && (
-                        <View className="transform scale-x-[-1] absolute -top-2 -right-2">
+                        <View className="transform scale-x-[-1] absolute top-4 -top-2  right-4 -right-2 ">
                           <AntDesign
                             name="pushpin"
                             size={27}
                             color={'#00b0a3'}
                           />
+                          {/* <Image
+                            source={require('../../assets/images/pinned-map.png')}
+                            style={{ width: 40, height: 40 }}
+                          /> */}
                         </View>
                       )}
                       <Text
