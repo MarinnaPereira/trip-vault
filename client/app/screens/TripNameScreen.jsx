@@ -210,9 +210,7 @@ export default function TripNameScreen({ navigation }) {
               }}
             >
               <View className="bg-white p-5 rounded-lg">
-                <Text className="font-bold mb-4 text-center ">
-                  Delete Trip?
-                </Text>
+                <Text className="font-bold mb-4 text-center ">Delete Trip</Text>
                 <Text>Are you sure you want to delete this trip?</Text>
                 <View className="flex-row justify-between mt-5">
                   <TouchableOpacity
@@ -236,7 +234,9 @@ export default function TripNameScreen({ navigation }) {
             <Text className="text-3xl mt-4 mb-2 text-[#00b0a3] font-bold items-start">
               {capitalizeFirstLetter(pinnedTrip.name)}
             </Text>
-            <Text className={`text-lg font-bold ${error ? 'mb-1' : 'mb-4'}`}>
+            <Text
+              className={`text-lg font-semibold ${error ? 'mb-1' : 'mb-4'}`}
+            >
               {new Date(pinnedTrip.start).toLocaleDateString()} –{' '}
               {new Date(pinnedTrip.end).toLocaleDateString()}
             </Text>

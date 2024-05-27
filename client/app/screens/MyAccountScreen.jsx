@@ -4,6 +4,7 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  Modal,
 } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
@@ -24,6 +25,8 @@ export default function MyAccountScreen({ navigation, route }) {
   // const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
+    useState(false);
 
   const { user, setIsLogged, isLogged, setUser } = useUserContext();
   const { trips, dispatch, setPinnedTrip } = useTripsContext();
@@ -74,12 +77,7 @@ export default function MyAccountScreen({ navigation, route }) {
 
   // *deleteUser
   const handleDeleteAccountPress = async () => {
-    try {
-      await deleteUser(user);
-      handleLogoutPress();
-    } catch (error) {
-      console.error('Error deleting user:', error);
-    }
+    toggleDeleteConfirmation();
   };
 
   // *logout
@@ -113,6 +111,20 @@ export default function MyAccountScreen({ navigation, route }) {
   // const togglePasswordVisibility = () => {
   //   setShowPassword(!showPassword);
   // };
+
+  const toggleDeleteConfirmation = () => {
+    setDeleteConfirmationVisible(!isDeleteConfirmationVisible);
+  };
+
+  const handleDeleteConfirmation = async () => {
+    toggleDeleteConfirmation();
+    try {
+      await deleteUser(user);
+      handleLogoutPress();
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
 
   return (
     <>
@@ -228,6 +240,40 @@ export default function MyAccountScreen({ navigation, route }) {
           />
         </View>
       </View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={isDeleteConfirmationVisible}
+        onRequestClose={toggleDeleteConfirmation}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          }}
+        >
+          <View className="bg-white p-5 rounded-lg">
+            <Text className="font-bold mb-4 text-center ">Delete Account</Text>
+            <Text>Are you sure you want to delete this account?</Text>
+            <View className="flex-row justify-between mt-5">
+              <TouchableOpacity
+                onPress={toggleDeleteConfirmation}
+                className="bg-lightGray p-4 rounded-md"
+              >
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleDeleteConfirmation}
+                className="bg-red-500 p-4 rounded-md"
+              >
+                <Text className="text-white">Delete</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 }

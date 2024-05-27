@@ -224,6 +224,10 @@ export default function NewExpenseScreen({ navigation, route }) {
     }
   };
 
+  const capitalizeFirstLetter = str => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
   return (
     <ScrollView>
       <View className="mt-10">
@@ -240,9 +244,6 @@ export default function NewExpenseScreen({ navigation, route }) {
           <Text className=" text-3xl font-semibold text-[#00B0A3]">
             {categoryName}
           </Text>
-          {/* <TouchableOpacity>
-            <FontAwesome6 name="trash-can" size={29} color="red" />
-          </TouchableOpacity> */}
         </View>
 
         <View className="items-center">
@@ -413,7 +414,9 @@ export default function NewExpenseScreen({ navigation, route }) {
                     color="black"
                   />
                   <Text className="py-3 pl-2 text-[18px]">
-                    {paymentMethod ? paymentMethod : 'Payment Method'}
+                    {paymentMethod
+                      ? capitalizeFirstLetter(paymentMethod)
+                      : 'Payment Method'}
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -422,9 +425,6 @@ export default function NewExpenseScreen({ navigation, route }) {
               modalVisible={isPaymentMethodModalVisible}
               closeModal={togglePaymentModal}
               handlePaymentMethod={handlePaymentMethod}
-              onCameraPress={() => {
-                uploadImage();
-              }}
             />
 
             <View className="mt-4">

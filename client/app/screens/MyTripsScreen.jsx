@@ -172,12 +172,12 @@ export default function MyTripsScreen({ navigation }) {
                           </View>
                         )}
                         <Text
-                          className={`w-[360px] px-1 text-lg font-bold relative ${pinnedTrip && pinnedTrip._id === item._id ? 'text-[#00b0a3]' : 'text-black'}`}
+                          className={`w-[360px] px-1 text-lg relative ${pinnedTrip && pinnedTrip._id === item._id ? 'text-[#00b0a3] font-bold' : 'text-black font-semibold'}`}
                         >
                           {capitalizeFirstLetter(item.name)}
                         </Text>
                         <Text
-                          className={`w-[360px] pl-1 text-lg ${pinnedTrip && pinnedTrip._id === item._id ? 'text-black font-bold' : 'text-black'}`}
+                          className={`w-[360px] pl-1 text-lg ${pinnedTrip && pinnedTrip._id === item._id ? 'text-black font-semibold' : 'text-black'}`}
                         >
                           {new Date(item.start).toLocaleDateString()} –{' '}
                           {new Date(item.end).toLocaleDateString()}

@@ -51,10 +51,10 @@ const ExpenseList = ({ navigation, expenses, tripCurrencySymbol }) => {
           />
           <View className="flex-1 justify-center gap-1">
             <View className="flex flex-row justify-between">
-              <Text className="text-[19px] font-semibold">
+              <Text className="text-[19px] font-medium">
                 {item.categoryName}
               </Text>
-              <Text className="text-[19px] font-semibold mr-3">
+              <Text className="text-[19px] font-medium mr-3">
                 {item.convertedAmount
                   ? `${item.convertedAmount} ${tripCurrencySymbol}`
                   : `${Number(item.value || 0).toFixed(2)} ${getCurrencySymbol(item.currency)}`}

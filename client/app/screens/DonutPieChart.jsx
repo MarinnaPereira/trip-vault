@@ -129,13 +129,13 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
       <View style={styles.containerDailyAverage}>
         <Text className="text-lg mb-2 ml-4 font-semibold text-[#00b0a3]">
           Daily Average:{' '}
-          <Text className="text-black font-bold">
+          <Text className="text-black font-medium">
             {dailyAverage} {tripCurrencySymbol}
           </Text>
         </Text>
         <Text className="text-lg  ml-4 font-semibold text-[#00b0a3]">
           Chart Metrics:{' '}
-          <Text className="text-black font-bold">Expenses by Category</Text>
+          <Text className="text-black font-medium">Expenses by Category</Text>
         </Text>
       </View>
 
@@ -249,14 +249,16 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   categoryName: {
-    color: '#7d7b7b',
+    color: 'black',
     fontSize: 18,
+    fontWeight: '400',
     paddingTop: 5,
     paddingBottom: 5,
   },
   valueCategory: {
-    color: '#7d7b7b',
+    color: 'black',
     fontSize: 18,
+    fontWeight: '400',
   },
 });
 
