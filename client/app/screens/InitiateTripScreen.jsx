@@ -148,12 +148,13 @@ export default function InitiateTripScreen({ navigation }) {
         </Text>
       </View>
       <View className="flex-1 items-center">
-        <View className="mt-4">
+        <View className="w-[380px] mt-4 bg-lightGray rounded-md flex flex-row justify-start items-center pl-[10px]">
+          <MaterialIcons name="edit" size={27} color="black" />
           <TextInput
             onChangeText={text => setTripName(text)}
             placeholder="Enter a name"
-            placeholderTextColor="#999"
-            className="w-[380px] text-lg p-3 bg-lightGray rounded-md"
+            placeholderTextColor="black"
+            className={`py-3 pl-2 text-[18px]`}
             value={tripName}
           />
         </View>
@@ -164,59 +165,88 @@ export default function InitiateTripScreen({ navigation }) {
             value={baseCurrency}
           />
         </View>
-        <View className="mt-7 bg-lightGray rounded-md">
+        <View className="w-[380px] mt-3 bg-lightGray rounded-md flex flex-row justify-start items-center pl-2">
+          <MaterialCommunityIcons
+            name="piggy-bank-outline"
+            size={27}
+            color="black"
+          />
           <TextInput
             onChangeText={text => setBudget(text)}
             placeholder="Enter budget (optional)"
-            placeholderTextColor="#999"
+            placeholderTextColor="black"
             keyboardType="numeric"
             value={budget}
-            className="w-[380px] text-lg p-3 bg-lightGray rounded-md"
+            className={`py-3 pl-2 text-[18px]`}
           />
         </View>
+
+        {/* Start Date */}
         <View className="mt-14">
           <TouchableOpacity
-            onPress={() => setStartDatePickerVisibility(true)}
-            className="bg-lightGray rounded-md"
+            onPress={() => {
+              setStartDatePickerVisibility(true);
+            }}
+            className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-2 pr-3 w-[380px]"
           >
-            <Text className="w-[380px] text-lg pt-3 pl-3 pb-2 text-[#999]">
-              Select start date
-            </Text>
-            {startDate && (
-              <Text className="pl-3 pb-3 text-lg">
-                {startDate.toDateString()}
-              </Text>
-            )}
+            <DateTimePickerModal
+              isVisible={isStartDatePickerVisible}
+              mode="date"
+              onConfirm={handleStartDateConfirm}
+              onCancel={() => setStartDatePickerVisibility(false)}
+            />
+            <View className="flex flex-row items-center">
+              <MaterialCommunityIcons
+                name="calendar-range"
+                size={29}
+                color="black"
+              />
+              {startDate ? (
+                <>
+                  <Text className="pl-2">Start</Text>
+                  <Text className="py-3 pl-2 text-[18px]">
+                    {startDate.toDateString()}
+                  </Text>
+                </>
+              ) : (
+                <Text className="py-3 pl-2 text-[18px]">Select start date</Text>
+              )}
+            </View>
           </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={isStartDatePickerVisible}
-            mode="date"
-            onConfirm={handleStartDateConfirm}
-            onCancel={() => setStartDatePickerVisibility(false)}
-          />
-        </View>
-        <View className="mt-2">
+
+          {/* End Date */}
           <TouchableOpacity
-            onPress={() => setEndDatePickerVisibility(true)}
-            className="bg-lightGray rounded-md"
+            onPress={() => {
+              setEndDatePickerVisibility(true);
+            }}
+            className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-2 pr-3 mt-3 w-[380px]"
           >
-            <Text className="w-[380px] text-lg pt-3 pl-3 pb-2 text-[#999]">
-              Select end date
-            </Text>
-            {endDate && (
-              <Text className="pl-3 pb-3 text-lg">
-                {endDate.toDateString()}
-              </Text>
-            )}
+            <DateTimePickerModal
+              isVisible={isEndDatePickerVisible}
+              mode="date"
+              onConfirm={handleEndDateConfirm}
+              onCancel={hideEndDatePicker}
+            />
+            <View className="flex flex-row items-center">
+              <MaterialCommunityIcons
+                name="calendar-range"
+                size={29}
+                color="black"
+              />
+              {endDate ? (
+                <>
+                  <Text className="pl-[14px]">End</Text>
+                  <Text className="py-3 pl-2 text-[18px]">
+                    {endDate.toDateString()}
+                  </Text>
+                </>
+              ) : (
+                <Text className="py-3 pl-2 text-[18px]">Select end date</Text>
+              )}
+            </View>
           </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={isEndDatePickerVisible}
-            mode="date"
-            onConfirm={handleEndDateConfirm}
-            onCancel={hideEndDatePicker}
-          />
         </View>
-        <View className="flex-row items-center mt-2 w-[380px] p-3 bg-lightGray rounded-md">
+        <View className="flex-row items-center mt-3 w-[380px] p-3 bg-lightGray rounded-md">
           <MaterialCommunityIcons
             name="information-outline"
             size={20}
@@ -232,7 +262,7 @@ export default function InitiateTripScreen({ navigation }) {
           </View>
         )}
 
-        <View className="mt-8">
+        <View className="mt-10">
           {loading ? (
             <ActivityIndicator size="large" color="#04D9B2" className=" p-4 " />
           ) : (

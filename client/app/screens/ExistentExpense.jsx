@@ -8,10 +8,12 @@ import {
   ActivityIndicator,
   Modal,
 } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
-import { FontAwesome6 } from '@expo/vector-icons';
+import {
+  MaterialIcons,
+  MaterialCommunityIcons,
+  FontAwesome,
+  FontAwesome6,
+} from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -335,7 +337,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
         </View>
 
         <View className="items-center">
-          <View className="mt-4 mb-3 bg-lightGray rounded-md">
+          <View className="mt-[16px] mb-3 bg-lightGray rounded-md">
             <View className="w-[380px] flex flex-row justify-between items-center">
               <Image
                 source={
@@ -348,7 +350,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
               <TextInput
                 className="text-3xl"
                 placeholder="0.00"
-                placeholderTextColor="#999"
+                placeholderTextColor="#878787"
                 value={value.toString()}
                 keyboardType="numeric"
                 onChangeText={text => setValue(text)}
@@ -364,7 +366,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
           </View>
           <View />
 
-          <View style="relative">
+          <View style="relative" className="mt-1">
             {currencyDropdownVisible && (
               <DropdownCurrency
                 selectedCurrency={selectedCurrency}
@@ -374,10 +376,10 @@ export default function ExistentExpenseScreen({ navigation, route }) {
           </View>
 
           <View
-            className={`${!currencyDropdownVisible ? '' : 'mt-6'} items-center`}
+            className={`${!currencyDropdownVisible ? '' : 'mt-2'} items-center`}
           >
-            <View className="w-[380px] mt-2 bg-lightGray rounded-md flex flex-row justify-start items-center pl-3">
-              <MaterialIcons name="edit" size={24} color="black" />
+            <View className="w-[380px] mt-2 bg-lightGray rounded-md flex flex-row justify-start items-center pl-[10px]">
+              <MaterialIcons name="edit" size={27} color="black" />
               <TextInput
                 className={`py-3 pl-2 text-[18px]`}
                 placeholder="Description"
@@ -389,11 +391,11 @@ export default function ExistentExpenseScreen({ navigation, route }) {
 
             {/* Calendar Single Date */}
             <View
-              className={`mt-4 w-[380px] ${isSpreadByDays ? 'hidden' : 'flex'}`}
+              className={`mt-[14px] w-[380px] ${isSpreadByDays ? 'hidden' : 'flex'}`}
             >
               <TouchableOpacity
                 onPress={showSingleDatePicker}
-                className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-3 pr-3"
+                className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-2 pr-3"
               >
                 <DateTimePickerModal
                   isVisible={isSingleDatePickerVisible}
@@ -404,7 +406,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
                 <View className="flex flex-row items-center">
                   <MaterialIcons
                     name="calendar-month"
-                    size={30}
+                    size={29}
                     color="black"
                   />
                   {singleDate ? (
@@ -428,14 +430,14 @@ export default function ExistentExpenseScreen({ navigation, route }) {
 
             {/* Calendar Spread by days */}
             <View
-              className={`mt-4 w-[380px] ${isSpreadByDays ? 'flex' : 'hidden'}`}
+              className={`mt-[14px] w-[380px] ${isSpreadByDays ? 'flex' : 'hidden'}`}
             >
               {/* Start Date */}
               <TouchableOpacity
                 onPress={() => {
                   setStartDatePickerVisibility(true);
                 }}
-                className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-3 pr-3 w-[380px]"
+                className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-2 pr-3 w-[380px]"
               >
                 <DateTimePickerModal
                   isVisible={isStartDatePickerVisible}
@@ -444,14 +446,14 @@ export default function ExistentExpenseScreen({ navigation, route }) {
                   onCancel={hideStartDatePicker}
                 />
                 <View className="flex flex-row items-center">
-                  <MaterialIcons
-                    name="calendar-month"
-                    size={30}
+                  <MaterialCommunityIcons
+                    name="calendar-range"
+                    size={29}
                     color="black"
                   />
                   {startDate ? (
                     <>
-                      <Text className="pl-1">Start</Text>
+                      <Text className="pl-2">Start</Text>
                       <Text className="py-3 pl-2 text-[18px]">
                         {startDate.toDateString()}
                       </Text>
@@ -477,7 +479,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
                 onPress={() => {
                   setEndDatePickerVisibility(true);
                 }}
-                className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-3 pr-3 mt-1 w-[380px]"
+                className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-2 pr-3 mt-[14px] w-[380px]"
               >
                 <DateTimePickerModal
                   isVisible={isEndDatePickerVisible}
@@ -486,22 +488,27 @@ export default function ExistentExpenseScreen({ navigation, route }) {
                   onCancel={hideEndDatePicker}
                 />
                 <View className="flex flex-row items-center">
+                  <MaterialCommunityIcons
+                    name="calendar-range"
+                    size={29}
+                    color="black"
+                  />
                   {endDate ? (
                     <>
-                      <Text className="pl-10">End</Text>
+                      <Text className="pl-[14px]">End</Text>
                       <Text className="py-3 pl-2 text-[18px]">
                         {endDate.toDateString()}
                       </Text>
                     </>
                   ) : (
-                    <Text className="py-3 pl-9 text-[18px]">
+                    <Text className="py-3 pl-2 text-[18px]">
                       Select end date
                     </Text>
                   )}
                 </View>
               </TouchableOpacity>
             </View>
-            <View className="mt-4 w-[380px]">
+            <View className="mt-[14px] w-[380px]">
               <TouchableOpacity
                 onPress={togglePaymentModal}
                 className=" bg-lightGray rounded-md"
@@ -509,7 +516,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
                 <View className="flex flex-row justify-start items-center pl-3">
                   <MaterialCommunityIcons
                     name="credit-card-plus-outline"
-                    size={28}
+                    size={26}
                     color="black"
                   />
                   <Text className="py-3 pl-2 text-[18px]">
@@ -527,7 +534,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
               }}
             />
 
-            <View className="mt-4 w-[380px]">
+            <View className="mt-[14px] w-[380px]">
               <TouchableOpacity
                 onPress={toggleUploadPictureModal}
                 className=" bg-lightGray rounded-md"

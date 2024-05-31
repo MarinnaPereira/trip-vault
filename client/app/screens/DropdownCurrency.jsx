@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
+import { MaterialIcons } from '@expo/vector-icons';
+
 import { useCurrencyContext } from '../contexts/currencyContext';
 
 const DropdownCurrency = ({ selectedCurrency, onChange }) => {
@@ -15,9 +17,10 @@ const DropdownCurrency = ({ selectedCurrency, onChange }) => {
   };
 
   return (
-    <View className="mt-4">
+    <View className="w-[380px] py-[14px] bg-lightGray rounded-md flex flex-row justify-start items-center pl-3">
+      <MaterialIcons name="currency-exchange" size={23} color="black" />
       <Dropdown
-        className="bg-lightGray rounded-md w-[380px] text-xl px-3 py-6 text-[#999]"
+        className="w-[345px] text-[18px] px-2 text-[#999]"
         style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
@@ -54,7 +57,7 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 18,
-    color: '#999',
+    color: 'black',
   },
   selectedTextStyle: {
     fontSize: 18,
