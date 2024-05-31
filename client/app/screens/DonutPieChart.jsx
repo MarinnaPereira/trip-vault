@@ -10,7 +10,7 @@ import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
 
-const DonutPieChart = ({ width = 300, height = 300 }) => {
+const DonutPieChart = ({ width = 280, height = 280 }) => {
   const [totalPerCategory, setTotalPerCategory] = useState({});
   const scrollViewRef = useRef(null);
 

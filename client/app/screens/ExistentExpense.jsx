@@ -134,8 +134,8 @@ export default function ExistentExpenseScreen({ navigation, route }) {
   };
 
   const handleUpdatePress = async () => {
-    // const updatedExpense = await saveExpense();
-    // console.log('updated on exist exp', updatedExpense);
+    const updatedExpense = await saveExpense();
+    console.log('updated on exist exp', updatedExpense);
   };
 
   const handleGoBack = () => {

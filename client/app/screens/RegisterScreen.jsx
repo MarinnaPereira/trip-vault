@@ -97,7 +97,7 @@ export default function RegisterScreen({ navigation, route }) {
               onChangeText={text => setPassword(text)}
             />
             <Ionicons
-              name={showPassword ? 'eye-off' : 'eye'}
+              name={showPassword ? 'eye' : 'eye-off'}
               size={24}
               color="black"
               onPress={togglePasswordVisibility}
