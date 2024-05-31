@@ -1,7 +1,8 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function TrackFirstExpenseScreen({ navigation }) {
-  const handleTackPress = () => {
+  const handleTrackPress = () => {
     navigation.navigate('Category');
   };
 
@@ -11,11 +12,12 @@ export default function TrackFirstExpenseScreen({ navigation }) {
         {' '}
         Track Your First Expense
       </Text>
-      <TouchableOpacity onPress={handleTackPress}>
-        <Image
-          source={require('../../assets/images/plus.png')}
-          className="w-[88px] h-[88px]"
-        />
+
+      <TouchableOpacity
+        className="mt-5 rounded-full w-[50px] h-[50px] bg-orange justify-center items-center"
+        onPress={handleTrackPress}
+      >
+        <MaterialIcons name="add" size={34} color="white" />
       </TouchableOpacity>
 
       <Image

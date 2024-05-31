@@ -1,4 +1,3 @@
-import React from 'react';
 import AppNavigator from './app/navigations/AppNavigator';
 import { UserProvider } from './app/contexts/userContext';
 import { TripsProvider } from './app/contexts/tripsContext';

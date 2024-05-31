@@ -6,9 +6,15 @@ import {
   TouchableOpacity,
   Modal,
   ActivityIndicator,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { DateTime } from 'luxon';
-import { Entypo, FontAwesome6 } from '@expo/vector-icons';
+import {
+  Entypo,
+  FontAwesome6,
+  MaterialIcons,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 
 import { useUserContext } from '../contexts/userContext';
@@ -53,6 +59,7 @@ export default function TripNameScreen({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
+      console.log('check expenses updated', trips);
       if (pinnedTrip) {
         const totalSpent = calculateTotalSpent(pinnedTrip);
         const tripDuration = calculateTripDuration(pinnedTrip);
@@ -172,28 +179,32 @@ export default function TripNameScreen({ navigation }) {
             visible={isMenuVisible}
             onRequestClose={toggleMenu}
           >
-            <View className="absolute top-[70px] right-4 bg-white rounded-md p-4 shadow">
-              <TouchableOpacity onPress={handleDownload} className="p-2">
-                <View className="flex-row items-center">
-                  <Entypo name="download" size={16} color="black" />
-                  <Text className="ml-2">Download trip</Text>
-                </View>
-              </TouchableOpacity>
+            <TouchableWithoutFeedback onPress={toggleMenu}>
+              <View className="flex-1">
+                <View className="absolute top-[70px] right-4 bg-white rounded-md p-4 shadow">
+                  <TouchableOpacity onPress={handleDownload} className="p-2">
+                    <View className="flex-row items-center">
+                      <Entypo name="download" size={16} color="black" />
+                      <Text className="ml-2">Download trip</Text>
+                    </View>
+                  </TouchableOpacity>
 
-              <TouchableOpacity onPress={handleEdit} className="p-2">
-                <View className="flex-row items-center">
-                  <Entypo name="edit" size={16} color="black" />
-                  <Text className="ml-2">Edit trip</Text>
-                </View>
-              </TouchableOpacity>
+                  <TouchableOpacity onPress={handleEdit} className="p-2">
+                    <View className="flex-row items-center">
+                      <Entypo name="edit" size={16} color="black" />
+                      <Text className="ml-2">Edit trip</Text>
+                    </View>
+                  </TouchableOpacity>
 
-              <TouchableOpacity className="p-2" onPress={handleDelete}>
-                <View className="flex-row items-center">
-                  <FontAwesome6 name="trash-can" size={16} color="red" />
-                  <Text className="ml-3 text-[#FF0000]">Delete trip</Text>
+                  <TouchableOpacity className="p-2" onPress={handleDelete}>
+                    <View className="flex-row items-center">
+                      <FontAwesome6 name="trash-can" size={16} color="red" />
+                      <Text className="ml-3 text-[#FF0000]">Delete trip</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
-            </View>
+              </View>
+            </TouchableWithoutFeedback>
           </Modal>
           <Modal
             animationType="fade"
@@ -230,8 +241,8 @@ export default function TripNameScreen({ navigation }) {
             </View>
           </Modal>
 
-          <View className="mt-20 ml-4 justify-start items-left">
-            <Text className="text-3xl mt-4 mb-2 text-[#00b0a3] font-bold items-start">
+          <View className="mt-[90px] ml-4 justify-start items-left">
+            <Text className="text-3xl mt-3 mb-2 text-[#00b0a3] font-bold items-start">
               {capitalizeFirstLetter(pinnedTrip.name)}
             </Text>
             <Text
@@ -270,12 +281,10 @@ export default function TripNameScreen({ navigation }) {
 
             <View className="flex-row justify-between items-center">
               <View className="bg-lightGray rounded-md ">
-                <Text className="w-[182px] p-3 text-lg text-[#999] ">
-                  {' '}
+                <Text className="w-[182px] p-3 text-lg text-[#999]">
                   {pinnedTrip.budget == 0 ? 'Trip Duration' : 'Balance'}
                 </Text>
                 <Text className="ml-auto mr-4 text-xl pb-2">
-                  {/* className=`ml-auto mr-4 text-xl pb-2 ${pinnedTrip && pinnedTrip.budget < 0 ? 'text-red': 'text-black'}` */}
                   {pinnedTrip.budget == 0
                     ? tripDuration + (tripDuration > 1 ? ' days' : ' day')
                     : balance + tripCurrencySymbol}
@@ -304,11 +313,12 @@ export default function TripNameScreen({ navigation }) {
           </View>
 
           <View className="flex-1 flex-row justify-end items-end">
-            <TouchableOpacity onPress={handleAddPress}>
-              <Image
-                source={require('../../assets/images/plus.png')}
-                className="mr-2 w-20 h-20"
-              />
+            <TouchableOpacity
+              className="rounded-full w-[50px] h-[50px] bg-orange justify-center items-center"
+              onPress={handleAddPress}
+              style={{ position: 'absolute', bottom: 12.5, right: 25 }}
+            >
+              <MaterialIcons name="add" size={34} color="white" />
             </TouchableOpacity>
           </View>
         </>

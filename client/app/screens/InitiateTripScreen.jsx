@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { DateTime } from 'luxon';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -136,14 +136,12 @@ export default function InitiateTripScreen({ navigation }) {
 
   return (
     <ScrollView>
-      <View className="mt-10">
-        <TouchableOpacity onPress={handleGoBack}>
-          <Image
-            source={require('../../assets/images/singleArrow.png')}
-            className="ml-1 mt-6 w-20 h-20"
-          />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        className="mt-20 mb-5 rounded-full w-[50px] h-[50px] bg-orange justify-center items-center ml-4"
+        onPress={handleGoBack}
+      >
+        <MaterialIcons name="keyboard-backspace" size={34} color="white" />
+      </TouchableOpacity>
       <View className="mt-5 justify-start items-left">
         <Text className="text-3xl ml-4 mb-7 text-[#00B0A3] font-bold items-start">
           Initiate a trip

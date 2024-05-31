@@ -230,15 +230,12 @@ export default function NewExpenseScreen({ navigation, route }) {
 
   return (
     <ScrollView>
-      <View className="mt-10">
-        <TouchableOpacity onPress={handleGoBack}>
-          <Image
-            source={require('../../assets/images/singleArrow.png')}
-            className="ml-1 mt-6 w-20 h-20"
-          />
-        </TouchableOpacity>
-      </View>
-
+      <TouchableOpacity
+        className="mt-20 rounded-full w-[50px] h-[50px] bg-orange justify-center items-center ml-4"
+        onPress={handleGoBack}
+      >
+        <MaterialIcons name="keyboard-backspace" size={34} color="white" />
+      </TouchableOpacity>
       <View className="flex-1">
         <View className="flex flex-row justify-between mx-4 mt-5">
           <Text className=" text-3xl font-semibold text-[#00B0A3]">
@@ -247,7 +244,7 @@ export default function NewExpenseScreen({ navigation, route }) {
         </View>
 
         <View className="items-center">
-          <View className="mt-4 mb-4 bg-lightGray rounded-md">
+          <View className="mt-4 mb-3 bg-lightGray rounded-md">
             <View className="w-[380px] flex flex-row justify-between items-center">
               <Image
                 source={categoryImage}
@@ -281,7 +278,9 @@ export default function NewExpenseScreen({ navigation, route }) {
             )}
           </View>
 
-          <View className={`${!currencyDropdownVisible ? '' : 'mt-6'}`}>
+          <View
+            className={`${!currencyDropdownVisible ? '' : 'mt-6'} items-center`}
+          >
             <View className="w-[380px] mt-2 bg-lightGray rounded-md flex flex-row justify-start items-center pl-3">
               <MaterialIcons name="edit" size={24} color="black" />
               <TextInput
@@ -293,7 +292,9 @@ export default function NewExpenseScreen({ navigation, route }) {
             </View>
 
             {/* Calendar Single Date */}
-            <View className={`mt-4 ${isSpreadByDays ? 'hidden' : 'flex'}`}>
+            <View
+              className={`mt-4 w-[380px] ${isSpreadByDays ? 'hidden' : 'flex'}`}
+            >
               <TouchableOpacity
                 onPress={showSingleDatePicker}
                 className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-3 pr-3"
@@ -330,7 +331,9 @@ export default function NewExpenseScreen({ navigation, route }) {
             </View>
 
             {/* Calendar Spread by days */}
-            <View className={`mt-4 ${isSpreadByDays ? 'flex' : 'hidden'}`}>
+            <View
+              className={`mt-4 w-[380px]  ${isSpreadByDays ? 'flex' : 'hidden'}`}
+            >
               {/* Start Date */}
               <TouchableOpacity
                 onPress={() => {
@@ -402,7 +405,7 @@ export default function NewExpenseScreen({ navigation, route }) {
                 </View>
               </TouchableOpacity>
             </View>
-            <View className="mt-4">
+            <View className="mt-4 w-[380px] ">
               <TouchableOpacity
                 onPress={togglePaymentModal}
                 className=" bg-lightGray rounded-md"
@@ -427,7 +430,7 @@ export default function NewExpenseScreen({ navigation, route }) {
               handlePaymentMethod={handlePaymentMethod}
             />
 
-            <View className="mt-4">
+            <View className="mt-4 w-[380px]">
               <TouchableOpacity
                 onPress={toggleUploadPictureModal}
                 className=" bg-lightGray rounded-md"
@@ -449,7 +452,7 @@ export default function NewExpenseScreen({ navigation, route }) {
             {image && (
               <Image
                 source={{ uri: image.uri }}
-                className="h-[150px] w-[150px] self-center mt-5"
+                className="h-[135px] w-[135px] self-center mt-5"
               />
             )}
 

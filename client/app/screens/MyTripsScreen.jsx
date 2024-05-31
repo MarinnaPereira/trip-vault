@@ -8,13 +8,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native';
+import { AntDesign, FontAwesome6, MaterialIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 
-import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
+import { useTripsContext } from '../contexts/tripsContext';
 import { updateUser } from '../api/api';
 import SearchBar from './SearchBar';
 import avatars from '../../assets/avatars';
@@ -22,8 +22,8 @@ import avatars from '../../assets/avatars';
 export default function MyTripsScreen({ navigation }) {
   const [filteredTrips, setFilteredTrips] = useState([]);
   const [error, setError] = useState('');
-  const flatListRef = useRef(null);
   const [loading, setLoading] = useState(false);
+  const flatListRef = useRef(null);
 
   const { trips, pinnedTrip, setPinnedTrip } = useTripsContext();
   const { user, setUser } = useUserContext();
@@ -48,6 +48,10 @@ export default function MyTripsScreen({ navigation }) {
     avatarImage = findAvatarImage(avatarName);
   }
 
+  const capitalizeFirstLetter = str => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
   let orderedTrips;
 
   const resetFilteredTrips = trips => {
@@ -68,7 +72,6 @@ export default function MyTripsScreen({ navigation }) {
   useFocusEffect(
     useCallback(() => {
       flatListRef.current?.scrollToOffset({ animated: false, offset: 0 }); // Scroll to top when screen gains focus
-      // return () => resetFilteredTrips(trips);
     }, []),
   );
 
@@ -108,10 +111,6 @@ export default function MyTripsScreen({ navigation }) {
     navigation.navigate('Shared', { screen: 'InitiateTrip' });
   };
 
-  const capitalizeFirstLetter = str => {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-  };
-
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -124,9 +123,12 @@ export default function MyTripsScreen({ navigation }) {
         keyExtractor={item => item._id}
         ListHeaderComponent={
           <>
-            <View className="flex-1 items-end mt-[61px] mr-[20px]">
+            <TouchableOpacity
+              onPress={() => navigation.navigate('MyAccountStack')}
+              className="flex-1 items-end mt-[61px] mr-[20px]"
+            >
               <Image source={avatarImage} className="w-10 h-10 rounded-xl" />
-            </View>
+            </TouchableOpacity>
             <View className="justify-start items-left">
               <Text className="text-3xl ml-4 mb-4 text-[#00b0a3] font-bold items-start">
                 My Trips
@@ -159,16 +161,12 @@ export default function MyTripsScreen({ navigation }) {
                     >
                       <View className={`p-3 rounded-md bg-lightGray relative`}>
                         {pinnedTrip && pinnedTrip._id === item._id && (
-                          <View className="transform scale-x-[-1] absolute top-4 -top-2  right-4 -right-2 ">
+                          <View className="transform scale-x-[-1] absolute -top-2  -right-2 ">
                             <AntDesign
                               name="pushpin"
                               size={27}
                               color={'#00b0a3'}
                             />
-                            {/* <Image
-                            source={require('../../assets/images/pinned-map.png')}
-                            style={{ width: 40, height: 40 }}
-                          /> */}
                           </View>
                         )}
                         <Text
@@ -197,14 +195,13 @@ export default function MyTripsScreen({ navigation }) {
           </>
         }
       />
-      <View style={{ position: 'absolute', bottom: 0, right: 8 }}>
-        <TouchableOpacity onPress={handleAddTrip}>
-          <Image
-            source={require('../../assets/images/plus.png')}
-            style={{ width: 80, height: 80 }}
-          />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        className="rounded-full w-[50px] h-[50px] bg-orange justify-center items-center"
+        onPress={handleAddTrip}
+        style={{ position: 'absolute', bottom: 12.5, right: 25 }}
+      >
+        <MaterialIcons name="add" size={34} color="white" />
+      </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 }

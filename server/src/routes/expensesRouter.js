@@ -27,13 +27,7 @@ expensesRouter
 expensesRouter
   .route('/:id')
   .get(verifyToken, validateId, getExpense)
-  .patch(
-    verifyToken,
-    validateId,
-    sanitizeExpenseToUpdate,
-    validateExpense,
-    updateExpense,
-  )
+  .patch(verifyToken, validateId, validateExpense, updateExpense)
   .delete(verifyToken, validateId, deleteExpense);
 
 expensesRouter

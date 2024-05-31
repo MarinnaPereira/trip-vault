@@ -6,6 +6,7 @@ import {
   TextInput,
   Image,
   ActivityIndicator,
+  Modal,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -43,17 +44,22 @@ export default function ExistentExpenseScreen({ navigation, route }) {
   const [value, setValue] = useState(item?.value);
   const [selectedCurrency, setSelectedCurrency] = useState(item?.currency);
   const [description, setDescription] = useState(
-    item?.description != 'null' ? item?.description : 'Description',
+    item?.description != 'null' ? item?.description : null,
   );
-  const [singleDate, setSingleDate] = useState(new Date(item?.dates[0])); //! nan
+  const [singleDate, setSingleDate] = useState(new Date(item?.dates[0]));
   const [startDate, setStartDate] = useState(new Date(item?.dates[0]));
-  const [endDate, setEndDate] = useState(new Date(item?.dates[1]));
+  const [endDate, setEndDate] = useState(
+    item?.dates.length > 1 ? new Date(item?.dates[1]) : null,
+  );
   const [paymentMethod, setPaymentMethod] = useState(
-    item?.paymentMethod != 'null' ? item?.paymentMethod : 'Payment Method',
+    item?.paymentMethod != 'null' ? item?.paymentMethod : null,
   );
   const [image, setImage] = useState(item?.receipt);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
+    useState(false);
 
   const [isSingleDatePickerVisible, setSingleDatePickerVisibility] =
     useState(false);
@@ -79,86 +85,61 @@ export default function ExistentExpenseScreen({ navigation, route }) {
 
   const categoryImage = findCategoryImage(categoryName);
 
-  //   const tripCurrency = pinnedTrip ? pinnedTrip.currency : 'USD';
-  //   const getConvertedAmount = () =>
-  //     convertCurrency(value, selectedCurrency, tripCurrency);
+  const tripCurrency = pinnedTrip ? pinnedTrip.currency : 'USD';
+  const getConvertedAmount = () =>
+    convertCurrency(value, selectedCurrency, tripCurrency);
 
-  //   let convertedAmount;
-  //   if (tripCurrency !== selectedCurrency) {
-  //     convertedAmount = getConvertedAmount();
-  //   }
+  let convertedAmount;
+  if (tripCurrency !== selectedCurrency) {
+    convertedAmount = getConvertedAmount();
+  }
 
-  //* addExpense
-  //   const saveExpense = async () => {
-  //     const formData = new FormData();
+  //* updateExpense
+  const saveExpense = async () => {
+    const formData = new FormData();
 
-  //     formData.append('categoryName', categoryName);
-  //     formData.append('value', value);
-  //     formData.append('currency', selectedCurrency);
-  //     convertedAmount && formData.append('convertedAmount', convertedAmount);
-  //     formData.append('description', description);
-  //     singleDate && formData.append('dates[]', singleDate.toISOString());
-  //     startDate && formData.append('dates[]', startDate.toISOString());
-  //     endDate && formData.append('dates[]', endDate.toISOString());
-  //     formData.append('paymentMethod', paymentMethod);
-  //     image &&
-  //       formData.append('file', {
-  //         uri: image.uri,
-  //         type: image.mimeType,
-  //         name: new Date() + '_receipt' + '.jpeg',
-  //       });
+    formData.append('categoryName', categoryName);
+    formData.append('value', value);
+    formData.append('currency', selectedCurrency);
+    convertedAmount && formData.append('convertedAmount', convertedAmount);
+    formData.append('description', description);
+    if (isSpreadByDays) {
+      formData.append('dates[]', startDate.toISOString());
+      formData.append('dates[]', endDate.toISOString());
+    } else {
+      formData.append('dates[]', singleDate.toISOString());
+    }
+    formData.append('paymentMethod', paymentMethod);
+    image &&
+      formData.append('file', {
+        uri: image.uri,
+        type: image.mimeType,
+        name: new Date() + '_receipt' + '.jpeg',
+      });
 
-  //     const newExpense = await addExpense(formData);
-  //     console.log('newExpense', newExpense);
-  //     dispatch({
-  //       type: 'ADD_EXPENSE',
-  //       trip: user.selectedTrip,
-  //       payload: newExpense,
-  //     });
+    const expenseId = item._id;
+    setLoading(true);
+    const data = await updateExpense(formData, expenseId);
+    setLoading(false);
+    if (data.status === 200) {
+      dispatch({
+        type: 'UPDATE_EXPENSE',
+        trip: user.selectedTrip,
+        expenseId: expenseId,
+        payload: data,
+      });
+    }
 
-  //     setUser(user => {
-  //       const newUser = { ...user };
-  //       newUser.selectedTrip.expenses.push(newExpense);
-  //       return newUser;
-  //     });
+    // !update user.selectedTrip and PinnedTrip
+  };
 
-  //     // *update expense
-  //     // const expenseId = '663a857170c7112af6015994'; //hardcoded for now
-  //     // const updatedExpense = await updateExpense(formData, expenseId);
-  //     //   const {selectedTrip} = user;
-  //     //   dispatch({
-  //     //     type: 'UPDATE_EXPENSE',
-  //     //     tripId: selectedTrip,
-  //     //     expenseId: expenseId,
-  //     //     payload: updatedExpense,
-  //     //   });
-  //   };
-
-  // *add expense
-  //   const handleSavePress = async () => {
-  //     await saveExpense();
-
-  //     navigation.navigate('Main', {
-  //       screen: 'PinnedTripStack',
-  //       params: {
-  //         screen: 'PinnedTrip',
-  //       },
-  //     });
-  //   };
-
-  //* update expense
-  // const handleSavePress2 = async () => {
-  //   const updatedExpense = await saveExpense();
-  //   // remember to update current trip
-  // };
-
-  // useEffect(() => {
-  //   console.log('Updated trip expenses', trips); // Logging updated trips
-  // }, [trips]);
+  const handleUpdatePress = async () => {
+    // const updatedExpense = await saveExpense();
+    // console.log('updated on exist exp', updatedExpense);
+  };
 
   const handleGoBack = () => {
     navigation.navigate('PinnedTrip');
-    //  navigation.navigate('Trips', { screen: 'TripName' });
   };
 
   const handleCurrencyChange = currency => {
@@ -258,6 +239,10 @@ export default function ExistentExpenseScreen({ navigation, route }) {
     }
   };
 
+  const toggleDeleteConfirmation = () => {
+    setDeleteConfirmationVisible(!isDeleteConfirmationVisible);
+  };
+
   const handleDelete = async () => {
     const previousLength = pinnedTrip.expenses.length;
     setLoading(true);
@@ -280,6 +265,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
       setPinnedTrip({ ...newUser.selectedTrip });
       return newUser;
     });
+    toggleDeleteConfirmation();
     handleNavigation(previousLength);
   };
 
@@ -295,27 +281,61 @@ export default function ExistentExpenseScreen({ navigation, route }) {
 
   return (
     <ScrollView>
-      <View className="mt-10">
-        <TouchableOpacity onPress={handleGoBack}>
-          <Image
-            source={require('../../assets/images/singleArrow.png')}
-            className="ml-1 mt-6 w-20 h-20"
-          />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        className="mt-20 rounded-full w-[50px] h-[50px] bg-orange justify-center items-center ml-4"
+        onPress={handleGoBack}
+      >
+        <MaterialIcons name="keyboard-backspace" size={34} color="white" />
+      </TouchableOpacity>
 
       <View className="flex-1">
         <View className="flex flex-row justify-between mx-4 mt-5">
           <Text className=" text-3xl font-semibold text-[#00B0A3]">
             {categoryName}
           </Text>
-          <TouchableOpacity onPress={() => handleDelete()}>
+          <TouchableOpacity onPress={toggleDeleteConfirmation}>
             <FontAwesome6 name="trash-can" size={29} color="red" />
           </TouchableOpacity>
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={isDeleteConfirmationVisible}
+            onRequestClose={toggleDeleteConfirmation}
+          >
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              }}
+            >
+              <View className="bg-white p-5 rounded-lg">
+                <Text className="font-bold mb-4 text-center ">
+                  Delete Expense
+                </Text>
+                <Text>Are you sure you want to delete this expense?</Text>
+                <View className="flex-row justify-between mt-5">
+                  <TouchableOpacity
+                    onPress={toggleDeleteConfirmation}
+                    className="bg-lightGray p-4 rounded-md"
+                  >
+                    <Text>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={handleDelete}
+                    className="bg-red-500 p-4 rounded-md"
+                  >
+                    <Text className="text-white">Delete</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </View>
 
         <View className="items-center">
-          <View className="mt-4 mb-4 bg-lightGray rounded-md">
+          <View className="mt-4 mb-3 bg-lightGray rounded-md">
             <View className="w-[380px] flex flex-row justify-between items-center">
               <Image
                 source={
@@ -353,7 +373,9 @@ export default function ExistentExpenseScreen({ navigation, route }) {
             )}
           </View>
 
-          <View className={`${!currencyDropdownVisible ? '' : 'mt-6'}`}>
+          <View
+            className={`${!currencyDropdownVisible ? '' : 'mt-6'} items-center`}
+          >
             <View className="w-[380px] mt-2 bg-lightGray rounded-md flex flex-row justify-start items-center pl-3">
               <MaterialIcons name="edit" size={24} color="black" />
               <TextInput
@@ -366,7 +388,9 @@ export default function ExistentExpenseScreen({ navigation, route }) {
             </View>
 
             {/* Calendar Single Date */}
-            <View className={`mt-4 ${isSpreadByDays ? 'hidden' : 'flex'}`}>
+            <View
+              className={`mt-4 w-[380px] ${isSpreadByDays ? 'hidden' : 'flex'}`}
+            >
               <TouchableOpacity
                 onPress={showSingleDatePicker}
                 className="bg-lightGray rounded-md flex flex-row justify-between items-center pl-3 pr-3"
@@ -403,7 +427,9 @@ export default function ExistentExpenseScreen({ navigation, route }) {
             </View>
 
             {/* Calendar Spread by days */}
-            <View className={`mt-4 ${isSpreadByDays ? 'flex' : 'hidden'}`}>
+            <View
+              className={`mt-4 w-[380px] ${isSpreadByDays ? 'flex' : 'hidden'}`}
+            >
               {/* Start Date */}
               <TouchableOpacity
                 onPress={() => {
@@ -475,7 +501,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
                 </View>
               </TouchableOpacity>
             </View>
-            <View className="mt-4">
+            <View className="mt-4 w-[380px]">
               <TouchableOpacity
                 onPress={togglePaymentModal}
                 className=" bg-lightGray rounded-md"
@@ -501,7 +527,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
               }}
             />
 
-            <View className="mt-4">
+            <View className="mt-4 w-[380px]">
               <TouchableOpacity
                 onPress={toggleUploadPictureModal}
                 className=" bg-lightGray rounded-md"
@@ -542,7 +568,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
                 />
               ) : (
                 <TouchableOpacity
-                  // onPress={handleSavePress}
+                  onPress={handleUpdatePress}
                   className="bg-green w-[180px] rounded-lg"
                 >
                   <Text className="text-white text-center p-4 text-[19px]">

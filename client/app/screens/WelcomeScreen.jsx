@@ -1,7 +1,6 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { React, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useTripsContext } from '../contexts/tripsContext';
+
 export default function WelcomeScreen() {
   const navigation = useNavigation();
 
@@ -16,7 +15,7 @@ export default function WelcomeScreen() {
   };
 
   return (
-    <View className="flex-1 mt-[130px] items-center text-center">
+    <View className="flex-1 pt-[130px] items-center text-center">
       <Image
         source={require('./../../assets/images/TripVault-LogoBig.png')}
         className=" w-[340px] h-[340px]"
@@ -25,13 +24,13 @@ export default function WelcomeScreen() {
         onPress={handleLoginPress}
         className="bg-orange w-[300px] rounded-lg mt-36"
       >
-        <Text className="text-white text-center p-4 text-[17px]">Login</Text>
+        <Text className="text-white text-center p-4 text-[19px]">Login</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={handleRegisterPress}
         className="bg-green w-[300px] rounded-lg m-6"
       >
-        <Text className="text-white text-center p-4 text-[17px]">Register</Text>
+        <Text className="text-white text-center p-4 text-[19px]">Register</Text>
       </TouchableOpacity>
     </View>
   );

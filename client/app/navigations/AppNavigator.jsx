@@ -1,8 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,7 +6,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
+
 import WelcomeScreen from '../screens/WelcomeScreen';
 import AvatarScreen from '../screens/AvatarScreen';
 import RegisterScreen from '../screens/RegisterScreen';
@@ -19,11 +21,11 @@ import MyTripsScreen from '../screens/MyTripsScreen';
 import TripNameScreen from '../screens/TripNameScreen';
 import DonutPieChart from '../screens/DonutPieChart';
 import MyAccountScreen from '../screens/MyAccountScreen';
-import NewExpenseScreen from '../screens/NewExpenseScreen';
-import CategoryScreen from '../screens/CategoryScreen';
 import UnlockFirstTripScreen from '../screens/UnlockFirstTripScreen';
 import InitiateTripScreen from '../screens/InitiateTripScreen';
 import TrackFirstExpenseScreen from '../screens/TrackFirstExpenseScreen';
+import NewExpenseScreen from '../screens/NewExpenseScreen';
+import CategoryScreen from '../screens/CategoryScreen';
 import ExistentExpenseScreen from '../screens/ExistentExpense';
 
 const Stack = createStackNavigator();
@@ -116,7 +118,7 @@ function MainTabNavigator() {
       screenOptions={{
         tabBarActiveTintColor: '#036884',
         tabBarStyle: {
-          height: 56,
+          height: 58,
           backgroundColor: 'white',
           display: keyboardVisible ? 'none' : 'flex',
         },

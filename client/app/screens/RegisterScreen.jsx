@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -25,6 +25,21 @@ export default function RegisterScreen({ navigation, route }) {
 
   const avatar = route.params.avatar;
 
+  useFocusEffect(
+    useCallback(() => {
+      // This will run when the screen is focused
+      setUsername('');
+      setEmail('');
+      setPassword('');
+      setShowPassword(false);
+      setError('');
+    }, []),
+  );
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleRegisterPress = async () => {
     setError('');
     setLoading(true);
@@ -42,21 +57,6 @@ export default function RegisterScreen({ navigation, route }) {
   const handleLoginPress = () => {
     navigation.navigate('Login', { screen: 'LoginScreen' });
   };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      // This will run when the screen is focused
-      setUsername('');
-      setEmail('');
-      setPassword('');
-      setShowPassword(false);
-      setError('');
-    }, []),
-  );
 
   return (
     <KeyboardAvoidingView

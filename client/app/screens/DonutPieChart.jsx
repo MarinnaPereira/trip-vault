@@ -1,15 +1,14 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { AntDesign } from '@expo/vector-icons';
-import { Octicons } from '@expo/vector-icons';
+import { AntDesign, Octicons } from '@expo/vector-icons';
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import { pie, arc } from 'd3-shape';
 import { useFocusEffect } from '@react-navigation/native';
 
+import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
-import { useUserContext } from '../contexts/userContext';
 
 const DonutPieChart = ({ width = 300, height = 300 }) => {
   const [totalPerCategory, setTotalPerCategory] = useState({});
@@ -121,7 +120,7 @@ const DonutPieChart = ({ width = 300, height = 300 }) => {
       </View>
 
       {/* Title */}
-      <Text className="text-3xl ml-4 mt-[6px] mb-2 text-[#00b0a3] font-bold items-start">
+      <Text className="text-3xl ml-4 mt-[10px] mb-2 text-[#00b0a3] font-bold items-start">
         Statistics
       </Text>
 

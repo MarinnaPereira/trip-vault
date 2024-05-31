@@ -29,16 +29,18 @@ const tripsReducer = (state, action) => {
           : trip;
       });
     case 'UPDATE_EXPENSE':
-      return state.map(trip =>
-        trip._id === action.tripId
+      return state.map(trip => {
+        return trip._id === action.trip._id
           ? {
               ...trip,
-              expenses: trip.expenses.map(expense =>
-                expense._id === action.expenseId ? action.payload : expense,
-              ),
+              expenses: trip.expenses.map(expense => {
+                return expense._id === action.expenseId
+                  ? action.payload
+                  : expense;
+              }),
             }
-          : trip,
-      );
+          : trip;
+      });
     case 'DELETE_EXPENSE':
       return state.map(trip => {
         console.log('tripId', action.trip._id);

@@ -159,7 +159,6 @@ export const addExpense = async formData => {
   try {
     const token = await getToken();
     console.log(token);
-    console.log('type', typeof formData);
 
     const response = await fetch(`${baseUrl}/expenses`, {
       method: 'POST',
@@ -176,7 +175,7 @@ export const addExpense = async formData => {
       throw new Error(`${data.error}`);
     }
     data.status = 201;
-    return data; // return object with the new expense info
+    return data;
   } catch (err) {
     return err.message;
   }
@@ -185,26 +184,27 @@ export const addExpense = async formData => {
 export const updateExpense = async (formData, expenseId) => {
   try {
     const token = await getToken();
-    console.log(token);
-    console.log(formData);
+    console.log('formData on API', formData);
+    console.log('expenseId', expenseId);
 
     const response = await fetch(`${baseUrl}/expenses/${expenseId}`, {
       method: 'PATCH',
       headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
       },
       body: formData,
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
     const data = await response.json();
-    console.log(data);
-    return data; // return object with the updated expense info
+    if (response.status !== 200) {
+      throw new Error(`${data.error}`);
+    }
+    data.status = 200;
+    return data;
   } catch (err) {
-    console.error(err.message);
+    return err.message;
   }
 };
 // !update trip

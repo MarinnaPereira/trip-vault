@@ -56,9 +56,13 @@ export const addExpense = async (req, res, next) => {
     res.status(201).json(savedExpense);
   } catch (error) {
     // ! delete file
-    // if (req.file) {
-    //   fse.remove(req.file.path);
-    // }
+    if (req.file) {
+      const receiptPath = expense.receipt;
+      const originalReceiptPath = decode(receiptPath);
+      // console.log(originalReceiptPath);
+      fse.remove(originalReceiptPath);
+      expense.receipt = undefined;
+    }
     next(error);
   }
 };
@@ -115,26 +119,48 @@ export const updateExpense = async (req, res, next) => {
     }
 
     const expenseId = req.params.id;
-    const expense = trip.expenses.filter(expense =>
+    const expenseIndex = trip.expenses.findIndex(expense =>
       expense._id.equals(expenseId),
-    )[0];
-    if (!expense) {
+    );
+    if (expenseIndex === -1) {
       return res.status(404).json({ message: 'Expense not found' });
     }
 
-    Object.assign(expense, req.body);
+    const {
+      categoryName,
+      value,
+      convertedAmount,
+      currency,
+      description,
+      dates,
+      paymentMethod,
+    } = req.body;
 
-    // if client deleted receipt image
-    if (!req.file) {
+    const expense = trip.expenses[expenseIndex];
+
+    // Update the expense with new values
+    if (categoryName !== undefined) expense.categoryName = categoryName;
+    if (value !== undefined) expense.value = value;
+    if (convertedAmount !== undefined)
+      expense.convertedAmount = convertedAmount;
+    if (currency !== undefined) expense.currency = currency;
+    if (description !== undefined) expense.description = description;
+    if (dates !== undefined) expense.dates = dates;
+    if (paymentMethod !== undefined) expense.paymentMethod = paymentMethod;
+    if (req.file) {
+      expense.receipt = req.file.path;
+    } else if (expense.receipt) {
+      // If no new file, remove the existing receipt if it exists
       const receiptPath = expense.receipt;
       const originalReceiptPath = decode(receiptPath);
-      // console.log(originalReceiptPath);
-      fse.remove(originalReceiptPath);
+      await fse.remove(originalReceiptPath);
       expense.receipt = undefined;
     }
 
+    // Save the updated trip
     await trip.save();
-    res.json(expense);
+
+    res.status(200).json(expense);
   } catch (error) {
     next(error);
   }

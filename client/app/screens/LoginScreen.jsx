@@ -157,9 +157,7 @@ export default function LoginScreen({ navigation }) {
           </View>
           {error && (
             <View className="mt-2 mx-6">
-              <Text className="text-[#e35239] text-red-500 text-center">
-                {error}
-              </Text>
+              <Text className="text-red-500 text-center">{error}</Text>
             </View>
           )}
           <Text

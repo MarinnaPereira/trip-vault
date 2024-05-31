@@ -1,4 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function UnlockFirstTripScreen({ navigation }) {
   const handleUnlockFirstTrip = () => {
@@ -10,11 +11,11 @@ export default function UnlockFirstTripScreen({ navigation }) {
       <Text className="text-3xl text-[#00b0a3] font-bold">
         Unlock Your First Trip
       </Text>
-      <TouchableOpacity onPress={handleUnlockFirstTrip}>
-        <Image
-          source={require('../../assets/images/plus.png')}
-          className="w-[88px] h-[88px]"
-        />
+      <TouchableOpacity
+        className="mt-5 rounded-full w-[50px] h-[50px] bg-orange justify-center items-center"
+        onPress={handleUnlockFirstTrip}
+      >
+        <MaterialIcons name="add" size={34} color="white" />
       </TouchableOpacity>
 
       <Image

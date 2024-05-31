@@ -1,24 +1,11 @@
 import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+
 import { useUserContext } from '../contexts/userContext';
 import avatars from '../../assets/avatars';
 
 export default function Avatar({ navigation }) {
   const { user } = useUserContext();
-
-  const handleAvatarPress = avatarName => {
-    if (user) {
-      const selectedAvatar = avatars.find(avatar => avatar.name === avatarName);
-      navigation.navigate('MyAccountStack', {
-        screen: 'MyAccount',
-        params: { newAvatar: selectedAvatar },
-      });
-    } else {
-      navigation.navigate('Auth', {
-        screen: 'Register',
-        params: { avatar: avatarName },
-      });
-    }
-  };
 
   const handleGoBack = () => {
     if (user) {
@@ -31,6 +18,21 @@ export default function Avatar({ navigation }) {
     } else {
       navigation.navigate('Auth', {
         screen: 'Welcome',
+      });
+    }
+  };
+
+  const handleAvatarPress = avatarName => {
+    if (user) {
+      const selectedAvatar = avatars.find(avatar => avatar.name === avatarName);
+      navigation.navigate('MyAccountStack', {
+        screen: 'MyAccount',
+        params: { newAvatar: selectedAvatar },
+      });
+    } else {
+      navigation.navigate('Auth', {
+        screen: 'Register',
+        params: { avatar: avatarName },
       });
     }
   };
@@ -49,20 +51,18 @@ export default function Avatar({ navigation }) {
 
   return (
     <>
-      <View className="mt-10">
-        <TouchableOpacity onPress={handleGoBack}>
-          <Image
-            source={require('../../assets/images/singleArrow.png')}
-            className="ml-1 mt-6 mb-2 w-[80px] h-[80px]"
-          />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        className="mt-24 mb-8 rounded-full w-[50px] h-[50px] bg-orange justify-center items-center ml-7"
+        onPress={handleGoBack}
+      >
+        <MaterialIcons name="keyboard-backspace" size={34} color="white" />
+      </TouchableOpacity>
 
       <View className="items-center">
         <Text className="text-3xl font-semibold text-[#00B0A3]">
           {user ? 'Change avatar' : 'Pick your avatar'}
         </Text>
-        <View className="mt-2">
+        <View className="mt-4">
           <FlatList
             data={avatars}
             renderItem={renderItem}

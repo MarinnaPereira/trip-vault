@@ -1,7 +1,9 @@
-import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
-import categories from '../../assets/categories';
 import { useState } from 'react';
+import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+
 import { useTripsContext } from '../contexts/tripsContext';
+import categories from '../../assets/categories';
 
 export default function Category({ navigation }) {
   const [expense, setExpense] = useState('null');
@@ -38,14 +40,12 @@ export default function Category({ navigation }) {
   );
   return (
     <>
-      <View className="mt-10">
-        <TouchableOpacity onPress={handleGoBack}>
-          <Image
-            source={require('../../assets/images/singleArrow.png')}
-            className="ml-1 mt-6 mb-2 w-[80px] h-[80px]"
-          />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        className="mt-24 mb-8 rounded-full w-[50px] h-[50px] bg-orange justify-center items-center ml-7"
+        onPress={handleGoBack}
+      >
+        <MaterialIcons name="keyboard-backspace" size={34} color="white" />
+      </TouchableOpacity>
 
       <View className="items-center">
         <Text className="text-3xl font-semibold text-[#00B0A3]">
