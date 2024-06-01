@@ -258,7 +258,7 @@ export default function InitiateTripScreen({ navigation }) {
         <View className="flex-row items-center mt-3 w-[380px] p-3 bg-lightGray rounded-md">
           <MaterialCommunityIcons
             name="information-outline"
-            size={20}
+            size={26}
             color="#00B0A3"
           />
           <Text className="ml-2 text-lg text-green font-medium">
