@@ -303,7 +303,7 @@ export default function TripNameScreen({ navigation }) {
           </View>
 
           <View className="flex-1 text-lg items-center">
-            <View className="h-[400px]">
+            <View className={`${isTripOver ? 'pt-5' : ''} h-[400px]`}>
               <ExpenseList
                 navigation={navigation}
                 expenses={pinnedTrip.expenses}

@@ -87,7 +87,7 @@ export default function RegisterScreen({ navigation, route }) {
             value={email}
             onChangeText={text => setEmail(text)}
           />
-          <View className="flex flex-row justify-between w-[380px] mt-4 bg-lightGray rounded-md p-3">
+          <View className="flex flex-row justify-between items-center w-[380px] mt-4 bg-lightGray rounded-md p-3">
             <TextInput
               className="text-[19px]"
               placeholder="password"
@@ -99,7 +99,7 @@ export default function RegisterScreen({ navigation, route }) {
             <Ionicons
               name={showPassword ? 'eye' : 'eye-off'}
               size={24}
-              color="black"
+              color="#555"
               onPress={togglePasswordVisibility}
             />
           </View>

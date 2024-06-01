@@ -149,11 +149,11 @@ export default function InitiateTripScreen({ navigation }) {
       </View>
       <View className="flex-1 items-center">
         <View className="w-[380px] mt-4 bg-lightGray rounded-md flex flex-row justify-start items-center pl-[10px]">
-          <MaterialIcons name="edit" size={27} color="black" />
+          <MaterialIcons name="edit" size={27} color="#333" />
           <TextInput
             onChangeText={text => setTripName(text)}
-            placeholder="Enter a name"
-            placeholderTextColor="black"
+            placeholder="Name"
+            placeholderTextColor="#333"
             className={`py-3 pl-2 text-[18px]`}
             value={tripName}
           />
@@ -169,12 +169,17 @@ export default function InitiateTripScreen({ navigation }) {
           <MaterialCommunityIcons
             name="piggy-bank-outline"
             size={27}
-            color="black"
+            color="#333"
           />
+          {/* <MaterialCommunityIcons
+            name="account-cash-outline"
+            size={27}
+            color="#333"
+          /> */}
           <TextInput
             onChangeText={text => setBudget(text)}
-            placeholder="Enter budget (optional)"
-            placeholderTextColor="black"
+            placeholder="Budget (optional)"
+            placeholderTextColor="#333"
             keyboardType="numeric"
             value={budget}
             className={`py-3 pl-2 text-[18px]`}
@@ -199,7 +204,7 @@ export default function InitiateTripScreen({ navigation }) {
               <MaterialCommunityIcons
                 name="calendar-range"
                 size={29}
-                color="black"
+                color="#333"
               />
               {startDate ? (
                 <>
@@ -209,7 +214,9 @@ export default function InitiateTripScreen({ navigation }) {
                   </Text>
                 </>
               ) : (
-                <Text className="py-3 pl-2 text-[18px]">Select start date</Text>
+                <Text className="py-3 pl-2 text-[18px] text-[#333]">
+                  Start date
+                </Text>
               )}
             </View>
           </TouchableOpacity>
@@ -231,7 +238,7 @@ export default function InitiateTripScreen({ navigation }) {
               <MaterialCommunityIcons
                 name="calendar-range"
                 size={29}
-                color="black"
+                color="#333"
               />
               {endDate ? (
                 <>
@@ -241,7 +248,9 @@ export default function InitiateTripScreen({ navigation }) {
                   </Text>
                 </>
               ) : (
-                <Text className="py-3 pl-2 text-[18px]">Select end date</Text>
+                <Text className="py-3 pl-2 text-[18px] text-[#333]">
+                  End date
+                </Text>
               )}
             </View>
           </TouchableOpacity>

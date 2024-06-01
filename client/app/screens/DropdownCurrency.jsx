@@ -18,9 +18,9 @@ const DropdownCurrency = ({ selectedCurrency, onChange }) => {
 
   return (
     <View className="w-[380px] py-[14px] bg-lightGray rounded-md flex flex-row justify-start items-center pl-3">
-      <MaterialIcons name="currency-exchange" size={23} color="black" />
+      <MaterialIcons name="currency-exchange" size={23} color="#333" />
       <Dropdown
-        className="w-[345px] text-[18px] px-2 text-[#999]"
+        className="w-[345px] text-[18px] px-2 text-[#333]"
         style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
@@ -34,7 +34,7 @@ const DropdownCurrency = ({ selectedCurrency, onChange }) => {
         maxHeight={300}
         labelField="label"
         valueField="code"
-        placeholder={!isFocus ? 'Choose currency' : '...'}
+        placeholder={!isFocus ? 'Currency' : '...'}
         searchPlaceholder="Search..."
         value={value}
         onFocus={() => setIsFocus(true)}
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 18,
-    color: 'black',
+    color: '#333',
   },
   selectedTextStyle: {
     fontSize: 18,

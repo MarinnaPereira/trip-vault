@@ -252,7 +252,7 @@ export default function NewExpenseScreen({ navigation, route }) {
                 className="w-[60px] h-[60px] m-2 rounded-xl"
               />
               <TextInput
-                className="text-3xl"
+                className="text-3xl text-[#333]"
                 placeholder="0.00"
                 placeholderTextColor="#878787"
                 value={value}
@@ -283,11 +283,11 @@ export default function NewExpenseScreen({ navigation, route }) {
             className={`${!currencyDropdownVisible ? '' : 'mt-2'} items-center`}
           >
             <View className="w-[380px] mt-2 bg-lightGray rounded-md flex flex-row justify-start items-center pl-[10px]">
-              <MaterialIcons name="edit" size={27} color="black" />
+              <MaterialIcons name="edit" size={27} color="#333" />
               <TextInput
                 className={`py-3 pl-2 text-[18px]`}
                 placeholder="Description"
-                placeholderTextColor="black"
+                placeholderTextColor="#333"
                 onChangeText={text => setDescription(text)}
               />
             </View>
@@ -307,11 +307,7 @@ export default function NewExpenseScreen({ navigation, route }) {
                   onCancel={hideSingleDatePicker}
                 />
                 <View className="flex flex-row items-center">
-                  <MaterialIcons
-                    name="calendar-month"
-                    size={29}
-                    color="black"
-                  />
+                  <MaterialIcons name="calendar-month" size={29} color="#333" />
                   {singleDate ? (
                     <Text className="py-3 pl-2 text-[18px]">
                       {singleDate.toDateString()}
@@ -352,7 +348,7 @@ export default function NewExpenseScreen({ navigation, route }) {
                   <MaterialCommunityIcons
                     name="calendar-range"
                     size={29}
-                    color="black"
+                    color="#333"
                   />
                   {startDate ? (
                     <>
@@ -392,7 +388,7 @@ export default function NewExpenseScreen({ navigation, route }) {
                   <MaterialCommunityIcons
                     name="calendar-range"
                     size={29}
-                    color="black"
+                    color="#333"
                   />
                   {endDate ? (
                     <>
@@ -416,7 +412,7 @@ export default function NewExpenseScreen({ navigation, route }) {
                   <MaterialCommunityIcons
                     name="credit-card-plus-outline"
                     size={26}
-                    color="black"
+                    color="#333"
                   />
                   <Text className="py-3 pl-2 text-[18px]">
                     {paymentMethod
@@ -438,7 +434,7 @@ export default function NewExpenseScreen({ navigation, route }) {
                 className=" bg-lightGray rounded-md"
               >
                 <View className="flex flex-row justify-start items-center pl-3">
-                  <FontAwesome name="cloud-upload" size={24} color="black" />
+                  <FontAwesome name="cloud-upload" size={24} color="#333" />
                   <Text className="py-3 pl-2 text-[18px]">Upload Picture</Text>
                 </View>
               </TouchableOpacity>
