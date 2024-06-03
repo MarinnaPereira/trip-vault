@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -16,23 +16,42 @@ import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
 import DropdownCurrency from './DropdownCurrency';
-import { addTrip } from '../api/api';
+import { addTrip, updateTrip } from '../api/api';
 
-export default function InitiateTripScreen({ navigation }) {
+export default function EditTripScreen({ navigation }) {
   const [tripName, setTripName] = useState('');
   const [budget, setBudget] = useState('');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState('');
 
   const [isStartDatePickerVisible, setStartDatePickerVisibility] =
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
 
   const { user, setUser } = useUserContext();
-  const { trips, dispatch, setPinnedTrip } = useTripsContext();
-  const { baseCurrency, setBaseCurrency } = useCurrencyContext();
+  const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
+  const { baseCurrency, setBaseCurrency, convertCurrency } =
+    useCurrencyContext();
+
+  //   !!!!!!!!!!!
+  // const newAvatar = route.params ? route.params.newAvatar : null;
+
+  useFocusEffect(
+    useCallback(() => {
+      setTripName(pinnedTrip?.name || '');
+      setBaseCurrency(pinnedTrip?.currency || baseCurrency);
+      setBudget(pinnedTrip?.budget?.toString() || '');
+      setStartDate(pinnedTrip ? new Date(pinnedTrip.start) : null);
+      setEndDate(pinnedTrip ? new Date(pinnedTrip.end) : null);
+      setError('');
+      setLoading('');
+      setStartDatePickerVisibility(false);
+      setEndDatePickerVisibility(false);
+    }, [pinnedTrip]),
+  );
 
   const tripData = {
     name: tripName,
@@ -42,27 +61,47 @@ export default function InitiateTripScreen({ navigation }) {
     end: endDate,
   };
 
-  let newTrip;
-  const createTrip = async () => {
+  let editedTrip = { ...pinnedTrip, ...tripData };
+  const editTrip = async () => {
+    if (pinnedTrip && editedTrip.currency !== pinnedTrip.currency) {
+      editedTrip.expenses = editedTrip.expenses.map(expense =>
+        expense.currency === editedTrip.currency
+          ? { ...expense, convertedAmount: null }
+          : {
+              ...expense,
+              convertedAmount: convertCurrency(
+                expense.value,
+                expense.currency,
+                editedTrip.currency,
+              ),
+            },
+      );
+    }
     setLoading(true);
-    const res = await addTrip(tripData);
+    const res = await updateTrip(editedTrip);
     setLoading(false);
-    if (res.status === 201) {
-      newTrip = res.data;
+    if (res.data) {
+      editedTrip = res.data;
       dispatch({
-        type: 'ADD_TRIP',
-        payload: newTrip,
+        type: 'UPDATE_TRIP',
+        payload: editedTrip,
       });
-      setUser({ ...user, selectedTrip: newTrip });
-      setPinnedTrip(newTrip);
-      navigation.navigate('TrackFirstExpense');
+      setUser(user => {
+        const newUser = { ...user };
+        newUser.selectedTrip = editedTrip;
+        setPinnedTrip(newUser);
+        return newUser;
+      });
+      setPinnedTrip(editedTrip);
+      setSuccess('Trip successfully updated!');
     } else {
       setError(res);
     }
   };
 
-  const handleSavePress = async () => {
+  const handleUpdatePress = async () => {
     setError('');
+    setSuccess('');
     if (budget.trim() && !Number(budget)) {
       setError('Budget must be a number (use "." as the decimal separator)');
       return;
@@ -72,20 +111,11 @@ export default function InitiateTripScreen({ navigation }) {
       setError('End date cannot be before start date');
       return;
     }
-    await createTrip();
+    await editTrip();
   };
 
   const handleGoBack = () => {
-    trips.length > 0
-      ? navigation.navigate('Main', {
-          screen: 'MyTripsStack',
-          params: {
-            screen: 'MyTrips',
-          },
-        })
-      : navigation.navigate('Shared', {
-          screen: 'UnlockFirstTrip',
-        });
+    navigation.goBack();
   };
 
   const showStartDatePicker = () => {
@@ -130,22 +160,6 @@ export default function InitiateTripScreen({ navigation }) {
         )
       : '__';
 
-  useFocusEffect(
-    useCallback(() => {
-      setTripName('');
-      setBudget('');
-      setStartDate(null);
-      setEndDate(null);
-      setError('');
-      setLoading('');
-      setStartDatePickerVisibility(false);
-      setEndDatePickerVisibility(false);
-      return () => {
-        setBaseCurrency(null);
-      };
-    }, []),
-  );
-
   return (
     <ScrollView>
       <TouchableOpacity
@@ -156,7 +170,7 @@ export default function InitiateTripScreen({ navigation }) {
       </TouchableOpacity>
       <View className="mt-5 justify-start items-left">
         <Text className="text-3xl ml-4 mb-3 text-[#00B0A3] font-bold items-start">
-          Initiate a trip
+          Edit trip
         </Text>
       </View>
       <View className="flex-1 items-center">
@@ -188,7 +202,7 @@ export default function InitiateTripScreen({ navigation }) {
             placeholder="Budget (optional)"
             placeholderTextColor="#333"
             keyboardType="numeric"
-            value={budget}
+            value={budget !== '0' ? budget.toString() : ''}
             className={`py-3 pl-2 text-[18px]`}
           />
         </View>
@@ -272,9 +286,18 @@ export default function InitiateTripScreen({ navigation }) {
             The trip length is {tripLength} {tripLength > 1 ? 'days' : 'day'}
           </Text>
         </View>
+
         {error && (
-          <View className="text-red-600 mt-3 mx-6">
+          <View className="mt-3 mx-6">
             <Text className="text-red-600 text-center">{error}</Text>
+          </View>
+        )}
+
+        {success && (
+          <View className="mt-3 mx-6">
+            <Text className="text-green font-medium text-center">
+              {success}
+            </Text>
           </View>
         )}
 
@@ -283,10 +306,10 @@ export default function InitiateTripScreen({ navigation }) {
             <ActivityIndicator size="large" color="#04D9B2" className=" p-4 " />
           ) : (
             <TouchableOpacity
-              onPress={handleSavePress}
-              className={`${!error ? 'bg-green text-lg w-[180px] rounded-lg mt-3' : 'bg-green text-lg w-[180px] rounded-lg'}`}
+              onPress={handleUpdatePress}
+              className={`${!error && !success ? 'bg-green text-lg w-[180px] rounded-lg mt-3' : 'bg-green text-lg w-[180px] rounded-lg'}`}
             >
-              <Text className="text-white text-lg text-center p-4">Save</Text>
+              <Text className="text-white text-lg text-center p-4">Update</Text>
             </TouchableOpacity>
           )}
         </View>

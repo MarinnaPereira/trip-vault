@@ -25,6 +25,12 @@ export const validateExpense = [
     .withMessage(
       'Expense value must be a number (use "." as the decimal separator)',
     )
+    .custom(value => {
+      if (value <= 0) {
+        throw new Error('Expense value must be greater than zero');
+      }
+      return true;
+    })
     .escape(),
 
   body('currency')

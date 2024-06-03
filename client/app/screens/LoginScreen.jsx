@@ -79,7 +79,11 @@ export default function LoginScreen({ navigation }) {
       navigation.navigate('Shared', {
         screen: 'UnlockFirstTrip',
       });
-    } else if (pinnedTrip.expenses.length === 0) {
+    } else if (
+      pinnedTrip &&
+      pinnedTrip.expenses &&
+      pinnedTrip.expenses.length === 0
+    ) {
       navigation.navigate('Shared', {
         screen: 'TrackFirstExpense',
       });

@@ -30,16 +30,15 @@ const tripsReducer = (state, action) => {
       });
     case 'UPDATE_EXPENSE':
       return state.map(trip => {
-        return trip._id === action.trip._id
-          ? {
-              ...trip,
-              expenses: trip.expenses.map(expense => {
-                return expense._id === action.expenseId
-                  ? action.payload
-                  : expense;
-              }),
-            }
-          : trip;
+        if (trip._id === action.trip._id) {
+          return {
+            ...trip,
+            expenses: trip.expenses.map(expense =>
+              expense._id === action.expenseId ? action.payload : expense,
+            ),
+          };
+        }
+        return trip;
       });
     case 'DELETE_EXPENSE':
       return state.map(trip => {

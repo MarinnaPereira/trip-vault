@@ -31,33 +31,57 @@ export default function ExistentExpenseScreen({ navigation, route }) {
   const { user, setUser } = useUserContext();
   const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
   const { convertCurrency } = useCurrencyContext();
+
   const { item } = route.params || null;
 
-  if (!item)
+  let selectedExpense = null;
+  if (pinnedTrip) {
+    selectedExpense = pinnedTrip.expenses.find(
+      expense => expense._id === item._id,
+    );
+  }
+  if (!selectedExpense)
     return (
       <View>
         <Text>Expense not found</Text>
       </View>
     );
 
-  console.log(item);
+  console.log(selectedExpense);
 
-  const [categoryName, setCategoryName] = useState(item?.categoryName);
-  const [value, setValue] = useState(item?.value);
-  const [selectedCurrency, setSelectedCurrency] = useState(item?.currency);
-  const [description, setDescription] = useState(
-    item?.description != 'null' ? item?.description : null,
+  const [categoryName, setCategoryName] = useState(
+    selectedExpense.categoryName,
   );
-  const [singleDate, setSingleDate] = useState(new Date(item?.dates[0]));
-  const [startDate, setStartDate] = useState(new Date(item?.dates[0]));
+  const [value, setValue] = useState(selectedExpense?.value);
+  const [selectedCurrency, setSelectedCurrency] = useState(
+    selectedExpense.currency,
+  );
+  const [description, setDescription] = useState(
+    selectedExpense.description != 'null' ? selectedExpense.description : null,
+  );
+  const [singleDate, setSingleDate] = useState(
+    selectedExpense.dates && selectedExpense.dates.length === 1
+      ? new Date(selectedExpense.dates[0])
+      : null,
+  );
+  const [startDate, setStartDate] = useState(
+    selectedExpense.dates && selectedExpense.dates.length > 1
+      ? new Date(selectedExpense.dates[0])
+      : null,
+  );
   const [endDate, setEndDate] = useState(
-    item?.dates.length > 1 ? new Date(item?.dates[1]) : null,
+    selectedExpense.dates && selectedExpense.dates.length > 1
+      ? new Date(selectedExpense.dates[1])
+      : null,
   );
   const [paymentMethod, setPaymentMethod] = useState(
-    item?.paymentMethod != 'null' ? item?.paymentMethod : null,
+    selectedExpense.paymentMethod != 'null'
+      ? selectedExpense.paymentMethod
+      : null,
   );
-  const [image, setImage] = useState(item?.receipt);
+  const [image, setImage] = useState(selectedExpense.receipt);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
@@ -68,7 +92,9 @@ export default function ExistentExpenseScreen({ navigation, route }) {
   const [isStartDatePickerVisible, setStartDatePickerVisibility] =
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
-  const [isSpreadByDays, setIsSpreadByDays] = useState(item.dates.length > 1);
+  const [isSpreadByDays, setIsSpreadByDays] = useState(
+    selectedExpense.dates.length > 1,
+  );
 
   const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] =
     useState(false);
@@ -105,12 +131,9 @@ export default function ExistentExpenseScreen({ navigation, route }) {
     formData.append('currency', selectedCurrency);
     convertedAmount && formData.append('convertedAmount', convertedAmount);
     formData.append('description', description);
-    if (isSpreadByDays) {
-      formData.append('dates[]', startDate.toISOString());
-      formData.append('dates[]', endDate.toISOString());
-    } else {
-      formData.append('dates[]', singleDate.toISOString());
-    }
+    singleDate && formData.append('dates[]', singleDate.toISOString());
+    startDate && formData.append('dates[]', startDate.toISOString());
+    endDate && formData.append('dates[]', endDate.toISOString());
     formData.append('paymentMethod', paymentMethod);
     image &&
       formData.append('file', {
@@ -119,25 +142,38 @@ export default function ExistentExpenseScreen({ navigation, route }) {
         name: new Date() + '_receipt' + '.jpeg',
       });
 
-    const expenseId = item._id;
+    const expenseId = selectedExpense._id;
     setLoading(true);
     const data = await updateExpense(formData, expenseId);
     setLoading(false);
-    if (data.status === 200) {
+    if (data._id) {
       dispatch({
         type: 'UPDATE_EXPENSE',
         trip: user.selectedTrip,
         expenseId: expenseId,
         payload: data,
       });
+      setUser(user => {
+        const newUser = { ...user };
+        newUser.selectedTrip.expenses = newUser.selectedTrip.expenses.map(
+          expense => (expense._id === data._id ? data : expense),
+        );
+        return newUser;
+      });
+      setSuccess('Expense successfully updated!');
+    } else {
+      setError(data);
     }
-
-    // !update user.selectedTrip and PinnedTrip
   };
 
+  useEffect(() => {
+    setPinnedTrip(user.selectedTrip);
+  }, [user]);
+
   const handleUpdatePress = async () => {
-    // const updatedExpense = await saveExpense();
-    // console.log('updated on exist exp', updatedExpense);
+    setError('');
+    setSuccess('');
+    await saveExpense();
   };
 
   const handleGoBack = () => {
@@ -248,7 +284,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
   const handleDelete = async () => {
     const previousLength = pinnedTrip.expenses.length;
     setLoading(true);
-    const res = await deleteExpense(item);
+    const res = await deleteExpense(selectedExpense);
     setLoading(false);
     if (!res.status) {
       setError(res);
@@ -257,12 +293,12 @@ export default function ExistentExpenseScreen({ navigation, route }) {
     dispatch({
       type: 'DELETE_EXPENSE',
       trip: user.selectedTrip,
-      payload: item,
+      payload: selectedExpense,
     });
     setUser(user => {
       const newUser = { ...user };
       newUser.selectedTrip.expenses = newUser.selectedTrip.expenses.filter(
-        expense => expense._id !== item._id,
+        expense => expense._id !== selectedExpense._id,
       );
       setPinnedTrip({ ...newUser.selectedTrip });
       return newUser;
@@ -279,6 +315,15 @@ export default function ExistentExpenseScreen({ navigation, route }) {
         screen: 'TrackFirstExpense',
       });
     }
+  };
+
+  const handleCategoryPress = () => {
+    // navigation.navigate('Shared', {
+    //   screen: 'Category',
+    //   params: {
+    //     changeCategory: true,
+    //   },
+    // });
   };
 
   return (
@@ -339,14 +384,16 @@ export default function ExistentExpenseScreen({ navigation, route }) {
         <View className="items-center">
           <View className="mt-[16px] mb-3 bg-lightGray rounded-md">
             <View className="w-[380px] flex flex-row justify-between items-center">
-              <Image
-                source={
-                  typeof categoryImage === 'string'
-                    ? { uri: categoryImage }
-                    : categoryImage
-                }
-                className="w-[60px] h-[60px] m-2 rounded-xl"
-              />
+              <TouchableOpacity onPress={handleCategoryPress}>
+                <Image
+                  source={
+                    typeof categoryImage === 'string'
+                      ? { uri: categoryImage }
+                      : categoryImage
+                  }
+                  className="w-[60px] h-[60px] m-2 rounded-xl"
+                />
+              </TouchableOpacity>
               <TextInput
                 className="text-3xl text-[#333]"
                 placeholder="0.00"
@@ -557,8 +604,16 @@ export default function ExistentExpenseScreen({ navigation, route }) {
             )}
 
             {error && (
-              <View className="text-red-600 mt-2 mx-6">
+              <View className="mt-2 mx-6">
                 <Text className="text-red-600 text-center">{error}</Text>
+              </View>
+            )}
+
+            {success && (
+              <View className="mt-2 mx-6">
+                <Text className="text-green font-medium text-center">
+                  {success}
+                </Text>
               </View>
             )}
 

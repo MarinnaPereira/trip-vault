@@ -1,6 +1,9 @@
+import { useCallback, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { SectionList, Text, View, Image, TouchableOpacity } from 'react-native';
 import { DateTime } from 'luxon';
 
+import { useTripsContext } from '../contexts/tripsContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
 import categories from '../../assets/categories';
 
@@ -11,12 +14,51 @@ const findCategoryImage = categoryName => {
     : categories.find(cat => cat.name === 'Others').image;
 };
 
-const ExpenseList = ({ navigation, expenses, tripCurrencySymbol }) => {
+const ExpenseList = ({ navigation, tripCurrencySymbol }) => {
   const { getCurrencySymbol } = useCurrencyContext();
+  const { pinnedTrip } = useTripsContext();
+  const [expenses, setExpenses] = useState([]);
 
-  const prepareSections = expenses => {
-    const grouped = expenses.reduce((acc, expense) => {
-      // const date = expense.dates[0];
+  useFocusEffect(
+    useCallback(() => {
+      if (pinnedTrip) {
+        setExpenses(pinnedTrip.expenses || []);
+      }
+    }, [pinnedTrip]),
+  );
+
+  const prepareExpenses = expenses => {
+    console.log('exp', expenses);
+    const spreadExpenses = expenses.flatMap(expense => {
+      if (expense.dates.length > 1) {
+        const startDate = DateTime.fromISO(expense.dates[0]);
+        const endDate = DateTime.fromISO(expense.dates[1]);
+        const numberOfDays = endDate.diff(startDate, 'days').days + 1;
+
+        // Spread the expense value over the number of days
+        const spreadExpenseValue = (expense.value / numberOfDays).toFixed(2);
+
+        // Generate array of spread expenses with updated dates
+        return Array.from({ length: numberOfDays }, (_, index) => {
+          const newDate = startDate.plus({ days: index }).toISO();
+          return {
+            ...expense,
+            dates: [newDate],
+            value: spreadExpenseValue,
+          };
+        });
+      } else {
+        return { ...expense, value: Number(expense.value).toFixed(2) };
+      }
+    });
+    console.log('spread', spreadExpenses);
+    return spreadExpenses;
+  };
+
+  const spreadExpenses = prepareExpenses(expenses);
+
+  const prepareSections = spreadExpenses => {
+    const grouped = spreadExpenses.reduce((acc, expense) => {
       const date = DateTime.fromISO(expense.dates[0]).toISODate(); // Normalize date to ISO string
       if (!acc[date]) acc[date] = { title: date, data: [] };
       acc[date].data.push(expense);
@@ -28,7 +70,7 @@ const ExpenseList = ({ navigation, expenses, tripCurrencySymbol }) => {
       .map(date => grouped[date]);
   };
 
-  const sections = prepareSections(expenses || []);
+  const sections = prepareSections(spreadExpenses || []);
 
   const capitalizeFirstLetter = str => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -87,17 +129,17 @@ const ExpenseList = ({ navigation, expenses, tripCurrencySymbol }) => {
   };
 
   const formatDate = title => {
-    //   const date = new Date(title).toLocaleDateString();
-    const date = DateTime.fromISO(title).toLocaleString(DateTime.DATE_SHORT); // Format date using Luxon
+    const date = DateTime.fromISO(title).toLocaleString(DateTime.DATE_SHORT);
     return isDateToday(title) ? 'Today' : date;
   };
 
   const totalAmountOfSection = data => {
     const total = data.reduce((acc, expense) => {
-      const spent = expense.convertedAmount || expense.value;
-      return acc + spent;
+      const spent =
+        parseFloat(expense.convertedAmount) || parseFloat(expense.value);
+      return acc + (isNaN(spent) ? 0 : spent);
     }, 0);
-    return Number(total || 0).toFixed(2);
+    return Number(total).toFixed(2);
   };
 
   const renderSectionHeader = ({ section: { title, data } }) => (
@@ -112,7 +154,7 @@ const ExpenseList = ({ navigation, expenses, tripCurrencySymbol }) => {
   return (
     <SectionList
       sections={sections}
-      keyExtractor={item => item._id}
+      keyExtractor={(item, index) => `${item._id}-${item.dates[0]}`}
       renderItem={renderItem}
       renderSectionHeader={renderSectionHeader}
       automaticallyAdjustContentInsets={false}

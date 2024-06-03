@@ -90,7 +90,7 @@ export default function NewExpenseScreen({ navigation, route }) {
     const data = await addExpense(formData);
     setLoading(false);
     console.log('new expense', data);
-    if (data.status === 201) {
+    if (data._id) {
       dispatch({
         type: 'ADD_EXPENSE',
         trip: user.selectedTrip,

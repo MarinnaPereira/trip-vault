@@ -31,7 +31,6 @@ export const loginUser = async userData => {
     const res = await axios.post(`${baseUrl}/auth/login`, userData, {
       headers: { 'Content-Type': 'application/json' },
     });
-    console.log(res.data);
     return res.data;
   } catch (err) {
     const errMessage = err.response.data.error;
@@ -71,7 +70,6 @@ export const deleteUser = async user => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res.data);
     return res.data; // return just a message
   } catch (err) {
     const errMessage = err.response.data.error;
@@ -90,7 +88,6 @@ export const getAllTrips = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res.data);
     return res.data; // return an array with all trips
   } catch (err) {
     const errMessage = err.response.data.error;
@@ -107,7 +104,6 @@ export const addTrip = async newTrip => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res.data);
     return res;
   } catch (err) {
     const errMessage = err.response.data.error;
@@ -128,10 +124,10 @@ export const updateTrip = async updatedTrip => {
         },
       },
     );
-    console.log(res.data);
-    return res.data; // return object with the updated trip info
+    return res;
   } catch (err) {
-    console.error(err.message);
+    const errMessage = err.response.data.error;
+    return errMessage;
   }
 };
 
@@ -146,9 +142,7 @@ export const deleteTrip = async trip => {
     });
     return res;
   } catch (err) {
-    console.log('err', err);
     const errMessage = err.response.data.message;
-    console.log('errMessage', errMessage);
     return errMessage;
   }
 };
@@ -158,8 +152,6 @@ export const deleteTrip = async trip => {
 export const addExpense = async formData => {
   try {
     const token = await getToken();
-    console.log(token);
-
     const response = await fetch(`${baseUrl}/expenses`, {
       method: 'POST',
       headers: {
@@ -169,12 +161,10 @@ export const addExpense = async formData => {
       },
       body: formData,
     });
-
     const data = await response.json();
-    if (response.status !== 201) {
+    if (!response.ok) {
       throw new Error(`${data.error}`);
     }
-    data.status = 201;
     return data;
   } catch (err) {
     return err.message;
@@ -184,9 +174,6 @@ export const addExpense = async formData => {
 export const updateExpense = async (formData, expenseId) => {
   try {
     const token = await getToken();
-    console.log('formData on API', formData);
-    console.log('expenseId', expenseId);
-
     const response = await fetch(`${baseUrl}/expenses/${expenseId}`, {
       method: 'PATCH',
       headers: {
@@ -198,16 +185,14 @@ export const updateExpense = async (formData, expenseId) => {
     });
 
     const data = await response.json();
-    if (response.status !== 200) {
+    if (!response.ok) {
       throw new Error(`${data.error}`);
     }
-    data.status = 200;
     return data;
   } catch (err) {
     return err.message;
   }
 };
-// !update trip
 
 export const deleteExpense = async expense => {
   try {
@@ -220,9 +205,7 @@ export const deleteExpense = async expense => {
     });
     return res;
   } catch (err) {
-    // console.log('err', err);
     const errMessage = err.response.data.message;
-    // console.log('errMessage', errMessage);
     return errMessage;
   }
 };

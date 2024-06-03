@@ -11,9 +11,9 @@ module.exports = {
         yellow: '#FDA541',
         gray: '#BBBBBB',
         lightGray: '#DDDDDD',
-      },
-      backgroundImage: {
-        doodle: "url('/assets/images/doodle-trave-icon-background')",
+        beige: '#fff4ee',
+        beige2: '#fef7ee',
+        lightBeige: '#f2e1d9',
       },
     },
   },

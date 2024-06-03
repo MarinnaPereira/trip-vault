@@ -49,7 +49,10 @@ export default function MyTripsScreen({ navigation }) {
   }
 
   const capitalizeFirstLetter = str => {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    if (typeof str === 'string' && str.length > 0) {
+      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    }
+    return '';
   };
 
   let orderedTrips;
@@ -158,10 +161,11 @@ export default function MyTripsScreen({ navigation }) {
                       onPress={() => handleTripPress(item)}
                       key={item._id}
                       style={{ marginTop: 10 }}
+                      className="w-[380px] mx-auto"
                     >
                       <View className={`p-3 rounded-md bg-lightGray relative`}>
                         {pinnedTrip && pinnedTrip._id === item._id && (
-                          <View className="transform scale-x-[-1] absolute -top-2  -right-2 ">
+                          <View className="transform scale-x-[-1] absolute -top-2 -right-2 ">
                             <AntDesign
                               name="pushpin"
                               size={27}
@@ -170,12 +174,12 @@ export default function MyTripsScreen({ navigation }) {
                           </View>
                         )}
                         <Text
-                          className={`w-[360px] px-1 text-lg relative ${pinnedTrip && pinnedTrip._id === item._id ? 'text-[#00b0a3] font-bold' : 'text-black font-semibold'}`}
+                          className={`px-1 text-lg relative ${pinnedTrip && pinnedTrip._id === item._id ? 'text-[#00b0a3] font-bold' : 'text-black font-semibold'}`}
                         >
                           {capitalizeFirstLetter(item.name)}
                         </Text>
                         <Text
-                          className={`w-[360px] pl-1 text-lg ${pinnedTrip && pinnedTrip._id === item._id ? 'text-black font-semibold' : 'text-black'}`}
+                          className={`pl-1 text-lg ${pinnedTrip && pinnedTrip._id === item._id ? 'text-black font-semibold' : 'text-black'}`}
                         >
                           {new Date(item.start).toLocaleDateString()} –{' '}
                           {new Date(item.end).toLocaleDateString()}

@@ -38,6 +38,7 @@ export default function TripNameScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [tripDeleted, setTripDeleted] = useState(false);
 
+  const { user, setUser } = useUserContext();
   const {
     trips,
     dispatch,
@@ -48,8 +49,6 @@ export default function TripNameScreen({ navigation }) {
     calculateDailyAverage,
     calculateBalance,
   } = useTripsContext();
-  const { user, setUser } = useUserContext();
-
   const { getCurrencySymbol } = useCurrencyContext();
 
   useEffect(() => {
@@ -85,13 +84,15 @@ export default function TripNameScreen({ navigation }) {
   );
 
   const capitalizeFirstLetter = str => {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    if (typeof str === 'string' && str.length > 0) {
+      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    }
+    return '';
   };
 
   const removeTrip = async () => {
-    // console.log('trips on pinned', trips);
-    setLoading(true);
     setError('');
+    setLoading(true);
     const res = await deleteTrip(user.selectedTrip);
     setLoading(false);
     if (!res.status) {
@@ -143,6 +144,7 @@ export default function TripNameScreen({ navigation }) {
 
   const handleEdit = () => {
     toggleMenu();
+    navigation.navigate('EditTrip');
   };
 
   const handleDelete = async () => {
@@ -287,7 +289,7 @@ export default function TripNameScreen({ navigation }) {
                 <Text className="ml-auto mr-4 text-xl pb-2">
                   {pinnedTrip.budget == 0
                     ? tripDuration + (tripDuration > 1 ? ' days' : ' day')
-                    : balance + tripCurrencySymbol}
+                    : balance + ' ' + tripCurrencySymbol}
                 </Text>
               </View>
 
@@ -306,7 +308,6 @@ export default function TripNameScreen({ navigation }) {
             <View className={`${isTripOver ? 'pt-5' : ''} h-[400px]`}>
               <ExpenseList
                 navigation={navigation}
-                expenses={pinnedTrip.expenses}
                 tripCurrencySymbol={tripCurrencySymbol}
               />
             </View>

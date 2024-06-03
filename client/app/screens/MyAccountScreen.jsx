@@ -57,7 +57,7 @@ export default function MyAccountScreen({ navigation, route }) {
     setLoading(true);
     const res = await updateUser(editedUser);
     setLoading(false);
-    if (res.status === 200) {
+    if (res.data) {
       setUser(res.data);
     } else {
       setError(res);
@@ -165,7 +165,7 @@ export default function MyAccountScreen({ navigation, route }) {
               onPress={toggleModal}
               className="bg-lightGray rounded-md mb-1 flex flex-row justify-between items-center pr-2"
             >
-              <Text className="p-3 text-[19px] text[#333]">
+              <Text className="py-3 px-4 text-[19px] text[#333]">
                 {user.username}
               </Text>
               <MaterialIcons name="edit" size={22} color="black" />
@@ -175,7 +175,7 @@ export default function MyAccountScreen({ navigation, route }) {
               <Text className="text-left text-[19px] font-medium mb-1">
                 Password
               </Text>
-              <View className="flex flex-row justify-between items-center bg-lightGray rounded-md p-3">
+              <View className="flex flex-row justify-between items-center bg-lightGray rounded-md py-3 pl-4 pr-3">
                 <Text className="text-lg font-bold text[#333]">
                   ********
                   {/* {showPassword ? user.password : ''} */}

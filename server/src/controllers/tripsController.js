@@ -1,6 +1,7 @@
+import { isValidObjectId } from 'mongoose';
+
 import Trip from '../models/Trip.js';
 import User from '../models/User.js';
-import { isValidObjectId } from 'mongoose';
 
 export const getAllTrips = async (req, res, next) => {
   const userId = req.userInfo._id;
@@ -69,8 +70,7 @@ export const getTrip = async (req, res, next) => {
 
 export const updateTrip = async (req, res, next) => {
   const { id } = req.params;
-  const tripData = req.body; //! for this data to be validated and then updated, the frontend should send the whole trip object, not only the updated part -> i think it's better!
-  //! OR: we create another middleware which will find the trip by id, clone it to a variable, spreading also the req.body, and after that pass the new variable to the validator
+  const tripData = req.body;
   try {
     const updatedTrip = await Trip.findByIdAndUpdate(id, tripData, {
       new: true,

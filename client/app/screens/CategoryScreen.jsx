@@ -5,28 +5,31 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useTripsContext } from '../contexts/tripsContext';
 import categories from '../../assets/categories';
 
-export default function Category({ navigation }) {
-  const [expense, setExpense] = useState('null');
-  const { pinnedTrip } = useTripsContext();
+export default function Category({ navigation, route }) {
+  console.log('params', route.params);
+  // const changeCategory = route.params ? route.params.changeCategory : false;
 
   const handleCategoryPress = category => {
+    //   console.log(changeCategory);
+    //   if (changeCategory) {
+    //     navigation.navigate('PinnedTripStack', {
+    //       screen: 'ExistentExpense',
+    //       params: {
+    //         categoryName: category.name,
+    //         categoryImage: category.image,
+    //       },
+    //     });
+
+    // } else {
     navigation.navigate('NewExpense', {
       categoryName: category.name,
       categoryImage: category.image,
     });
+    // }
   };
 
   const handleGoBack = () => {
-    if (pinnedTrip.expenses.length !== 0) {
-      navigation.navigate('Main', {
-        screen: 'PinnedTripStack',
-        params: {
-          screen: 'TripNameScreen',
-        },
-      });
-    } else {
-      navigation.navigate('TrackFirstExpense');
-    }
+    navigation.goBack();
   };
 
   const renderItem = ({ item }) => (

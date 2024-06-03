@@ -73,25 +73,6 @@ export const CurrencyProvider = ({ children }) => {
     return currency ? currency.symbol : '';
   }
 
-  const calculateTotalExpenses = (expenses, baseCurrency) => {
-    return expenses.reduce((total, expense) => {
-      const amountInBaseCurrency = convertCurrency(
-        expense.value,
-        expense.currency,
-        baseCurrency,
-      );
-      return total + amountInBaseCurrency;
-    }, 0);
-  };
-
-  const calculateDailyAverage = (totalExpenses, tripDuration) => {
-    return tripDuration ? totalExpenses / tripDuration : 0;
-  };
-
-  const calculateRemainingBalance = (budget, totalExpenses) => {
-    return budget - totalExpenses;
-  };
-
   useEffect(() => {
     fetchExchangeRates(baseCurrency);
     fetchAvailableCurrencies();
@@ -107,9 +88,6 @@ export const CurrencyProvider = ({ children }) => {
         fetchExchangeRates,
         convertCurrency,
         getCurrencySymbol,
-        calculateTotalExpenses,
-        calculateDailyAverage,
-        calculateRemainingBalance,
       }}
     >
       {children}

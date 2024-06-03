@@ -27,6 +27,7 @@ import TrackFirstExpenseScreen from '../screens/TrackFirstExpenseScreen';
 import NewExpenseScreen from '../screens/NewExpenseScreen';
 import CategoryScreen from '../screens/CategoryScreen';
 import ExistentExpenseScreen from '../screens/ExistentExpense';
+import EditTripScreen from '../screens/EditTrip';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -69,6 +70,7 @@ function PinnedTripStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="PinnedTrip" component={TripNameScreen} />
+      <Stack.Screen name="EditTrip" component={EditTripScreen} />
       <Stack.Screen name="ExistentExpense" component={ExistentExpenseScreen} />
     </Stack.Navigator>
   );
@@ -244,6 +246,6 @@ export default function AppNavigator() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff4ee',
   },
 });

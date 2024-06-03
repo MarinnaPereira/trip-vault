@@ -27,10 +27,6 @@ const DonutPieChart = ({ width = 280, height = 280 }) => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log('trips', trips);
-      console.log('select', user.selectedTrip);
-      console.log('pinned', pinnedTrip);
-
       if (pinnedTrip && pinnedTrip.expenses) {
         setTotalPerCategory(
           calculateTotalSpentPerCategory(pinnedTrip.expenses),

@@ -10,7 +10,6 @@ import {
 import { validateTrip } from '../middlewares/validateTrip.js';
 import { validateId } from '../middlewares/validateId.js';
 import verifyToken from '../middlewares/verifyToken.js';
-import { sanitizeTripToUpdate } from '../middlewares/sanitizeTripToUpdate.js';
 
 export const tripsRouter = Router();
 
@@ -22,11 +21,5 @@ tripsRouter
 tripsRouter
   .route('/:id')
   .get(validateId, verifyToken, getTrip)
-  .patch(
-    validateId,
-    verifyToken,
-    sanitizeTripToUpdate,
-    validateTrip,
-    updateTrip,
-  )
+  .patch(validateId, verifyToken, validateTrip, updateTrip)
   .delete(validateId, verifyToken, deleteTrip);
