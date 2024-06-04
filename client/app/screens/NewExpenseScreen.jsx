@@ -117,6 +117,11 @@ export default function NewExpenseScreen({ navigation, route }) {
   // *add expense
   const handleSavePress = async () => {
     setError('');
+    if (startDate && endDate && endDate < startDate) {
+      console.log(startDate && endDate && endDate < startDate);
+      setError('End date cannot be before start date');
+      return;
+    }
     await saveExpense();
   };
 

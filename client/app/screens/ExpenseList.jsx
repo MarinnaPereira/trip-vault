@@ -41,10 +41,14 @@ const ExpenseList = ({ navigation, tripCurrencySymbol }) => {
         // Generate array of spread expenses with updated dates
         return Array.from({ length: numberOfDays }, (_, index) => {
           const newDate = startDate.plus({ days: index }).toISO();
+          const convertedAmount = expense.convertedAmount
+            ? (expense.convertedAmount / numberOfDays).toFixed(2)
+            : null;
           return {
             ...expense,
             dates: [newDate],
             value: spreadExpenseValue,
+            convertedAmount: convertedAmount,
           };
         });
       } else {

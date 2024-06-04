@@ -173,6 +173,11 @@ export default function ExistentExpenseScreen({ navigation, route }) {
   const handleUpdatePress = async () => {
     setError('');
     setSuccess('');
+    if (startDate && endDate && endDate < startDate) {
+      console.log(startDate && endDate && endDate < startDate);
+      setError('End date cannot be before start date');
+      return;
+    }
     await saveExpense();
   };
 

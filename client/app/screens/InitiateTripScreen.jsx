@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -64,7 +64,9 @@ export default function InitiateTripScreen({ navigation }) {
   const handleSavePress = async () => {
     setError('');
     if (budget.trim() && !Number(budget)) {
-      setError('Budget must be a number (use "." as the decimal separator)');
+      setError(
+        'Budget must be a number bigger than zero (use "." as the decimal separator)',
+      );
       return;
     }
     if (startDate && endDate && endDate < startDate) {
@@ -130,6 +132,10 @@ export default function InitiateTripScreen({ navigation }) {
         )
       : '__';
 
+  useEffect(() => {
+    setBudget('');
+  }, []);
+
   useFocusEffect(
     useCallback(() => {
       setTripName('');
@@ -140,6 +146,7 @@ export default function InitiateTripScreen({ navigation }) {
       setLoading('');
       setStartDatePickerVisibility(false);
       setEndDatePickerVisibility(false);
+      setBaseCurrency('');
       return () => {
         setBaseCurrency(null);
       };
