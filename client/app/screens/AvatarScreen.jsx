@@ -8,18 +8,7 @@ export default function Avatar({ navigation }) {
   const { user } = useUserContext();
 
   const handleGoBack = () => {
-    if (user) {
-      navigation.navigate('Main', {
-        screen: 'MyAccountStack',
-        params: {
-          screen: 'MyAccount',
-        },
-      });
-    } else {
-      navigation.navigate('Auth', {
-        screen: 'Welcome',
-      });
-    }
+    navigation.goBack();
   };
 
   const handleAvatarPress = avatarName => {

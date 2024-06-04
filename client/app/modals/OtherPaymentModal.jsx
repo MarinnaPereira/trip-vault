@@ -1,5 +1,5 @@
-import { Modal, View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useState } from 'react';
+import { Modal, View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 export default function OtherPaymentModal({

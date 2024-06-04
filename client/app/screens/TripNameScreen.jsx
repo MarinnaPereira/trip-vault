@@ -2,20 +2,14 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
-  Image,
   TouchableOpacity,
   Modal,
   ActivityIndicator,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { DateTime } from 'luxon';
-import {
-  Entypo,
-  FontAwesome6,
-  MaterialIcons,
-  MaterialCommunityIcons,
-} from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
+import { Entypo, FontAwesome6, MaterialIcons } from '@expo/vector-icons';
+import { DateTime } from 'luxon';
 
 import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
@@ -24,20 +18,6 @@ import { deleteTrip } from '../api/api';
 import ExpenseList from './ExpenseList';
 
 export default function TripNameScreen({ navigation }) {
-  const [isMenuVisible, setMenuVisible] = useState(false);
-  const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
-    useState(false);
-
-  const [totalSpent, setTotalSpent] = useState(0);
-  const [tripDuration, setTripDuration] = useState(0);
-  const [dailyAverage, setDailyAverage] = useState(0);
-  const [balance, setBalance] = useState('0.00');
-  const [tripCurrencySymbol, setTripCurrencySymbol] = useState('');
-  const [isTripOver, setIsTripOver] = useState(false);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [tripDeleted, setTripDeleted] = useState(false);
-
   const { user, setUser } = useUserContext();
   const {
     trips,
@@ -51,14 +31,21 @@ export default function TripNameScreen({ navigation }) {
   } = useTripsContext();
   const { getCurrencySymbol } = useCurrencyContext();
 
-  useEffect(() => {
-    console.log('pinned', pinnedTrip);
-    console.log('selected', user.selectedTrip);
-  }, []);
+  const [totalSpent, setTotalSpent] = useState(0);
+  const [tripDuration, setTripDuration] = useState(0);
+  const [balance, setBalance] = useState('0.00');
+  const [dailyAverage, setDailyAverage] = useState(0);
+  const [tripCurrencySymbol, setTripCurrencySymbol] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [isTripOver, setIsTripOver] = useState(false);
+  const [tripDeleted, setTripDeleted] = useState(false);
+  const [isMenuVisible, setMenuVisible] = useState(false);
+  const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
+    useState(false);
 
   useFocusEffect(
     useCallback(() => {
-      console.log('check expenses updated', trips);
       if (pinnedTrip) {
         const totalSpent = calculateTotalSpent(pinnedTrip);
         const tripDuration = calculateTripDuration(pinnedTrip);
@@ -67,44 +54,18 @@ export default function TripNameScreen({ navigation }) {
           ? calculateBalance(pinnedTrip.budget, totalSpent)
           : '0.00';
         const tripCurrencySymbol = getCurrencySymbol(pinnedTrip?.currency);
-
         setTotalSpent(totalSpent);
         setTripDuration(tripDuration);
         setDailyAverage(dailyAverage);
         setBalance(balance);
         setTripCurrencySymbol(tripCurrencySymbol);
         setError('');
-
-        // Check if trip is over
         const endDate = DateTime.fromISO(pinnedTrip.end);
         const currentDate = DateTime.now();
         setIsTripOver(currentDate >= endDate);
       }
     }, [pinnedTrip]),
   );
-
-  const capitalizeFirstLetter = str => {
-    if (typeof str === 'string' && str.length > 0) {
-      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-    }
-    return '';
-  };
-
-  const removeTrip = async () => {
-    setError('');
-    setLoading(true);
-    const res = await deleteTrip(user.selectedTrip);
-    setLoading(false);
-    if (!res.status) {
-      setError(res);
-      return;
-    }
-    dispatch({
-      type: 'DELETE_TRIP',
-      payload: user.selectedTrip,
-    });
-    setTripDeleted(true);
-  };
 
   useEffect(() => {
     if (tripDeleted) {
@@ -129,6 +90,29 @@ export default function TripNameScreen({ navigation }) {
   useEffect(() => {
     if (tripDeleted) setTripDeleted(false);
   }, [pinnedTrip]);
+
+  const removeTrip = async () => {
+    setError('');
+    setLoading(true);
+    const res = await deleteTrip(user.selectedTrip);
+    setLoading(false);
+    if (!res.data) {
+      setError(res);
+      return;
+    }
+    dispatch({
+      type: 'DELETE_TRIP',
+      payload: user.selectedTrip,
+    });
+    setTripDeleted(true);
+  };
+
+  const capitalizeFirstLetter = str => {
+    if (typeof str === 'string' && str.length > 0) {
+      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    }
+    return '';
+  };
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
@@ -156,6 +140,7 @@ export default function TripNameScreen({ navigation }) {
     toggleDeleteConfirmation();
     await removeTrip();
   };
+
   const handleAddPress = () => {
     navigation.navigate('Shared', { screen: 'Category' });
   };
@@ -305,7 +290,9 @@ export default function TripNameScreen({ navigation }) {
           </View>
 
           <View className="flex-1 text-lg items-center">
-            <View className={`${isTripOver ? 'pt-5' : ''} h-[400px] pb-12`}>
+            <View
+              className={`${isTripOver ? 'pt-5 pb-12' : 'pb-2'} h-[400px] `}
+            >
               <ExpenseList
                 navigation={navigation}
                 tripCurrencySymbol={tripCurrencySymbol}

@@ -16,7 +16,7 @@ export const registerUser = async newUser => {
       headers: { 'Content-Type': 'application/json' },
     });
     if (res.data) {
-      return res.data;
+      return res;
     }
   } catch (err) {
     const errMessage = err.response.data.error;
@@ -65,7 +65,7 @@ export const deleteUser = async user => {
         Authorization: `Bearer ${token}`,
       },
     });
-    return res.data;
+    return res;
   } catch (err) {
     const errMessage = err.response.data.error;
     return errMessage;

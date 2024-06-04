@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
 import { SectionList, Text, View, Image, TouchableOpacity } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { DateTime } from 'luxon';
 
 import { useTripsContext } from '../contexts/tripsContext';
@@ -15,8 +15,9 @@ const findCategoryImage = categoryName => {
 };
 
 const ExpenseList = ({ navigation, tripCurrencySymbol }) => {
-  const { getCurrencySymbol } = useCurrencyContext();
   const { pinnedTrip } = useTripsContext();
+  const { getCurrencySymbol } = useCurrencyContext();
+
   const [expenses, setExpenses] = useState([]);
 
   useFocusEffect(
@@ -28,17 +29,12 @@ const ExpenseList = ({ navigation, tripCurrencySymbol }) => {
   );
 
   const prepareExpenses = expenses => {
-    console.log('exp', expenses);
     const spreadExpenses = expenses.flatMap(expense => {
       if (expense.dates.length > 1) {
         const startDate = DateTime.fromISO(expense.dates[0]);
         const endDate = DateTime.fromISO(expense.dates[1]);
         const numberOfDays = endDate.diff(startDate, 'days').days + 1;
-
-        // Spread the expense value over the number of days
         const spreadExpenseValue = (expense.value / numberOfDays).toFixed(2);
-
-        // Generate array of spread expenses with updated dates
         return Array.from({ length: numberOfDays }, (_, index) => {
           const newDate = startDate.plus({ days: index }).toISO();
           const convertedAmount = expense.convertedAmount
@@ -55,7 +51,6 @@ const ExpenseList = ({ navigation, tripCurrencySymbol }) => {
         return { ...expense, value: Number(expense.value).toFixed(2) };
       }
     });
-    console.log('spread', spreadExpenses);
     return spreadExpenses;
   };
 
@@ -63,26 +58,17 @@ const ExpenseList = ({ navigation, tripCurrencySymbol }) => {
 
   const prepareSections = spreadExpenses => {
     const grouped = spreadExpenses.reduce((acc, expense) => {
-      const date = DateTime.fromISO(expense.dates[0]).toISODate(); // Normalize date to ISO string
+      const date = DateTime.fromISO(expense.dates[0]).toISODate();
       if (!acc[date]) acc[date] = { title: date, data: [] };
       acc[date].data.push(expense);
       return acc;
     }, {});
-
     return Object.keys(grouped)
       .sort((a, b) => new Date(b) - new Date(a))
       .map(date => grouped[date]);
   };
 
   const sections = prepareSections(spreadExpenses || []);
-
-  const capitalizeFirstLetter = str => {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-  };
-
-  const handleExpensePress = item => {
-    navigation.navigate('ExistentExpense', { item });
-  };
 
   const renderItem = ({ item }) => {
     return (
@@ -154,6 +140,14 @@ const ExpenseList = ({ navigation, tripCurrencySymbol }) => {
       </Text>
     </View>
   );
+
+  const handleExpensePress = item => {
+    navigation.navigate('ExistentExpense', { item });
+  };
+
+  const capitalizeFirstLetter = str => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
 
   return (
     <SectionList

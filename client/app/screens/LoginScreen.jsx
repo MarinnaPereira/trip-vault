@@ -10,23 +10,32 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
 
 import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
 import { loginUser, getAllTrips } from '../api/api';
 
 export default function LoginScreen({ navigation }) {
+  const { setUser, setIsLogged } = useUserContext();
+  const { dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
+
   const [credential, setCredential] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { setUser, setIsLogged } = useUserContext();
-  const { dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
+  useFocusEffect(
+    useCallback(() => {
+      setCredential('');
+      setPassword('');
+      setShowPassword(false);
+      setError('');
+    }, []),
+  );
 
   useEffect(() => {
     (async () => {
@@ -58,10 +67,9 @@ export default function LoginScreen({ navigation }) {
   let allTrips;
   const fetchUserTrips = async () => {
     try {
-      // setLoading(true);
+      setLoading(true);
       allTrips = await getAllTrips();
-      // setLoading(false);
-      console.log(allTrips);
+      setLoading(false);
       if (allTrips) {
         dispatch({
           type: 'ADD_ALL_TRIPS',
@@ -111,21 +119,11 @@ export default function LoginScreen({ navigation }) {
     setShowPassword(!showPassword);
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      // This will run when the screen is focused
-      setCredential('');
-      setPassword('');
-      setShowPassword(false);
-      setError('');
-    }, []),
-  );
-
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : null}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this value as needed
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="flex-1 items-center">
@@ -160,12 +158,12 @@ export default function LoginScreen({ navigation }) {
             />
           </View>
           {error && (
-            <View className="mt-2 mx-6">
+            <View className="mt-3 mx-6">
               <Text className="text-red-500 text-center">{error}</Text>
             </View>
           )}
           <Text
-            className={`${!error ? 'mt-36 text-[19px]' : 'mt-[117px] text-[19px] px-6'}`}
+            className={`${!error ? 'mt-36 text-[19px]' : 'mt-[113px] text-[19px] px-6'}`}
           >
             Don't have an account?
           </Text>

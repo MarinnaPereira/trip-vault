@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -8,17 +8,22 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { useFocusEffect } from '@react-navigation/native';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { DateTime } from 'luxon';
-import { useFocusEffect } from '@react-navigation/native';
 
-import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
+import { useTripsContext } from '../contexts/tripsContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
+import { updateTrip } from '../api/api';
 import DropdownCurrency from './DropdownCurrency';
-import { addTrip, updateTrip } from '../api/api';
 
 export default function EditTripScreen({ navigation }) {
+  const { setUser } = useUserContext();
+  const { dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
+  const { baseCurrency, setBaseCurrency, convertCurrency } =
+    useCurrencyContext();
+
   const [tripName, setTripName] = useState('');
   const [budget, setBudget] = useState('');
   const [startDate, setStartDate] = useState(null);
@@ -26,18 +31,9 @@ export default function EditTripScreen({ navigation }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
-
   const [isStartDatePickerVisible, setStartDatePickerVisibility] =
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
-
-  const { user, setUser } = useUserContext();
-  const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
-  const { baseCurrency, setBaseCurrency, convertCurrency } =
-    useCurrencyContext();
-
-  //   !!!!!!!!!!!
-  // const newAvatar = route.params ? route.params.newAvatar : null;
 
   useFocusEffect(
     useCallback(() => {
@@ -52,6 +48,10 @@ export default function EditTripScreen({ navigation }) {
       setEndDatePickerVisibility(false);
     }, [pinnedTrip]),
   );
+
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
 
   const tripData = {
     name: tripName,
@@ -102,32 +102,17 @@ export default function EditTripScreen({ navigation }) {
   const handleUpdatePress = async () => {
     setError('');
     setSuccess('');
-    if (budget.trim() && !Number(budget)) {
-      setError('Budget must be a number (use "." as the decimal separator)');
+    if (isNaN(budget) || budget === null) {
+      setError(
+        'Budget must be a valid number (use "." as the decimal separator)',
+      );
       return;
     }
     if (startDate && endDate && endDate < startDate) {
-      console.log(startDate && endDate && endDate < startDate);
       setError('End date cannot be before start date');
       return;
     }
     await editTrip();
-  };
-
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
-
-  const showStartDatePicker = () => {
-    setStartDatePickerVisibility(true);
-  };
-
-  const hideStartDatePicker = () => {
-    setStartDatePickerVisibility(false);
-  };
-
-  const showEndDatePicker = () => {
-    setEndDatePickerVisibility(true);
   };
 
   const hideEndDatePicker = () => {
@@ -145,7 +130,6 @@ export default function EditTripScreen({ navigation }) {
   };
 
   const handleCurrencyChange = value => {
-    console.log(value);
     setBaseCurrency(value);
   };
 
@@ -202,12 +186,11 @@ export default function EditTripScreen({ navigation }) {
             placeholder="Budget (optional)"
             placeholderTextColor="#333"
             keyboardType="numeric"
-            value={budget !== '0' ? budget.toString() : ''}
+            value={budget != '0' ? budget.toString() : ''}
             className={`py-3 pl-2 text-[18px]`}
           />
         </View>
 
-        {/* Start Date */}
         <View className="mt-10">
           <TouchableOpacity
             onPress={() => {
@@ -242,7 +225,6 @@ export default function EditTripScreen({ navigation }) {
             </View>
           </TouchableOpacity>
 
-          {/* End Date */}
           <TouchableOpacity
             onPress={() => {
               setEndDatePickerVisibility(true);

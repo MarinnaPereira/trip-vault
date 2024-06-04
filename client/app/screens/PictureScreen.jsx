@@ -1,8 +1,5 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import React from 'react';
-import { Entypo } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
+import { Entypo, FontAwesome, AntDesign } from '@expo/vector-icons';
 
 export default function PictureScreen() {
   return (

@@ -1,7 +1,5 @@
 import { Modal, View, Text, TouchableOpacity } from 'react-native';
-import React from 'react';
-import { Entypo } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
+import { Entypo, FontAwesome } from '@expo/vector-icons';
 
 export default function UploadPictureModal({
   modalVisible,

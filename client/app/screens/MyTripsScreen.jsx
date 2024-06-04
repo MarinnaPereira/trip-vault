@@ -8,10 +8,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
-  SafeAreaView,
 } from 'react-native';
-import { AntDesign, FontAwesome6, MaterialIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 
 import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
@@ -20,13 +19,13 @@ import SearchBar from './SearchBar';
 import avatars from '../../assets/avatars';
 
 export default function MyTripsScreen({ navigation }) {
+  const { user, setUser } = useUserContext();
+  const { trips, pinnedTrip, setPinnedTrip } = useTripsContext();
+
   const [filteredTrips, setFilteredTrips] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const flatListRef = useRef(null);
-
-  const { trips, pinnedTrip, setPinnedTrip } = useTripsContext();
-  const { user, setUser } = useUserContext();
 
   let avatarName;
   if (user) {
@@ -74,7 +73,7 @@ export default function MyTripsScreen({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
-      flatListRef.current?.scrollToOffset({ animated: false, offset: 0 }); // Scroll to top when screen gains focus
+      flatListRef.current?.scrollToOffset({ animated: false, offset: 0 });
     }, []),
   );
 
@@ -87,7 +86,7 @@ export default function MyTripsScreen({ navigation }) {
         selectedTrip: item._id,
       });
       setLoading(false);
-      if (res.status === 200) {
+      if (res.data) {
         const updatedUser = { ...user, selectedTrip: item };
         setUser(updatedUser);
         setPinnedTrip(item);
@@ -118,7 +117,7 @@ export default function MyTripsScreen({ navigation }) {
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : null}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust offset as needed
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
       <FlatList
         ref={flatListRef}

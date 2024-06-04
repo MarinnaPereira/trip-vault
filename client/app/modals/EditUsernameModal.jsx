@@ -1,22 +1,24 @@
 import { useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+
 import { useUserContext } from '../contexts/userContext';
 import { updateUser } from '../api/api';
 
 export default function EditUsernameModal({ modalVisible, closeModal }) {
   const { user, setUser } = useUserContext();
-  const currentUsername = user.username;
-  console.log(typeof currentUsername);
+
   const [newUsername, setNewUsername] = useState('');
   const [modalError, setModalError] = useState('');
+
+  const currentUsername = user.username;
 
   let editedUser;
 
   const editUser = async editedUser => {
     setModalError('');
     const res = await updateUser(editedUser);
-    if (res.status === 200) {
+    if (res.data) {
       setUser(res.data);
       setModalError('');
       closeModal();
@@ -83,7 +85,7 @@ export default function EditUsernameModal({ modalVisible, closeModal }) {
               />
             </View>
             {modalError && (
-              <View className="text-red-600 mt-2 mb-6 mx-6">
+              <View className="mt-1 mb-6 mx-6">
                 <Text className="text-red-600 text-center">{modalError}</Text>
               </View>
             )}

@@ -8,42 +8,42 @@ import {
   ActivityIndicator,
   Modal,
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import * as ImagePicker from 'expo-image-picker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {
   MaterialIcons,
   MaterialCommunityIcons,
   FontAwesome,
   FontAwesome6,
 } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
-import { ScrollView } from 'react-native-gesture-handler';
 
-import PaymentMethodModal from '../modals/PaymentMethodModal';
-import UploadPictureModal from '../modals/UploadPictureModal';
-import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
+import { useTripsContext } from '../contexts/tripsContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
 import { updateExpense, deleteExpense } from '../api/api';
-import DropdownCurrency from './DropdownCurrency';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import PaymentMethodModal from '../modals/PaymentMethodModal';
+import UploadPictureModal from '../modals/UploadPictureModal';
 import categories from '../../assets/categories';
+import DropdownCurrency from './DropdownCurrency';
 
 export default function ExistentExpenseScreen({ navigation, route }) {
   const { item } = route.params;
   const { newCategoryName, newCategoryImage } = route.params;
 
   const { user, setUser } = useUserContext();
-  const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
+  const { dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
   const { convertCurrency } = useCurrencyContext();
+
   const [currentExpense, setCurrentExpense] = useState(item || null);
 
   let selectedExpense = null;
+
   if (pinnedTrip) {
     selectedExpense = pinnedTrip.expenses.find(
       expense => expense._id === currentExpense._id,
     );
   }
-
-  console.log(selectedExpense);
 
   const [categoryName, setCategoryName] = useState(
     newCategoryName || selectedExpense?.categoryName,
@@ -81,10 +81,8 @@ export default function ExistentExpenseScreen({ navigation, route }) {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
-
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
-
   const [isSingleDatePickerVisible, setSingleDatePickerVisibility] =
     useState(false);
   const [isStartDatePickerVisible, setStartDatePickerVisibility] =
@@ -93,15 +91,16 @@ export default function ExistentExpenseScreen({ navigation, route }) {
   const [isSpreadByDays, setIsSpreadByDays] = useState(
     selectedExpense?.dates.length > 1,
   );
-
   const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] =
     useState(false);
   const [isUploadPictureModalVisible, setIsUploadPictureModalVisible] =
     useState(false);
-
   const [currencyDropdownVisible, setCurrencyDropdownVisible] = useState(false);
 
-  // * category image
+  useEffect(() => {
+    setPinnedTrip(user.selectedTrip);
+  }, [user]);
+
   const findCategoryImage = categoryName => {
     const category = categories.find(cat => cat.name === categoryName);
     return category
@@ -112,6 +111,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
   const categoryImage = newCategoryImage || findCategoryImage(categoryName);
 
   const tripCurrency = pinnedTrip ? pinnedTrip.currency : 'USD';
+
   const getConvertedAmount = () =>
     convertCurrency(value, selectedCurrency, tripCurrency);
 
@@ -120,7 +120,10 @@ export default function ExistentExpenseScreen({ navigation, route }) {
     convertedAmount = getConvertedAmount();
   }
 
-  //* updateExpense
+  const handleGoBack = () => {
+    navigation.navigate('PinnedTrip');
+  };
+
   const saveExpense = async () => {
     const formData = new FormData();
 
@@ -164,23 +167,14 @@ export default function ExistentExpenseScreen({ navigation, route }) {
     }
   };
 
-  useEffect(() => {
-    setPinnedTrip(user.selectedTrip);
-  }, [user]);
-
   const handleUpdatePress = async () => {
     setError('');
     setSuccess('');
     if (startDate && endDate && endDate < startDate) {
-      console.log(startDate && endDate && endDate < startDate);
       setError('End date cannot be before start date');
       return;
     }
     await saveExpense();
-  };
-
-  const handleGoBack = () => {
-    navigation.navigate('PinnedTrip');
   };
 
   const handleCurrencyChange = currency => {
@@ -208,16 +202,8 @@ export default function ExistentExpenseScreen({ navigation, route }) {
     setSingleDatePickerVisibility(false);
   };
 
-  const showStartDatePicker = () => {
-    setStartDatePickerVisibility(true);
-  };
-
   const hideStartDatePicker = () => {
     setStartDatePickerVisibility(false);
-  };
-
-  const showEndDatePicker = () => {
-    setEndDatePickerVisibility(true);
   };
 
   const hideEndDatePicker = () => {
@@ -289,7 +275,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
     setLoading(true);
     const res = await deleteExpense(selectedExpense);
     setLoading(false);
-    if (!res.status) {
+    if (!res.data) {
       setError(res);
       return;
     }

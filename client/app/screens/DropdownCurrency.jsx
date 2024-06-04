@@ -7,6 +7,7 @@ import { useCurrencyContext } from '../contexts/currencyContext';
 
 const DropdownCurrency = ({ selectedCurrency, onChange }) => {
   const { availableCurrencies } = useCurrencyContext();
+
   const [value, setValue] = useState(selectedCurrency || null);
   const [isFocus, setIsFocus] = useState(false);
 

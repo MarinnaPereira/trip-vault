@@ -6,7 +6,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -23,11 +22,11 @@ import DonutPieChart from '../screens/DonutPieChart';
 import MyAccountScreen from '../screens/MyAccountScreen';
 import UnlockFirstTripScreen from '../screens/UnlockFirstTripScreen';
 import InitiateTripScreen from '../screens/InitiateTripScreen';
-import TrackFirstExpenseScreen from '../screens/TrackFirstExpenseScreen';
-import NewExpenseScreen from '../screens/NewExpenseScreen';
-import CategoryScreen from '../screens/CategoryScreen';
-import ExistentExpenseScreen from '../screens/ExistentExpense';
 import EditTripScreen from '../screens/EditTrip';
+import TrackFirstExpenseScreen from '../screens/TrackFirstExpenseScreen';
+import CategoryScreen from '../screens/CategoryScreen';
+import NewExpenseScreen from '../screens/NewExpenseScreen';
+import ExistentExpenseScreen from '../screens/ExistentExpense';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -246,6 +245,6 @@ export default function AppNavigator() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff4ee',
+    backgroundColor: '#fff',
   },
 });

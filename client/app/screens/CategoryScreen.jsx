@@ -6,7 +6,6 @@ import { useTripsContext } from '../contexts/tripsContext';
 import categories from '../../assets/categories';
 
 export default function Category({ navigation, route }) {
-  console.log('params', route.params);
   const changeCategory = route.params ? route.params.changeCategory : false;
 
   const handleCategoryPress = category => {

@@ -7,130 +7,32 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { DateTime } from 'luxon';
-import { useFocusEffect } from '@react-navigation/native';
 
-import { useTripsContext } from '../contexts/tripsContext';
 import { useUserContext } from '../contexts/userContext';
+import { useTripsContext } from '../contexts/tripsContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
-import DropdownCurrency from './DropdownCurrency';
 import { addTrip } from '../api/api';
+import DropdownCurrency from './DropdownCurrency';
 
 export default function InitiateTripScreen({ navigation }) {
+  const { user, setUser } = useUserContext();
+  const { dispatch, setPinnedTrip } = useTripsContext();
+  const { baseCurrency, setBaseCurrency } = useCurrencyContext();
+
   const [tripName, setTripName] = useState('');
   const [budget, setBudget] = useState('');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
   const [isStartDatePickerVisible, setStartDatePickerVisibility] =
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
-
-  const { user, setUser } = useUserContext();
-  const { trips, dispatch, setPinnedTrip } = useTripsContext();
-  const { baseCurrency, setBaseCurrency } = useCurrencyContext();
-
-  const tripData = {
-    name: tripName,
-    currency: baseCurrency,
-    budget: parseFloat(budget) || 0,
-    start: startDate,
-    end: endDate,
-  };
-
-  let newTrip;
-  const createTrip = async () => {
-    setLoading(true);
-    const res = await addTrip(tripData);
-    setLoading(false);
-    if (res.status === 201) {
-      newTrip = res.data;
-      dispatch({
-        type: 'ADD_TRIP',
-        payload: newTrip,
-      });
-      setUser({ ...user, selectedTrip: newTrip });
-      setPinnedTrip(newTrip);
-      navigation.navigate('TrackFirstExpense');
-    } else {
-      setError(res);
-    }
-  };
-
-  const handleSavePress = async () => {
-    setError('');
-    if (budget.trim() && !Number(budget)) {
-      setError(
-        'Budget must be a number bigger than zero (use "." as the decimal separator)',
-      );
-      return;
-    }
-    if (startDate && endDate && endDate < startDate) {
-      console.log(startDate && endDate && endDate < startDate);
-      setError('End date cannot be before start date');
-      return;
-    }
-    await createTrip();
-  };
-
-  const handleGoBack = () => {
-    trips.length > 0
-      ? navigation.navigate('Main', {
-          screen: 'MyTripsStack',
-          params: {
-            screen: 'MyTrips',
-          },
-        })
-      : navigation.navigate('Shared', {
-          screen: 'UnlockFirstTrip',
-        });
-  };
-
-  const showStartDatePicker = () => {
-    setStartDatePickerVisibility(true);
-  };
-
-  const hideStartDatePicker = () => {
-    setStartDatePickerVisibility(false);
-  };
-
-  const showEndDatePicker = () => {
-    setEndDatePickerVisibility(true);
-  };
-
-  const hideEndDatePicker = () => {
-    setEndDatePickerVisibility(false);
-  };
-
-  const handleStartDateConfirm = date => {
-    setStartDate(date);
-    setStartDatePickerVisibility(false);
-  };
-
-  const handleEndDateConfirm = date => {
-    setEndDate(date);
-    setEndDatePickerVisibility(false);
-  };
-
-  const handleCurrencyChange = value => {
-    console.log(value);
-    setBaseCurrency(value);
-  };
-
-  const tripLength =
-    endDate && startDate
-      ? Math.floor(
-          parseInt(
-            DateTime.fromJSDate(endDate)
-              .diff(DateTime.fromJSDate(startDate), 'days')
-              .toObject().days + 1,
-          ),
-        )
-      : '__';
 
   useEffect(() => {
     setBaseCurrency('');
@@ -148,10 +50,86 @@ export default function InitiateTripScreen({ navigation }) {
       setEndDatePickerVisibility(false);
       setBaseCurrency('');
       return () => {
-        setBaseCurrency(null);
+        setBaseCurrency('');
       };
     }, []),
   );
+
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
+  const tripData = {
+    name: tripName,
+    currency: baseCurrency,
+    budget: parseFloat(budget) || 0,
+    start: startDate,
+    end: endDate,
+  };
+
+  let newTrip;
+  const createTrip = async () => {
+    setLoading(true);
+    const res = await addTrip(tripData);
+    setLoading(false);
+    if (res.data) {
+      newTrip = res.data;
+      dispatch({
+        type: 'ADD_TRIP',
+        payload: newTrip,
+      });
+      setUser({ ...user, selectedTrip: newTrip });
+      setPinnedTrip(newTrip);
+      setBaseCurrency('');
+      navigation.navigate('TrackFirstExpense');
+    } else {
+      setError(res);
+    }
+  };
+
+  const handleSavePress = async () => {
+    setError('');
+    if (isNaN(budget) || budget === null) {
+      setError(
+        'Budget must be a valid number (use "." as the decimal separator)',
+      );
+      return;
+    }
+    if (startDate && endDate && endDate < startDate) {
+      setError('End date cannot be before start date');
+      return;
+    }
+    await createTrip();
+  };
+
+  const hideEndDatePicker = () => {
+    setEndDatePickerVisibility(false);
+  };
+
+  const handleStartDateConfirm = date => {
+    setStartDate(date);
+    setStartDatePickerVisibility(false);
+  };
+
+  const handleEndDateConfirm = date => {
+    setEndDate(date);
+    setEndDatePickerVisibility(false);
+  };
+
+  const handleCurrencyChange = value => {
+    setBaseCurrency(value);
+  };
+
+  const tripLength =
+    endDate && startDate
+      ? Math.floor(
+          parseInt(
+            DateTime.fromJSDate(endDate)
+              .diff(DateTime.fromJSDate(startDate), 'days')
+              .toObject().days + 1,
+          ),
+        )
+      : '__';
 
   return (
     <ScrollView>
@@ -200,7 +178,6 @@ export default function InitiateTripScreen({ navigation }) {
           />
         </View>
 
-        {/* Start Date */}
         <View className="mt-10">
           <TouchableOpacity
             onPress={() => {
@@ -235,7 +212,6 @@ export default function InitiateTripScreen({ navigation }) {
             </View>
           </TouchableOpacity>
 
-          {/* End Date */}
           <TouchableOpacity
             onPress={() => {
               setEndDatePickerVisibility(true);

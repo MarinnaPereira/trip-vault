@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { CURRENCY_API_KEY } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,14 +7,13 @@ const CurrencyContext = createContext();
 
 export const CurrencyProvider = ({ children }) => {
   const [exchangeRates, setExchangeRates] = useState({});
-  const [baseCurrency, setBaseCurrency] = useState('USD'); // Default base currency
+  const [baseCurrency, setBaseCurrency] = useState('USD');
   const [availableCurrencies, setAvailableCurrencies] = useState([]);
 
   const fetchExchangeRates = async baseCurrency => {
     const storedData = await AsyncStorage.getItem('exchangeRates');
     const lastFetched = storedData ? JSON.parse(storedData).lastFetched : null;
     const now = new Date();
-
     if (
       lastFetched &&
       new Date(lastFetched).toDateString() === now.toDateString()
@@ -22,7 +21,6 @@ export const CurrencyProvider = ({ children }) => {
       setExchangeRates(JSON.parse(storedData).data);
       return;
     }
-
     try {
       const response = await axios.get(
         `https://api.freecurrencyapi.com/v1/latest?apikey=${CURRENCY_API_KEY}&base_currency=${baseCurrency}`,

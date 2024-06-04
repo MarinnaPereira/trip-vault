@@ -1,21 +1,16 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { AntDesign, Octicons } from '@expo/vector-icons';
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
-import { pie, arc } from 'd3-shape';
 import { useFocusEffect } from '@react-navigation/native';
+import { Octicons } from '@expo/vector-icons';
+import { pie, arc } from 'd3-shape';
 
-import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
 import { useCurrencyContext } from '../contexts/currencyContext';
 
 const DonutPieChart = ({ width = 280, height = 280 }) => {
-  const [totalPerCategory, setTotalPerCategory] = useState({});
-  const scrollViewRef = useRef(null);
-
   const {
-    trips,
     pinnedTrip,
     calculateTotalSpent,
     calculateTripDuration,
@@ -23,7 +18,14 @@ const DonutPieChart = ({ width = 280, height = 280 }) => {
   } = useTripsContext();
   const { getCurrencySymbol } = useCurrencyContext();
 
-  const { user } = useUserContext();
+  const [totalPerCategory, setTotalPerCategory] = useState({});
+  const scrollViewRef = useRef(null);
+
+  useEffect(() => {
+    if (pinnedTrip && pinnedTrip.expenses) {
+      setTotalPerCategory(calculateTotalSpentPerCategory(pinnedTrip.expenses));
+    }
+  }, [pinnedTrip]);
 
   useFocusEffect(
     useCallback(() => {
@@ -32,7 +34,7 @@ const DonutPieChart = ({ width = 280, height = 280 }) => {
           calculateTotalSpentPerCategory(pinnedTrip.expenses),
         );
       }
-      return () => scrollViewRef.current?.scrollTo({ y: 0, animated: true }); // Scroll to top when screen gains focus
+      return () => scrollViewRef.current?.scrollTo({ y: 0, animated: true });
     }, [pinnedTrip]),
   );
 
@@ -62,13 +64,6 @@ const DonutPieChart = ({ width = 280, height = 280 }) => {
     return totalSpentPerCategory;
   };
 
-  useEffect(() => {
-    if (pinnedTrip && pinnedTrip.expenses) {
-      setTotalPerCategory(calculateTotalSpentPerCategory(pinnedTrip.expenses));
-    }
-  }, [pinnedTrip]);
-
-  // Prepare data for the pie chart
   const data = categories
     .map(category => ({
       ...category,
@@ -95,32 +90,27 @@ const DonutPieChart = ({ width = 280, height = 280 }) => {
     ? getCurrencySymbol(pinnedTrip.currency)
     : '';
 
-  // Here we will handle the download button
   const handleDownload = () => {
+    // Here we will handle the download button
     // We can use libraries like react-native-fs or
     // react-native-fetch-blob to handle file downloads
-    console.log('Download button pressed');
   };
 
   return (
     <ScrollView style={styles.container} ref={scrollViewRef}>
-      {/* Download Button */}
       <View style={styles.containerDownloadButton}>
         <TouchableOpacity
           style={styles.downloadButton}
           onPress={handleDownload}
         >
           <Octicons name="download" size={30} color="black" />
-          {/* <AntDesign name="download" size={30} color="black" /> */}
         </TouchableOpacity>
       </View>
 
-      {/* Title */}
       <Text className="text-3xl ml-4 mt-[10px] mb-2 text-[#00b0a3] font-bold items-start">
         Statistics
       </Text>
 
-      {/* Daily Average Amount */}
       <View style={styles.containerDailyAverage}>
         <Text className="text-lg mb-2 ml-4 font-semibold text-[#00b0a3]">
           Daily Average:{' '}
@@ -134,7 +124,6 @@ const DonutPieChart = ({ width = 280, height = 280 }) => {
         </Text>
       </View>
 
-      {/* Pie Chart */}
       <View style={styles.containerChart}>
         <Svg width={width} height={height}>
           <G x={width / 2} y={height / 2}>
@@ -152,7 +141,7 @@ const DonutPieChart = ({ width = 280, height = 280 }) => {
                     fontSize="16"
                     stroke="#000"
                     strokeWidth={0.1}
-                    fontWeight="bold" // Set the font weight here
+                    fontWeight="bold"
                   >
                     {`${((slice.data.value / data.reduce((acc, cur) => acc + cur.value, 0)) * 100).toFixed(1)}%`}
                   </SvgText>
@@ -209,13 +198,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
   },
-  // dailyAverage: {
-  //   color: '#00b0a3',
-  //   fontSize: 20,
-  //   fontWeight: 'bold',
-  //   marginTop: 10,
-  //   marginLeft: 16,
-  // },
   containerChart: {
     alignItems: 'center',
     justifyContent: 'center',

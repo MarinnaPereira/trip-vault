@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { Modal, View, Text, TouchableOpacity } from 'react-native';
-import { FontAwesome6 } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Octicons } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
+import {
+  FontAwesome6,
+  MaterialCommunityIcons,
+  Octicons,
+  MaterialIcons,
+} from '@expo/vector-icons';
+
 import OtherPaymentModal from './OtherPaymentModal';
 
 const PaymentMethodModal = ({

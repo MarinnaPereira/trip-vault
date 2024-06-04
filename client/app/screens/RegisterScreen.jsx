@@ -16,6 +16,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { registerUser } from '../api/api';
 
 export default function RegisterScreen({ navigation, route }) {
+  const avatar = route.params.avatar;
+
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,11 +25,8 @@ export default function RegisterScreen({ navigation, route }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const avatar = route.params.avatar;
-
   useFocusEffect(
     useCallback(() => {
-      // This will run when the screen is focused
       setUsername('');
       setEmail('');
       setPassword('');
@@ -46,8 +45,7 @@ export default function RegisterScreen({ navigation, route }) {
     const newUser = { username, email, password, avatar };
     const res = await registerUser(newUser);
     setLoading(false);
-    if (typeof res !== 'string') {
-      console.log('addedUser', res);
+    if (res.data) {
       navigation.navigate('Login', { screen: 'LoginScreen' });
     } else {
       setError(res);
@@ -104,13 +102,13 @@ export default function RegisterScreen({ navigation, route }) {
             />
           </View>
           {error && (
-            <View className="text-red-600 mt-2 mx-6">
+            <View className="text-red-600 mt-3 mx-6">
               <Text className="text-red-600 text-center">{error}</Text>
             </View>
           )}
 
           <Text
-            className={`${!error ? 'mt-20 text-[19px]' : 'mt-[42px] text-[19px] px-6'}`}
+            className={`${!error ? 'mt-20 text-[19px]' : 'mt-[47px] text-[19px] px-6'}`}
           >
             Already have an account?
           </Text>

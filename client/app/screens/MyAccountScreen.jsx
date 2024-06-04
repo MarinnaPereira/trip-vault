@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,20 +8,24 @@ import {
   Modal,
 } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
-import { useState, useEffect } from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
-import { useUserContext } from '../contexts/userContext';
-import { deleteUser, updateUser } from '../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import EditUsernameModal from '../modals/EditUsernameModal';
-import { Ionicons } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
+import {
+  MaterialIcons,
+  MaterialCommunityIcons,
+  AntDesign,
+  Ionicons,
+} from '@expo/vector-icons';
 
-import avatars from '../../assets/avatars';
+import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
+import { deleteUser, updateUser } from '../api/api';
+import EditUsernameModal from '../modals/EditUsernameModal';
+import avatars from '../../assets/avatars';
 
 export default function MyAccountScreen({ navigation, route }) {
+  const { user, setIsLogged, isLogged, setUser } = useUserContext();
+  const { trips, dispatch, setPinnedTrip } = useTripsContext();
+
   const [isEditUserModalVisible, setIsEditUserModalVisible] = useState(false);
   // const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -28,14 +33,18 @@ export default function MyAccountScreen({ navigation, route }) {
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
 
-  const { user, setIsLogged, isLogged, setUser } = useUserContext();
-  const { trips, dispatch, setPinnedTrip } = useTripsContext();
-
   useEffect(() => {
     if (!user) {
       navigation.replace('Auth', { screen: 'Welcome' });
     }
   }, [user, navigation]);
+
+  useEffect(() => {
+    if (newAvatar && newAvatar.name !== user.avatar) {
+      const editedUser = { ...user, avatar: newAvatar.name };
+      editUser(editedUser);
+    }
+  }, [newAvatar]);
 
   const findAvatarImage = userAvatar => {
     const avatar = avatars.find(avatar => avatar.name === userAvatar);
@@ -51,7 +60,6 @@ export default function MyAccountScreen({ navigation, route }) {
     ? newAvatar.image
     : user && findAvatarImage(user.avatar);
 
-  // *updateUser
   const editUser = async editedUser => {
     setError('');
     setLoading(true);
@@ -64,27 +72,9 @@ export default function MyAccountScreen({ navigation, route }) {
     }
   };
 
-  useEffect(() => {
-    if (newAvatar && newAvatar.name !== user.avatar) {
-      const editedUser = { ...user, avatar: newAvatar.name };
-      editUser(editedUser);
-    }
-  }, [newAvatar]);
-
-  const toggleModal = () => {
-    setIsEditUserModalVisible(!isEditUserModalVisible);
-  };
-
-  // *deleteUser
-  const handleDeleteAccountPress = async () => {
-    toggleDeleteConfirmation();
-  };
-
-  // *logout
-
   const handleLogoutPress = async () => {
     setLoading(true);
-    await AsyncStorage.clear().then(() => console.log('AsyncStorage cleared'));
+    await AsyncStorage.clear();
     setLoading(false);
     setUser(null);
     setError('');
@@ -99,18 +89,11 @@ export default function MyAccountScreen({ navigation, route }) {
         routes: [{ name: 'Auth' }],
       }),
     );
-    console.log('User: ', user);
-    console.log('Trips: ', trips);
-    console.log('isLogged: ', isLogged);
-    console.log('ALL CLEARED!');
   };
 
-  if (!user) {
-    return null;
-  }
-  // const togglePasswordVisibility = () => {
-  //   setShowPassword(!showPassword);
-  // };
+  const handleDeleteAccountPress = async () => {
+    toggleDeleteConfirmation();
+  };
 
   const toggleDeleteConfirmation = () => {
     setDeleteConfirmationVisible(!isDeleteConfirmationVisible);
@@ -118,13 +101,28 @@ export default function MyAccountScreen({ navigation, route }) {
 
   const handleDeleteConfirmation = async () => {
     toggleDeleteConfirmation();
-    try {
-      await deleteUser(user);
+    setError('');
+    setLoading(true);
+    const res = await deleteUser(user);
+    if (res.data) {
+      setLoading(false);
       handleLogoutPress();
-    } catch (error) {
-      console.error('Error deleting user:', error);
+    } else {
+      setError(res);
     }
   };
+
+  const toggleModal = () => {
+    setIsEditUserModalVisible(!isEditUserModalVisible);
+  };
+
+  // const togglePasswordVisibility = () => {
+  //   setShowPassword(!showPassword);
+  // };
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <>

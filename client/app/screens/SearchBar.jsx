@@ -1,20 +1,20 @@
 import { useState, useCallback } from 'react';
 import { View, TextInput, TouchableOpacity } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
+import { Feather } from '@expo/vector-icons';
 
 import { useTripsContext } from '../contexts/tripsContext';
 
 const SearchBar = ({ trips, setFilteredTrips }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-
   const { pinnedTrip } = useTripsContext();
 
-  useFocusEffect(
-    useCallback(() => {
-      setSearchQuery('');
-    }, []),
-  );
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     setSearchQuery('');
+  //   }, []),
+  // );
 
   const reversedTrips = [...trips].reverse();
   const notPinnedTrips = reversedTrips.filter(
