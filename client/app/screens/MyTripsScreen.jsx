@@ -47,13 +47,6 @@ export default function MyTripsScreen({ navigation }) {
     avatarImage = findAvatarImage(avatarName);
   }
 
-  const capitalizeFirstLetter = str => {
-    if (typeof str === 'string' && str.length > 0) {
-      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-    }
-    return '';
-  };
-
   let orderedTrips;
 
   const resetFilteredTrips = trips => {
@@ -111,6 +104,13 @@ export default function MyTripsScreen({ navigation }) {
 
   const handleAddTrip = () => {
     navigation.navigate('Shared', { screen: 'InitiateTrip' });
+  };
+
+  const capitalizeFirstLetter = str => {
+    if (typeof str === 'string' && str.length > 0) {
+      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    }
+    return '';
   };
 
   return (

@@ -33,7 +33,7 @@ const SearchBar = ({ trips, setFilteredTrips }) => {
 
   const handleClearSearch = () => {
     setSearchQuery('');
-    setFilteredTrips(trips);
+    setFilteredTrips(orderedTrips);
   };
 
   return (
