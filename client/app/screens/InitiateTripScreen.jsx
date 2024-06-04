@@ -133,7 +133,7 @@ export default function InitiateTripScreen({ navigation }) {
       : '__';
 
   useEffect(() => {
-    setBudget('');
+    setBaseCurrency('');
   }, []);
 
   useFocusEffect(

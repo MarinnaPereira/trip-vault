@@ -28,16 +28,18 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import categories from '../../assets/categories';
 
 export default function ExistentExpenseScreen({ navigation, route }) {
+  const { item } = route.params;
+  const { newCategoryName, newCategoryImage } = route.params;
+
   const { user, setUser } = useUserContext();
   const { trips, dispatch, pinnedTrip, setPinnedTrip } = useTripsContext();
   const { convertCurrency } = useCurrencyContext();
-
-  const { item } = route.params || null;
+  const [currentExpense, setCurrentExpense] = useState(item || null);
 
   let selectedExpense = null;
   if (pinnedTrip) {
     selectedExpense = pinnedTrip.expenses.find(
-      expense => expense._id === item._id,
+      expense => expense._id === currentExpense._id,
     );
   }
   if (!selectedExpense)
@@ -50,7 +52,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
   console.log(selectedExpense);
 
   const [categoryName, setCategoryName] = useState(
-    selectedExpense.categoryName,
+    newCategoryName || selectedExpense.categoryName,
   );
   const [value, setValue] = useState(selectedExpense?.value);
   const [selectedCurrency, setSelectedCurrency] = useState(
@@ -111,7 +113,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
       : categories.find(cat => cat.name === 'Others').image;
   };
 
-  const categoryImage = findCategoryImage(categoryName);
+  const categoryImage = newCategoryImage || findCategoryImage(categoryName);
 
   const tripCurrency = pinnedTrip ? pinnedTrip.currency : 'USD';
   const getConvertedAmount = () =>
@@ -126,7 +128,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
   const saveExpense = async () => {
     const formData = new FormData();
 
-    formData.append('categoryName', categoryName);
+    formData.append('categoryName', newCategoryName || categoryName);
     formData.append('value', value);
     formData.append('currency', selectedCurrency);
     convertedAmount && formData.append('convertedAmount', convertedAmount);
@@ -323,12 +325,12 @@ export default function ExistentExpenseScreen({ navigation, route }) {
   };
 
   const handleCategoryPress = () => {
-    // navigation.navigate('Shared', {
-    //   screen: 'Category',
-    //   params: {
-    //     changeCategory: true,
-    //   },
-    // });
+    navigation.navigate('Shared', {
+      screen: 'Category',
+      params: {
+        changeCategory: 'true',
+      },
+    });
   };
 
   return (
@@ -343,7 +345,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
       <View className="flex-1">
         <View className="flex flex-row justify-between mx-4 mt-5">
           <Text className=" text-3xl font-semibold text-[#00B0A3]">
-            {categoryName}
+            {newCategoryName || categoryName}
           </Text>
           <TouchableOpacity onPress={toggleDeleteConfirmation}>
             <FontAwesome6 name="trash-can" size={29} color="red" />
@@ -609,20 +611,20 @@ export default function ExistentExpenseScreen({ navigation, route }) {
             )}
 
             {error && (
-              <View className="mt-2 mx-6">
+              <View className="mt-3 mx-6">
                 <Text className="text-red-600 text-center">{error}</Text>
               </View>
             )}
 
             {success && (
-              <View className="mt-2 mx-6">
+              <View className="mt-3 mx-6">
                 <Text className="text-green font-medium text-center">
                   {success}
                 </Text>
               </View>
             )}
 
-            <View className="items-center mt-6">
+            <View className={`items-center ${image ? 'mt-5' : 'mt-8'}`}>
               {loading ? (
                 <ActivityIndicator
                   size="large"

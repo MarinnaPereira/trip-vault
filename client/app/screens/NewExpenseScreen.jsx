@@ -460,12 +460,12 @@ export default function NewExpenseScreen({ navigation, route }) {
             )}
 
             {error && (
-              <View className="text-red-600 mt-2 mx-6">
+              <View className="mt-3 mx-6">
                 <Text className="text-red-600 text-center">{error}</Text>
               </View>
             )}
 
-            <View className="items-center mt-6">
+            <View className={`items-center ${image ? 'mt-5' : 'mt-8'}`}>
               {loading ? (
                 <ActivityIndicator
                   size="large"

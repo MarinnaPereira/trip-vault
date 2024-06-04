@@ -7,25 +7,23 @@ import categories from '../../assets/categories';
 
 export default function Category({ navigation, route }) {
   console.log('params', route.params);
-  // const changeCategory = route.params ? route.params.changeCategory : false;
+  const changeCategory = route.params ? route.params.changeCategory : false;
 
   const handleCategoryPress = category => {
-    //   console.log(changeCategory);
-    //   if (changeCategory) {
-    //     navigation.navigate('PinnedTripStack', {
-    //       screen: 'ExistentExpense',
-    //       params: {
-    //         categoryName: category.name,
-    //         categoryImage: category.image,
-    //       },
-    //     });
-
-    // } else {
-    navigation.navigate('NewExpense', {
-      categoryName: category.name,
-      categoryImage: category.image,
-    });
-    // }
+    if (changeCategory === 'true') {
+      navigation.navigate('PinnedTripStack', {
+        screen: 'ExistentExpense',
+        params: {
+          newCategoryName: category.name,
+          newCategoryImage: category.image,
+        },
+      });
+    } else {
+      navigation.navigate('NewExpense', {
+        categoryName: category.name,
+        categoryImage: category.image,
+      });
+    }
   };
 
   const handleGoBack = () => {
@@ -52,7 +50,7 @@ export default function Category({ navigation, route }) {
 
       <View className="items-center">
         <Text className="text-3xl font-semibold text-[#00B0A3]">
-          Pick a category
+          {changeCategory === 'true' ? 'Change category' : 'Pick a category'}
         </Text>
         <View className="mt-3">
           <FlatList
