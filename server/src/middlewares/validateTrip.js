@@ -38,7 +38,6 @@ export const validateTrip = [
 
   (req, res, next) => {
     const errors = validationResult(req);
-    console.log(errors);
     if (errors.isEmpty()) {
       console.log('[Trip validated]');
       return next();

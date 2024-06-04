@@ -71,10 +71,7 @@ export const validateExpense = [
     .escape(),
 
   (req, res, next) => {
-    console.log('req.body on validate', req.body);
-
     const errors = validationResult(req);
-    console.log('errors', errors);
     if (errors.isEmpty()) {
       console.log('[Expense validated]');
       return next();
