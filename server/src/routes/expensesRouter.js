@@ -1,7 +1,9 @@
 import { Router } from 'express';
-import { handleUpload } from '../middlewares/uploadFile.js';
 import multer from 'multer';
 
+import { validateId } from '../middlewares/validateId.js';
+import verifyToken from '../middlewares/verifyToken.js';
+import { validateExpense } from '../middlewares/validateExpense.js';
 import {
   getAllExpenses,
   addExpense,
@@ -10,9 +12,6 @@ import {
   updateExpense,
   deleteExpense,
 } from '../controllers/expensesController.js';
-import { validateExpense } from '../middlewares/validateExpense.js';
-import { validateId } from '../middlewares/validateId.js';
-import verifyToken from '../middlewares/verifyToken.js';
 
 export const expensesRouter = Router();
 

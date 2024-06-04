@@ -15,13 +15,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.use(morgan('dev'));
 
-// routes
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/trips', tripsRouter);
 app.use('/expenses', expensesRouter);
 
-// error handling
 app.use((req, res, next) => {
   const error = new Error('Route is not found');
   error.status = 404;

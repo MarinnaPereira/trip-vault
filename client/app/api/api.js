@@ -10,14 +10,12 @@ const getToken = async () => {
   return token;
 };
 
-// * auth requests
-
 export const registerUser = async newUser => {
   try {
     const res = await axios.post(`${baseUrl}/auth/register`, newUser, {
       headers: { 'Content-Type': 'application/json' },
     });
-    if (res.status === 200) {
+    if (res.data) {
       return res.data;
     }
   } catch (err) {
@@ -37,8 +35,6 @@ export const loginUser = async userData => {
     return errMessage;
   }
 };
-
-// * user requests
 
 export const updateUser = async updatedUser => {
   try {
@@ -63,21 +59,18 @@ export const updateUser = async updatedUser => {
 export const deleteUser = async user => {
   try {
     const token = await getToken();
-
     const res = await axios.delete(`${baseUrl}/user/${user._id}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     });
-    return res.data; // return just a message
+    return res.data;
   } catch (err) {
     const errMessage = err.response.data.error;
     return errMessage;
   }
 };
-
-// * trips requests
 
 export const getAllTrips = async () => {
   try {
@@ -88,7 +81,7 @@ export const getAllTrips = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    return res.data; // return an array with all trips
+    return res.data;
   } catch (err) {
     const errMessage = err.response.data.error;
     return errMessage;
@@ -146,8 +139,6 @@ export const deleteTrip = async trip => {
     return errMessage;
   }
 };
-
-// * expenses requests
 
 export const addExpense = async formData => {
   try {

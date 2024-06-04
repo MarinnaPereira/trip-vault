@@ -1,6 +1,7 @@
-import app from './src/app.js';
-import { connectDB } from './src/utilities/connectDB.js';
 import 'dotenv/config';
+
+import { connectDB } from './src/utilities/connectDB.js';
+import app from './src/app.js';
 
 const PORT = process.env.PORT || 8080;
 

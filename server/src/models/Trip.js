@@ -22,7 +22,7 @@ const expenseSchema = new Schema({
   description: { type: String },
   dates: [{ type: Date, required: true }],
   paymentMethod: { type: String },
-  receipt: { type: String }, // path
+  receipt: { type: String },
 });
 
 const tripSchema = new Schema({
@@ -33,7 +33,6 @@ const tripSchema = new Schema({
   currency: { type: String, required: true },
   budget: { type: Number },
   expenses: [expenseSchema],
-  // expenses: [{ type: Schema.Types.ObjectId, ref: 'Expense' }],
 });
 
 tripSchema.methods.toJSON = function () {

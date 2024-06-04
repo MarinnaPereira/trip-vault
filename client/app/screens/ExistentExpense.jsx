@@ -42,46 +42,42 @@ export default function ExistentExpenseScreen({ navigation, route }) {
       expense => expense._id === currentExpense._id,
     );
   }
-  if (!selectedExpense)
-    return (
-      <View>
-        <Text>Expense not found</Text>
-      </View>
-    );
 
   console.log(selectedExpense);
 
   const [categoryName, setCategoryName] = useState(
-    newCategoryName || selectedExpense.categoryName,
+    newCategoryName || selectedExpense?.categoryName,
   );
   const [value, setValue] = useState(selectedExpense?.value);
   const [selectedCurrency, setSelectedCurrency] = useState(
-    selectedExpense.currency,
+    selectedExpense?.currency,
   );
   const [description, setDescription] = useState(
-    selectedExpense.description != 'null' ? selectedExpense.description : null,
+    selectedExpense?.description != 'null'
+      ? selectedExpense?.description
+      : null,
   );
   const [singleDate, setSingleDate] = useState(
-    selectedExpense.dates && selectedExpense.dates.length === 1
-      ? new Date(selectedExpense.dates[0])
+    selectedExpense?.dates && selectedExpense?.dates.length === 1
+      ? new Date(selectedExpense?.dates[0])
       : null,
   );
   const [startDate, setStartDate] = useState(
-    selectedExpense.dates && selectedExpense.dates.length > 1
-      ? new Date(selectedExpense.dates[0])
+    selectedExpense?.dates && selectedExpense?.dates.length > 1
+      ? new Date(selectedExpense?.dates[0])
       : null,
   );
   const [endDate, setEndDate] = useState(
-    selectedExpense.dates && selectedExpense.dates.length > 1
-      ? new Date(selectedExpense.dates[1])
+    selectedExpense?.dates && selectedExpense?.dates.length > 1
+      ? new Date(selectedExpense?.dates[1])
       : null,
   );
   const [paymentMethod, setPaymentMethod] = useState(
-    selectedExpense.paymentMethod != 'null'
-      ? selectedExpense.paymentMethod
+    selectedExpense?.paymentMethod != 'null'
+      ? selectedExpense?.paymentMethod
       : null,
   );
-  const [image, setImage] = useState(selectedExpense.receipt);
+  const [image, setImage] = useState(selectedExpense?.receipt);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
@@ -95,7 +91,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
   const [isSpreadByDays, setIsSpreadByDays] = useState(
-    selectedExpense.dates.length > 1,
+    selectedExpense?.dates.length > 1,
   );
 
   const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] =
@@ -144,7 +140,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
         name: new Date() + '_receipt' + '.jpeg',
       });
 
-    const expenseId = selectedExpense._id;
+    const expenseId = selectedExpense?._id;
     setLoading(true);
     const data = await updateExpense(formData, expenseId);
     setLoading(false);
@@ -305,7 +301,7 @@ export default function ExistentExpenseScreen({ navigation, route }) {
     setUser(user => {
       const newUser = { ...user };
       newUser.selectedTrip.expenses = newUser.selectedTrip.expenses.filter(
-        expense => expense._id !== selectedExpense._id,
+        expense => expense._id !== selectedExpense?._id,
       );
       setPinnedTrip({ ...newUser.selectedTrip });
       return newUser;
@@ -332,6 +328,13 @@ export default function ExistentExpenseScreen({ navigation, route }) {
       },
     });
   };
+
+  if (!selectedExpense)
+    return (
+      <View>
+        <Text>Expense not found</Text>
+      </View>
+    );
 
   return (
     <ScrollView>

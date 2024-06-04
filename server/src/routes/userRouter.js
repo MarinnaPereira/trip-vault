@@ -1,14 +1,14 @@
 import { Router } from 'express';
 
+import { validateId } from '../middlewares/validateId.js';
+import verifyToken from '../middlewares/verifyToken.js';
+import { sanitizeUserToUpdate } from '../middlewares/sanitizeUserToUpdate.js';
+import { validateUser } from '../middlewares/validateUser.js';
 import {
   getUser,
   updateUser,
   deleteUser,
 } from '../controllers/userController.js';
-import { validateId } from '../middlewares/validateId.js';
-import { validateUser } from '../middlewares/validateUser.js';
-import verifyToken from '../middlewares/verifyToken.js';
-import { sanitizeUserToUpdate } from '../middlewares/sanitizeUserToUpdate.js';
 
 export const userRouter = Router();
 

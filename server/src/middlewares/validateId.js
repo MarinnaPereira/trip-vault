@@ -11,7 +11,7 @@ export const validateId = [
     if (!result.isEmpty()) {
       return next(new Error('Invalid id'));
     }
-    console.log('id validated');
+    console.log('[Id validated]');
     next();
   },
 ];

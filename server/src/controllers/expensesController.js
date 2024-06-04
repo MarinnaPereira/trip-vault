@@ -4,7 +4,6 @@ import fse from 'fs-extra';
 import Trip from '../models/Trip.js';
 
 export const getAllExpenses = async (req, res, next) => {
-  //! necessary? when we get the trip, we get all expenses
   try {
     const tripId = req.tripId;
     const trip = await Trip.findById(tripId);
@@ -30,16 +29,10 @@ export const addExpense = async (req, res, next) => {
       dates,
       paymentMethod,
     } = req.body;
-
     const trip = await Trip.findById(tripId);
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
     }
-    console.log('req.body on controller', req.body);
-
-    console.log('req.file', req.file);
-    console.log('req.body', req.body);
-
     const newExpense = {
       categoryName,
       value,
@@ -55,11 +48,9 @@ export const addExpense = async (req, res, next) => {
     const savedExpense = trip.expenses[trip.expenses.length - 1];
     res.status(201).json(savedExpense);
   } catch (error) {
-    // ! delete file
     if (req.file) {
       const receiptPath = expense.receipt;
       const originalReceiptPath = decode(receiptPath);
-      // console.log(originalReceiptPath);
       fse.remove(originalReceiptPath);
       expense.receipt = undefined;
     }
@@ -75,7 +66,6 @@ export const getExpense = async (req, res, next) => {
       return res.status(404).json({ message: 'Trip not found' });
     }
     const expenseId = req.params.id;
-
     const expense = trip.expenses.find(
       expense => expense._id.toString() === expenseId,
     );
@@ -101,13 +91,6 @@ export const downloadReceipt = async (req, res, next) => {
     return res.status(404).json({ message: 'Receipt not found' });
   }
   res.sendFile(res.locals.expense.receipt), { root: '.' };
-
-  //   .get("/:path",async(req,res,next)=>{
-
-  // const absolutePath = path.resolve(path)
-
-  // res.sendFile(absolutePath)
-  // })
 };
 
 export const updateExpense = async (req, res, next) => {
@@ -117,7 +100,6 @@ export const updateExpense = async (req, res, next) => {
     if (!trip) {
       return res.status(404).json({ message: 'Trip not found' });
     }
-
     const expenseId = req.params.id;
     const expenseIndex = trip.expenses.findIndex(expense =>
       expense._id.equals(expenseId),
@@ -125,7 +107,6 @@ export const updateExpense = async (req, res, next) => {
     if (expenseIndex === -1) {
       return res.status(404).json({ message: 'Expense not found' });
     }
-
     const {
       categoryName,
       value,
@@ -135,10 +116,7 @@ export const updateExpense = async (req, res, next) => {
       dates,
       paymentMethod,
     } = req.body;
-
     const expense = trip.expenses[expenseIndex];
-
-    // Update the expense with new values
     if (categoryName !== undefined) expense.categoryName = categoryName;
     if (value !== undefined) expense.value = value;
     if (convertedAmount !== undefined)
@@ -150,17 +128,13 @@ export const updateExpense = async (req, res, next) => {
     if (req.file) {
       expense.receipt = req.file.path;
     } else if (expense.receipt) {
-      // If no new file, remove the existing receipt if it exists
       const receiptPath = expense.receipt;
       const originalReceiptPath = decode(receiptPath);
       await fse.remove(originalReceiptPath);
       expense.receipt = undefined;
     }
-
-    // Save the updated trip
     await trip.save();
-
-    res.status(200).json(expense);
+    res.json(expense);
   } catch (error) {
     next(error);
   }
@@ -180,12 +154,17 @@ export const deleteExpense = async (req, res, next) => {
     if (!expense) {
       return res.status(404).json({ message: 'Expense not found' });
     }
+    if (expense.receipt) {
+      const receiptPath = expense.receipt;
+      const originalReceiptPath = decode(receiptPath);
+      await fse.remove(originalReceiptPath);
+      expense.receipt = undefined;
+    }
     trip.expenses = trip.expenses.filter(
       expense => !expense._id.equals(expenseId),
     );
     await trip.save();
-    //! remember to delete the file of the uploads folder as well
-    res.status(204).json({ message: 'Expense deleted successfully' });
+    res.json({ message: 'Expense deleted successfully' });
   } catch (error) {
     next(error);
   }

@@ -1,5 +1,8 @@
 import { Router } from 'express';
 
+import { validateId } from '../middlewares/validateId.js';
+import verifyToken from '../middlewares/verifyToken.js';
+import { validateTrip } from '../middlewares/validateTrip.js';
 import {
   getAllTrips,
   addTrip,
@@ -7,9 +10,6 @@ import {
   updateTrip,
   deleteTrip,
 } from '../controllers/tripsController.js';
-import { validateTrip } from '../middlewares/validateTrip.js';
-import { validateId } from '../middlewares/validateId.js';
-import verifyToken from '../middlewares/verifyToken.js';
 
 export const tripsRouter = Router();
 

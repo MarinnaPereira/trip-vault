@@ -62,9 +62,8 @@ export const validateUser = [
 
   (req, res, next) => {
     const errors = validationResult(req);
-    console.log(errors);
     if (errors.isEmpty()) {
-      console.log('user validated');
+      console.log('[User validated]');
       return next();
     }
     next({ status: 400, message: errors.array()[0].msg });

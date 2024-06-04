@@ -76,7 +76,7 @@ export const validateExpense = [
     const errors = validationResult(req);
     console.log('errors', errors);
     if (errors.isEmpty()) {
-      console.log('expense validated');
+      console.log('[Expense validated]');
       return next();
     }
     next({ status: 400, message: errors.array()[0].msg });

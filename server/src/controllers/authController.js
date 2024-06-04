@@ -6,7 +6,7 @@ export const addUser = async (req, res, next) => {
   const newUser = { username, email, password, avatar };
   try {
     const registeredUser = await User.register(newUser);
-    res.json(registeredUser);
+    res.status(201).json(registeredUser);
   } catch (error) {
     next(error);
   }
@@ -14,7 +14,6 @@ export const addUser = async (req, res, next) => {
 
 export const loginUser = async (req, res, next) => {
   const { credential, password } = req.body;
-
   if (credential === '') {
     next({ status: 400, message: 'Username or email is required' });
   }

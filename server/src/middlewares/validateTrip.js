@@ -40,7 +40,7 @@ export const validateTrip = [
     const errors = validationResult(req);
     console.log(errors);
     if (errors.isEmpty()) {
-      console.log('trip validated');
+      console.log('[Trip validated]');
       return next();
     }
     next({ status: 400, message: errors.array()[0].msg });
