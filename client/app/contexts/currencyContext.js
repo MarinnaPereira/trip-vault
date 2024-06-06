@@ -7,10 +7,10 @@ const CurrencyContext = createContext();
 
 export const CurrencyProvider = ({ children }) => {
   const [exchangeRates, setExchangeRates] = useState({});
-  const [baseCurrency, setBaseCurrency] = useState('USD');
+  const [baseCurrency, setBaseCurrency] = useState('');
   const [availableCurrencies, setAvailableCurrencies] = useState([]);
 
-  const fetchExchangeRates = async baseCurrency => {
+  const fetchExchangeRates = async (baseCurrency = 'USD') => {
     const storedData = await AsyncStorage.getItem('exchangeRates');
     const lastFetched = storedData ? JSON.parse(storedData).lastFetched : null;
     const now = new Date();

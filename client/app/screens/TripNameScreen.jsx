@@ -29,7 +29,7 @@ export default function TripNameScreen({ navigation }) {
     calculateDailyAverage,
     calculateBalance,
   } = useTripsContext();
-  const { getCurrencySymbol } = useCurrencyContext();
+  const { setBaseCurrency, getCurrencySymbol } = useCurrencyContext();
 
   const [totalSpent, setTotalSpent] = useState(0);
   const [tripDuration, setTripDuration] = useState(0);
@@ -128,6 +128,7 @@ export default function TripNameScreen({ navigation }) {
 
   const handleEdit = () => {
     toggleMenu();
+    pinnedTrip && setBaseCurrency(pinnedTrip.currency);
     navigation.navigate('EditTrip');
   };
 

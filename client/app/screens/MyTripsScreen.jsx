@@ -14,6 +14,7 @@ import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 
 import { useUserContext } from '../contexts/userContext';
 import { useTripsContext } from '../contexts/tripsContext';
+import { useCurrencyContext } from '../contexts/currencyContext';
 import { updateUser } from '../api/api';
 import SearchBar from './SearchBar';
 import avatars from '../../assets/avatars';
@@ -21,6 +22,7 @@ import avatars from '../../assets/avatars';
 export default function MyTripsScreen({ navigation }) {
   const { user, setUser } = useUserContext();
   const { trips, pinnedTrip, setPinnedTrip } = useTripsContext();
+  const { baseCurrency, setBaseCurrency } = useCurrencyContext();
 
   const [filteredTrips, setFilteredTrips] = useState([]);
   const [error, setError] = useState('');
@@ -67,6 +69,7 @@ export default function MyTripsScreen({ navigation }) {
   useFocusEffect(
     useCallback(() => {
       flatListRef.current?.scrollToOffset({ animated: false, offset: 0 });
+      return () => {};
     }, []),
   );
 
@@ -103,6 +106,7 @@ export default function MyTripsScreen({ navigation }) {
   };
 
   const handleAddTrip = () => {
+    setBaseCurrency('');
     navigation.navigate('Shared', { screen: 'InitiateTrip' });
   };
 
