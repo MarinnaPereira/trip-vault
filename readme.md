@@ -140,7 +140,7 @@ Our app helps you keep all your expenses organized and easily accessible.
 ## Authors
 
 - <a href="https://github.com/DepyRigadopoulouKeighran" target="_blank">Depy Rigadopoulou Keighran</a>
-- <a href="https://github.com/JFujie" target="_blank">Julian Fujie</a>
+- <a href="https://github.com/JFujie" target="_blank">Julian Fujie Awiek Widjaja</a>
 - <a href="https://github.com/MarinnaPereira" target="_blank">Marinna Pereira</a>
 - <a href="https://github.com/yukosuga" target="_blank">Yuko Suga</a>
 
